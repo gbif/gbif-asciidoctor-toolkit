@@ -34,7 +34,7 @@ for lang in en translations/??.po; do
 	mkdir -p $langcode
 
 	# Document title for PDF filename
-	title=$(grep -m 1 '^=[^=]' index.$langcode.adoc | tr / - | sed 's/^= *//; s/ /-/g; s/-+/-/g;' | tr '[:upper:]' '[:lower:]')
+	title=$(grep -m 1 '^=[^=]' index.$langcode.adoc | rev | cut -d: -f2- | rev | tr : - | tr / - | sed 's/^= *//; s/ /-/g; s/-+/-/g;' | tr '[:upper:]' '[:lower:]')
 	echo "Document title in $langcode is “$title”"
 
 	asciidoctor -a lang=$langcode \
