@@ -1,0 +1,11 @@
+#toc class=(attr 'toc-class', 'toc')
+  header#logo
+    a href="https://www.gbif.org/"
+      img src="https://rs.gbif.org/style/logo.svg" alt="GBIF – Global Biodiversity Information Facility"
+  br
+  #toctitle Other formats
+  = converter.convert document, 'alternate'
+  br
+  #toctitle =(attr 'toc-title')
+  / Renders block_outline.html.
+  = converter.convert document, 'outline'

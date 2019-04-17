@@ -104,8 +104,11 @@ RUN gem install rugged
 #compass compile
 #asciidoctor ... -a stylesheet=asciidoctor-stylesheet-factory/stylesheets/readthedocs.css
 
-COPY asciidoctor-extensions-lab /asciidoctor-extensions-lab
-COPY gbif-extensions /gbif-extensions
+COPY asciidoctor-extensions-lab /adoc/asciidoctor-extensions-lab
+COPY gbif-extensions/ /adoc/gbif-extensions/
+COPY gbif-templates/ /adoc/gbif-templates/
+COPY GbifHtmlConverter.rb /adoc/
+
 COPY build.sh /usr/local/bin/build.sh
 
 WORKDIR /documents

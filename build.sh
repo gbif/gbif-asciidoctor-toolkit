@@ -41,18 +41,20 @@ for lang in en translations/??.po; do
 				-a imagesdir=../ \
 				-a pdf_filename=$title.$langcode.pdf \
 				-r asciidoctor-diagram \
-				-r /asciidoctor-extensions-lab/lib/git-metadata-preprocessor.rb \
-				-r /gbif-extensions/lib/license-url-docinfoprocessor.rb \
-				-r /gbif-extensions/lib/translation-links.rb \
+				-r /adoc/asciidoctor-extensions-lab/lib/git-metadata-preprocessor.rb \
+				-r /adoc/gbif-extensions/lib/license-url-docinfoprocessor.rb \
+				-r /adoc/gbif-extensions/lib/translation-links.rb \
+				-r /adoc/GbifHtmlConverter.rb \
+				-T /adoc/gbif-templates/ \
 				-o $langcode/index.$langcode.html \
 				--trace \
 				index.$langcode.adoc
-				#-T ./asciidoctor-backends/slim/html5/
+
 
 	asciidoctor-pdf -a lang=$langcode \
 					-a media=print \
 					-r asciidoctor-diagram \
-					-r /asciidoctor-extensions-lab/lib/git-metadata-preprocessor.rb \
+					-r /adoc/asciidoctor-extensions-lab/lib/git-metadata-preprocessor.rb \
 					-o $langcode/$title.$langcode.pdf \
 					--trace \
 					index.$langcode.adoc
