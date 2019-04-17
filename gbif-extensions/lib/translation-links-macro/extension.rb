@@ -65,12 +65,11 @@ class TranslationLinksMacro < Extensions::InlineMacroProcessor
       links = attributes['preText']
 
       Dir["index.??.adoc"].sort.each do |file|
-        if links.length > attributes['preText'].length
-          links += ', '
-        end
-
         langCode = file[6,2]
         if langCode != currentLangCode
+          if links.length > attributes['preText'].length
+            links += ', '
+          end
           links += %(<a hreflang="#{langCode}" href="../#{langCode}/">#{LANGUAGE_NAMES[langCode]}</a>)
         end
       end
