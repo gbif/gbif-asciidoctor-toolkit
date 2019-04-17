@@ -1,9 +1,14 @@
-= Asciidoctor Docker Container
+= GBIF Asciidoctor Toolkit
 :source-highlighter: coderay
 
-== The environment
+== The toolkit
 
-This Docker container provides:
+This is a Docker container derived from https://github.com/asciidoctor/docker-asciidoctor[docker-asciidoctor], but with the addition of:
+
+* GBIF templates and styling
+* GBIF document build script
+
+The Asciidoctor Docker container provides:
 
 * Asciidoctor 2.0.6
 * Aciidoctor Diagram with Graphviz integration (supports plantuml and graphiz diagrams)
@@ -16,50 +21,18 @@ This Docker container provides:
 
 == How to use it
 
-Just run:
+From the top-level directory containing the GBIF document, run:
 
 [source,bash]
 ----
-docker run -it -v <your directory>:/documents/ asciidoctor/docker-asciidoctor
+docker run --rm -it -v $PWD:/documents/ mb.gbif.org:5000/gbif-asciidoctor-toolkit
 ----
 
-It will be directly mapped with [path]_/documents_ of the container.
-
-Once started, you can use Asciidoctor commands to convert AsciiDoc files you created in the directory mentioned above. You can find several examples below.
-
-* To run Asciidoctor on a basic AsciiDoc file:
-+
-[source,bash]
-----
-asciidoctor sample.adoc
-asciidoctor-pdf sample.adoc
-asciidoctor-epub3 sample.adoc
-----
-
-* To run AsciiDoc on an AsciiDoc file that contains diagrams:
-+
-[source,bash]
-----
-asciidoctor -r asciidoctor-diagram sample-with-diagram.adoc
-asciidoctor-pdf -r asciidoctor-diagram sample-with-diagram.adoc
-asciidoctor-epub3 -r asciidoctor-diagram sample-with-diagram.adoc
-----
-
-* To use Asciidoctor Confluence:
-+
-[source, bash]
-----
-asciidoctor-confluence --host HOSTNAME --spaceKey SPACEKEY --title TITLE --username USER --password PASSWORD sample.adoc
-----
-
-* Batch mode. You can use it in a "batch" mode
-+
-[source, bash]
-----
-docker run --rm -v $(pwd):/documents/ asciidoctor/docker-asciidoctor asciidoctor-pdf index.adoc
-----
+Your documents will be processed, and output in the same directory.
 
 == How to contribute / do it yourself ?
+
+_(Section not updated.)_
 
 === Requirements
 

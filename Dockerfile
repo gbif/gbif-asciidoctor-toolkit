@@ -81,7 +81,34 @@ RUN apk add --no-cache --virtual .pythonmakedepends \
     seqdiag \
   && apk del -r --no-cache .pythonmakedepends
 
+# PO4A translation tool
+RUN apk add --no-cache diffutils perl-unicode-linebreak po4a
+
+# Git commit plugin
+RUN apk add --no-cache openssl openssl-dev cmake ruby-dev ruby-rdoc gcc musl-dev
+RUN gem install rugged
+
+# A2S diagrams (needs Go)
+#RUN apk add --no-cache git make musl-dev go
+#ENV GOROOT /usr/lib/go
+#ENV GOPATH /go
+#ENV PATH /go/bin:$PATH
+#RUN mkdir -p ${GOPATH}/src ${GOPATH}/bin
+#RUN apk add --no-cache go git gcc musl-dev
+#go get github.com/asciitosvg/asciitosvg/cmd/a2s
+
+# Stylesheet compiler:
+#apk add ruby-rdoc ruby-bundler
+#cd asciidoctor-stylesheet-factory/
+#bundle install
+#compass compile
+#asciidoctor ... -a stylesheet=asciidoctor-stylesheet-factory/stylesheets/readthedocs.css
+
+COPY asciidoctor-extensions-lab /asciidoctor-extensions-lab
+COPY gbif-extensions /gbif-extensions
+COPY build.sh /usr/local/bin/build.sh
+
 WORKDIR /documents
 VOLUME /documents
 
-CMD ["/bin/bash"]
+CMD ["/usr/local/bin/build.sh"]
