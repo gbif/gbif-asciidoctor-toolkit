@@ -8,6 +8,16 @@ shopt -s globstar
 # In case there are no translations.
 shopt -s nullglob
 
+# Check this is run from a reasonable directory.
+# (Advanced users can run /bin/bash as a Docker target command.)
+if [[ ! -e index.en.adoc ]]; then
+    echo >&2 "There is no index.en.adoc file in this directory."
+	echo >&2
+	echo >&2 "Check you are running this from the top-level of your document,"
+	echo >&2 "and that there is an English source document called index.en.adoc."
+    exit 1
+fi
+
 # Produce the translated adoc source from the po-files.
 if [[ -e po4a.conf ]]; then
 	echo "Translating sources"
