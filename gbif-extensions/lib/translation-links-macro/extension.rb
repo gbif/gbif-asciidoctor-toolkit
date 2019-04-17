@@ -68,9 +68,9 @@ class TranslationLinksMacro < Extensions::InlineMacroProcessor
         langCode = file[6,2]
         if langCode != currentLangCode
           if links.length > attributes['preText'].length
-            links += ', '
+            links += ','
           end
-          links += %(<a hreflang="#{langCode}" href="../#{langCode}/">#{LANGUAGE_NAMES[langCode]}</a>)
+          links += %( <a hreflang="#{langCode}" href="../#{langCode}/">#{LANGUAGE_NAMES[langCode]}</a>)
         end
       end
 
