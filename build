@@ -21,8 +21,8 @@ if [[ ! -e index.$PRIMARY_LANGUAGE.adoc ]]; then
 fi
 
 # Clean any old files
-echo "Cleaning old files"
-git clean -f -x
+echo "Removing files ignored by Git"
+git clean -f -X
 
 # Produce the translated adoc source from the po-files.
 if [[ -e po4a.conf ]]; then
