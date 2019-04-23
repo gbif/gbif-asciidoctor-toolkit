@@ -27,7 +27,8 @@ git clean -f -X
 # Produce the translated adoc source from the po-files.
 if [[ -e po4a.conf ]]; then
 	echo "Translating sources"
-	po4a -v po4a.conf
+	# --force is used because Git usage has probably made timestamps unrelated to actual modification time.
+	po4a -v po4a.conf --force
 	for lang in translations/??.po; do
 		langcode=$(basename $lang .po)
 		# Replace include and image links to translated alternatives
