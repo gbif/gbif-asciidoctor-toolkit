@@ -3,20 +3,26 @@
 # Run:
 #   docker run --rm -it -v $PWD:/documents/ mb.gbif.org:5000/docker-asciidoctor:2.0.6
 
-# Enable the **/*.en.adoc below.
+# Enable the **/*.$PRIMARY_LANGUAGE.adoc below.
 shopt -s globstar
 # In case there are no translations.
 shopt -s nullglob
 
+echo "Primary language is $PRIMARY_LANGUAGE."
+
 # Check this is run from a reasonable directory.
 # (Advanced users can run /bin/bash as a Docker target command.)
-if [[ ! -e index.en.adoc ]]; then
-    echo >&2 "There is no index.en.adoc file in this directory."
+if [[ ! -e index.$PRIMARY_LANGUAGE.adoc ]]; then
+    echo >&2 "There is no index.$PRIMARY_LANGUAGE.adoc file in this directory."
 	echo >&2
 	echo >&2 "Check you are running this from the top-level of your document,"
-	echo >&2 "and that there is an English source document called index.en.adoc."
+	echo >&2 "and that there is an $PRIMARY_LANGUAGE source document called index.$PRIMARY_LANGUAGE.adoc."
     exit 1
 fi
+
+# Clean any old files
+echo "Cleaning old files"
+git clean -f -x
 
 # Produce the translated adoc source from the po-files.
 if [[ -e po4a.conf ]]; then
@@ -27,7 +33,7 @@ if [[ -e po4a.conf ]]; then
 		# Replace include and image links to translated alternatives
 		for tdoc in $(grep -l -E -e '\.[a-z][a-z]\.adoc' **/*.$langcode.adoc); do
 			echo "Replacing includes in $tdoc for $langcode"
-			perl -pi -e 's/([A-Za-z0-9_-]+).en.adoc/\1.'$langcode'.adoc/' $tdoc
+			perl -pi -e 's/([A-Za-z0-9_-]+).'$PRIMARY_LANGUAGE'.adoc/\1.'$langcode'.adoc/' $tdoc
 		done
 	done
 	echo "Translating source files completed"
@@ -38,7 +44,7 @@ echo
 
 # Generate the output HTML and PDF.
 rm -f **/*.??.html **/*.??.pdf *.??.asis
-for lang in en translations/??.po; do
+for lang in $PRIMARY_LANGUAGE translations/??.po; do
 	langcode=$(basename $lang .po)
 	echo "Building language $langcode"
 	mkdir -p $langcode

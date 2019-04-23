@@ -109,6 +109,9 @@ COPY gbif-extensions/ /adoc/gbif-extensions/
 COPY gbif-templates/ /adoc/gbif-templates/
 COPY GbifHtmlConverter.rb /adoc/
 
+# GBIF build script
+RUN apk add --no-cache git
+ENV PRIMARY_LANGUAGE=en
 COPY build.sh /usr/local/bin/build.sh
 
 WORKDIR /documents
