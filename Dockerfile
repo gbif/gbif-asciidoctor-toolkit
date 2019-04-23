@@ -112,9 +112,9 @@ COPY GbifHtmlConverter.rb /adoc/
 # GBIF build script
 RUN apk add --no-cache git
 ENV PRIMARY_LANGUAGE=en
-COPY build.sh /usr/local/bin/build.sh
+COPY build /usr/local/bin/build
 
 WORKDIR /documents
 VOLUME /documents
 
-CMD ["/usr/local/bin/build.sh"]
+CMD ["/usr/local/bin/build"]
