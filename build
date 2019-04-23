@@ -64,6 +64,7 @@ for lang in $PRIMARY_LANGUAGE translations/??.po; do
 				-a pdf_filename=$title.$langcode.pdf \
 				-r asciidoctor-diagram \
 				-r /adoc/asciidoctor-extensions-lab/lib/git-metadata-preprocessor.rb \
+				-r /adoc/gbif-extensions/lib/translate-labels.rb \
 				-r /adoc/gbif-extensions/lib/license-url-docinfoprocessor.rb \
 				-r /adoc/gbif-extensions/lib/translation-links.rb \
 				-r /adoc/GbifHtmlConverter.rb \
@@ -76,6 +77,7 @@ for lang in $PRIMARY_LANGUAGE translations/??.po; do
 	asciidoctor-pdf -a lang=$langcode \
 					-a media=print \
 					-r asciidoctor-diagram \
+					-r /adoc/gbif-extensions/lib/translate-labels.rb \
 					-r /adoc/asciidoctor-extensions-lab/lib/git-metadata-preprocessor.rb \
 					-o $langcode/$title.$langcode.pdf \
 					--trace \

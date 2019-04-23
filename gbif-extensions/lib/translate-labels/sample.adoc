@@ -1,0 +1,4 @@
+= Translate labels example
+:lang:es
+
+NOTE: This is a note.
