@@ -29,6 +29,11 @@ if [[ -e po4a.conf ]]; then
 	echo "Translating sources"
 	# --force is used because Git usage has probably made timestamps unrelated to actual modification time.
 	po4a -v po4a.conf --force
+	# If index.pot has only one changed line, it's the "POT-Creation-Date", and we don't want to commit that.
+	if [[ $(git diff --numstat translations/index.pot | cut -f 1) -eq 1 ]]; then
+		echo "No change to index.pot"
+		git checkout translations/index.pot
+	fi
 	for lang in translations/??.po; do
 		langcode=$(basename $lang .po)
 		# Replace include and image links to translated alternatives
