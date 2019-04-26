@@ -76,6 +76,7 @@ for lang in $PRIMARY_LANGUAGE translations/??.po; do
 
 	asciidoctor-pdf -a lang=$langcode \
 					-a media=print \
+					-a title-page \
 					-r asciidoctor-diagram \
 					-r /adoc/gbif-extensions/lib/translate-labels.rb \
 					-r /adoc/asciidoctor-extensions-lab/lib/git-metadata-preprocessor.rb \
