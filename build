@@ -61,6 +61,7 @@ for lang in $PRIMARY_LANGUAGE translations/??.po; do
 
 	asciidoctor -a lang=$langcode \
 				-a imagesdir=../ \
+				-a sectanchors \
 				-a pdf_filename=$title.$langcode.pdf \
 				-r asciidoctor-diagram \
 				-r /adoc/asciidoctor-extensions-lab/lib/git-metadata-preprocessor.rb \
