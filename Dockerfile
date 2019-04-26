@@ -104,13 +104,18 @@ RUN gem install rugged
 #compass compile
 #asciidoctor ... -a stylesheet=asciidoctor-stylesheet-factory/stylesheets/readthedocs.css
 
+# Needed by build script.
+RUN apk add --no-cache git
+
+COPY inline-syntax-highlighting.patch /adoc/patches/
+RUN cd /usr/lib/ruby/gems/2.5.0/gems/asciidoctor-${asciidoctor_version}/ && patch -p1 < /adoc/patches/inline-syntax-highlighting.patch
+
 COPY asciidoctor-extensions-lab /adoc/asciidoctor-extensions-lab
 COPY gbif-extensions/ /adoc/gbif-extensions/
 COPY gbif-templates/ /adoc/gbif-templates/
 COPY GbifHtmlConverter.rb /adoc/
 
 # GBIF build script
-RUN apk add --no-cache git
 ENV PRIMARY_LANGUAGE=en
 COPY build /usr/local/bin/build
 

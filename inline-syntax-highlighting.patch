@@ -1,0 +1,37 @@
+diff --git a/lib/asciidoctor/syntax_highlighter.rb b/lib/asciidoctor/syntax_highlighter.rb
+index b14b7c48..26e58aec 100644
+--- a/lib/asciidoctor/syntax_highlighter.rb
++++ b/lib/asciidoctor/syntax_highlighter.rb
+@@ -233,9 +233,17 @@ module SyntaxHighlighter
+         pre = { 'class' => class_attr_val }
+         code = lang ? { 'data-lang' => lang } : {}
+         transform[pre, code]
+-        %(<pre#{pre.map {|k, v| %[ #{k}="#{v}"] }.join}><code#{code.map {|k, v| %[ #{k}="#{v}"] }.join}>#{node.content}</code></pre>)
++        if (node.block?)
++          %(<pre#{pre.map {|k, v| %[ #{k}="#{v}"] }.join}><code#{code.map {|k, v| %[ #{k}="#{v}"] }.join}>#{node.content}</code></pre>)
++        else
++          %(<span#{pre.map {|k, v| %[ #{k}="#{v}"] }.join}><code#{code.map {|k, v| %[ #{k}="#{v}"] }.join}>#{node.text}</code></span>)
++        end
+       else
+-        %(<pre class="#{class_attr_val}"><code#{lang ? %[ data-lang="#{lang}"] : ''}>#{node.content}</code></pre>)
++        if (node.block?)
++          %(<pre class="#{class_attr_val}"><code#{lang ? %[ data-lang="#{lang}"] : ''}>#{node.content}</code></pre>)
++        else
++          %(<span class="#{class_attr_val}"><code#{lang ? %[ data-lang="#{lang}"] : ''}>#{node.text}</code></span>)
++        end
+       end
+     end
+   end
+diff --git a/lib/asciidoctor/syntax_highlighter/pygments.rb b/lib/asciidoctor/syntax_highlighter/pygments.rb
+index 191acb31..08aa63e9 100644
+--- a/lib/asciidoctor/syntax_highlighter/pygments.rb
++++ b/lib/asciidoctor/syntax_highlighter/pygments.rb
+@@ -121,7 +121,7 @@ class SyntaxHighlighter::PygmentsAdapter < SyntaxHighlighter::Base
+     end
+ 
+     DEFAULT_STYLE = 'default'
+-    BASE_SELECTOR = 'pre.pygments'
++    BASE_SELECTOR = '.pygments'
+     TOKEN_CLASS_PREFIX = 'tok-'
+ 
+     BaseStyleRx = /^#{BASE_SELECTOR.gsub '.', '\\.'} +\{([^}]+?)\}/

@@ -65,4 +65,43 @@ class GbifHtmlConverter < (Asciidoctor::Converter.for 'html5')
     result << '</ul>'
     result.join LF
   end
+
+  def convert_inline_quoted node
+    open, close, is_tag = QUOTE_TAGS[node.type]
+    if (role = node.role)
+      if is_tag
+        if role == 'source'
+          # TODO: Read language attribute
+          # TODO: Default to source-language attribute
+          #puts node.attributes
+          lang = node.attr 'language', 'javascript'
+          if (syntax_hl = node.document.syntax_highlighter)
+            opts = syntax_hl.highlight? ? {
+              css_mode: ((doc_attrs = node.document.attributes)[%(#{syntax_hl.name}-css)] || :class).to_sym,
+              style: doc_attrs[%(#{syntax_hl.name}-style)],
+            } : {}
+
+            # Tokenize
+            highlighted, source_offset = syntax_hl.highlight node, node.text, lang, opts
+            node.text = highlighted
+
+            # Format
+            result_text = syntax_hl.format node, lang, opts
+
+            quoted_text = %(#{result_text})
+          else
+            quoted_text = %(#{open.chop}#{lang ? %[ class="language-#{lang}" data-lang="#{lang}"] : ''} class="#{role}">#{node.text}#{close})
+          end
+        else
+          quoted_text = %(#{open.chop} class="#{role}">#{node.text}#{close})
+        end
+      else
+        quoted_text = %(<span class="#{role}">#{open}#{node.text}#{close}</span>)
+      end
+    else
+      quoted_text = %(#{open}#{node.text}#{close})
+    end
+
+    node.id ? %(<a id="#{node.id}"></a>#{quoted_text}) : quoted_text
+  end
 end
