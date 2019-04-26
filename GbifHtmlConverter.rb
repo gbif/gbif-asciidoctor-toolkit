@@ -66,15 +66,17 @@ class GbifHtmlConverter < (Asciidoctor::Converter.for 'html5')
     result.join LF
   end
 
+  # Extend original convert_inline_quoted method to support inline syntax highlighting.
+  #
+  # Example: [source javascript]`map.put("value")` or [.source.javascript]`map.put("value")`.
+  #
+  # See https://github.com/asciidoctor/asciidoctor/issues/1043
   def convert_inline_quoted node
     open, close, is_tag = QUOTE_TAGS[node.type]
     if (role = node.role)
       if is_tag
-        if role == 'source'
-          # TODO: Read language attribute
-          # TODO: Default to source-language attribute
-          #puts node.attributes
-          lang = node.attr 'language', 'javascript'
+        if node.has_role? 'source'
+          lang = (language = node.roles[1] || node.document.attributes['source-language'])
           if (syntax_hl = node.document.syntax_highlighter)
             opts = syntax_hl.highlight? ? {
               css_mode: ((doc_attrs = node.document.attributes)[%(#{syntax_hl.name}-css)] || :class).to_sym,
@@ -83,7 +85,8 @@ class GbifHtmlConverter < (Asciidoctor::Converter.for 'html5')
 
             # Tokenize
             highlighted, source_offset = syntax_hl.highlight node, node.text, lang, opts
-            node.text = highlighted
+            # Chop off trailing newline
+            node.text = highlighted.chomp
 
             # Format
             result_text = syntax_hl.format node, lang, opts
