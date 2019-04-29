@@ -24,6 +24,9 @@ fi
 echo "Removing files ignored by Git"
 git clean -f -X
 
+# Set timestamp on index.$PRIMARY_LANGUAGE.adoc to latest commit time (shown in document footer)
+touch --no-create --date @$(git rev-list --max-count=1 --pretty=%ct HEAD | tail -n 1) index.$PRIMARY_LANGUAGE.adoc
+
 # Produce the translated adoc source from the po-files.
 if [[ -e po4a.conf ]]; then
 	echo "Translating sources"
