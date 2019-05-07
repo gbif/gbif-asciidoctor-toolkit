@@ -107,6 +107,17 @@ RUN gem install rugged
 # Needed by build script.
 RUN apk add --no-cache git
 
+# FixUID: https://github.com/boxboat/fixuid
+RUN addgroup --gid 1000 asciidoctor && adduser --uid 1000 --ingroup asciidoctor --home /documents --shell /bin/bash --disabled-password --gecos "" asciidoctor
+RUN USER=asciidoctor && \
+    GROUP=asciidoctor && \
+    curl -SsL https://github.com/boxboat/fixuid/releases/download/v0.4/fixuid-0.4-linux-amd64.tar.gz | tar -C /usr/local/bin -xzf - && \
+    chown root:root /usr/local/bin/fixuid && \
+    chmod 4755 /usr/local/bin/fixuid && \
+    mkdir -p /etc/fixuid && \
+    printf "user: $USER\ngroup: $GROUP\n" > /etc/fixuid/config.yml
+ENTRYPOINT ["fixuid", "-q"]
+
 COPY inline-syntax-highlighting.patch /adoc/patches/
 RUN cd /usr/lib/ruby/gems/2.5.0/gems/asciidoctor-${asciidoctor_version}/ && patch -p1 < /adoc/patches/inline-syntax-highlighting.patch
 
@@ -122,4 +133,5 @@ COPY build /usr/local/bin/build
 WORKDIR /documents
 VOLUME /documents
 
+USER asciidoctor:asciidoctor
 CMD ["/usr/local/bin/build"]
