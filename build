@@ -62,31 +62,44 @@ for lang in $PRIMARY_LANGUAGE translations/??.po; do
 	title=$(grep -m 1 '^=[^=]' index.$langcode.adoc | rev | cut -d: -f2- | rev | tr : - | tr / - | sed 's/^= *//; s/ /-/g; s/--*/-/g; s/^-*//; s/-*$//;' | tr '[:upper:]' '[:lower:]')
 	echo "Document title in $langcode is “$title”"
 
-	asciidoctor -a lang=$langcode \
-				-a imagesdir=../ \
-				-a sectanchors \
-				-a pdf_filename=$title.$langcode.pdf \
-				-r asciidoctor-diagram \
-				-r /adoc/asciidoctor-extensions-lab/lib/git-metadata-preprocessor.rb \
-				-r /adoc/gbif-extensions/lib/translate-labels.rb \
-				-r /adoc/gbif-extensions/lib/license-url-docinfoprocessor.rb \
-				-r /adoc/gbif-extensions/lib/translation-links.rb \
-				-r /adoc/GbifHtmlConverter.rb \
-				-T /adoc/gbif-templates/ \
-				-o $langcode/index.$langcode.html \
-				--trace \
-				index.$langcode.adoc
+	asciidoctor \
+		-a toc=left \
+		-a toclevels=3 \
+		-a numbered \
+		-a icons=font \
+		-a xrefstyle=short \
+		-a lang=$langcode \
+		-a imagesdir=../ \
+		-a sectanchors \
+		-a pdf_filename=$title.$langcode.pdf \
+		-r asciidoctor-diagram \
+		-r /adoc/asciidoctor-extensions-lab/lib/git-metadata-preprocessor.rb \
+		-r /adoc/gbif-extensions/lib/translate-labels.rb \
+		-r /adoc/gbif-extensions/lib/license-url-docinfoprocessor.rb \
+		-r /adoc/gbif-extensions/lib/translation-links.rb \
+		-r /adoc/GbifHtmlConverter.rb \
+		-T /adoc/gbif-templates/ \
+		-o $langcode/index.$langcode.html \
+		--trace \
+		index.$langcode.adoc
 
 
-	asciidoctor-pdf -a lang=$langcode \
-					-a media=print \
-					-a title-page \
-					-r asciidoctor-diagram \
-					-r /adoc/gbif-extensions/lib/translate-labels.rb \
-					-r /adoc/asciidoctor-extensions-lab/lib/git-metadata-preprocessor.rb \
-					-o $langcode/$title.$langcode.pdf \
-					--trace \
-					index.$langcode.adoc
+	asciidoctor-pdf \
+		-a toc \
+		-a toclevels=3 \
+		-a numbered \
+		-a icons=font \
+		-a pagenums \
+		-a xrefstyle=short \
+		-a lang=$langcode \
+		-a media=print \
+		-a title-page \
+		-r asciidoctor-diagram \
+		-r /adoc/gbif-extensions/lib/translate-labels.rb \
+		-r /adoc/asciidoctor-extensions-lab/lib/git-metadata-preprocessor.rb \
+		-o $langcode/$title.$langcode.pdf \
+		--trace \
+		index.$langcode.adoc
 
 	cat > index.$langcode.asis <<-EOF
 		Status: 303 See Other
