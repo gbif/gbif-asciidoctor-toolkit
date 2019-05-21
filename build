@@ -51,6 +51,12 @@ else
 fi
 echo
 
+if git remote get-url origin &> /dev/null; then
+	contribute_url=https://github.com/gbif/$(git remote get-url origin | rev | cut -d/ -f1 | rev | cut -d. -f1)
+else
+	contribute_url=
+fi
+
 # Generate the output HTML and PDF.
 rm -f **/*.??.html **/*.??.pdf *.??.asis
 for lang in $PRIMARY_LANGUAGE translations/??.po; do
@@ -62,6 +68,7 @@ for lang in $PRIMARY_LANGUAGE translations/??.po; do
 	title=$(grep -m 1 '^=[^=]' index.$langcode.adoc | rev | cut -d: -f2- | rev | tr : - | tr / - | sed 's/^= *//; s/ /-/g; s/--*/-/g; s/^-*//; s/-*$//;' | tr '[:upper:]' '[:lower:]')
 	echo "Document title in $langcode is “$title”"
 
+	echo "Generating $langcode HTML"
 	asciidoctor \
 		-a toc=left \
 		-a toclevels=3 \
@@ -72,6 +79,7 @@ for lang in $PRIMARY_LANGUAGE translations/??.po; do
 		-a imagesdir=../ \
 		-a sectanchors \
 		-a pdf_filename=$title.$langcode.pdf \
+		-a contribute_url=$contribute_url \
 		-r asciidoctor-diagram \
 		-r /adoc/asciidoctor-extensions-lab/lib/git-metadata-preprocessor.rb \
 		-r /adoc/gbif-extensions/lib/translate-labels.rb \
@@ -83,7 +91,7 @@ for lang in $PRIMARY_LANGUAGE translations/??.po; do
 		--trace \
 		index.$langcode.adoc
 
-
+	echo "Generating $langcode PDF"
 	asciidoctor-pdf \
 		-a toc \
 		-a toclevels=3 \

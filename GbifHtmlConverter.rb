@@ -2,6 +2,7 @@
 class GbifHtmlConverter < (Asciidoctor::Converter.for 'html5')
   register_for 'html5'
 
+  # Language names in their own language, for use linking to translated documents.
   LANGUAGE_NAMES = {
     "ar" => "&#1593;&#1585;&#1576;&#1610;&#1577;&nbsp;(Arabiya)",
     "bg" => "&#1041;&#1098;&#1083;&#1075;&#1072;&#1088;&#1089;&#1082;&#1080;&nbsp;(B&#601;lgarski)",
@@ -43,17 +44,24 @@ class GbifHtmlConverter < (Asciidoctor::Converter.for 'html5')
     "zh-TW" => "&#20013;&#25991;(&#32321;)"
   }
 
+  # Used when the label hasn't been translated
+  FALLBACK_LABEL = '&#x1f64a;&#x2753;'
+
+  # Links to alternative versions of the same document (other formats, other languages).
   def convert_alternate node
-    result = [%(<ul class="sectlevel1">)]
+    other_formats_text = node.document.attributes['other_formats_text'] || FALLBACK_LABEL
+    # The style is hardcoded here, but should be migrated once we need a custom stylesheet.
+    result = [%(<h3 style="color: #7a2518; margin: 0 0 0.8rem 0; line-height: 1.2; font-size: 1.375em;">#{other_formats_text}</h3>)]
+    result << [%(<ul class="sectlevel1">)]
 
     currentLangCode = node.document.attributes['lang']
     if ! currentLangCode
       currentLangCode = 'en'
     end
 
-    pdfFilename = node.document.attributes['pdf_filename']
-    linkText = 'PDF file'
-    result << %(<li><a hreflang="#{currentLangCode}" type="application/pdf" href="#{pdfFilename}">#{linkText}</a></li>)
+    pdf_filename = node.document.attributes['pdf_filename']
+    pdf_file_text = node.document.attributes['pdf_file_text'] || FALLBACK_LABEL
+    result << %(<li><a hreflang="#{currentLangCode}" type="application/pdf" href="#{pdf_filename}">#{pdf_file_text}</a></li>)
 
     Dir["index.??.adoc"].sort.each do |file|
       langCode = file[6,2]
@@ -64,6 +72,22 @@ class GbifHtmlConverter < (Asciidoctor::Converter.for 'html5')
 
     result << '</ul>'
     result.join LF
+  end
+
+  # Link to a place to contribute edits, such as GitHub.
+  def convert_contribute_edit node
+    contribute_url = node.document.attributes['contribute_url']
+    # contribute_system = 'GitHub'
+
+    if contribute_url
+      contribute_title_text = node.document.attributes['contribute_title_text'] || FALLBACK_LABEL
+      contribute_edit_text = node.document.attributes['contribute_edit_text'] || FALLBACK_LABEL
+
+      result = [%(<h3 style="color: #7a2518; margin: 0 0 0.8rem 0; line-height: 1.2; font-size: 1.375em;">#{contribute_title_text}</h3>)]
+      result << %(<div style="font-family: 'Open Sans','DejaVu Sans',sans-serif;"><a href="#{contribute_url}"><img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjxzdmcKICAgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIgogICBpZD0iZ2l0aHViLW1hcmsiCiAgIHZlcnNpb249IjEuMSIKICAgdmlld0JveD0iMCAwIDExLjQ5MjkgMTEuMjA5NDY2IgogICBoZWlnaHQ9IjExLjIwOTQ2Nm1tIgogICB3aWR0aD0iMTEuNDkyOW1tIj4KICA8cGF0aAogICAgIGlkPSJtYXJrIgogICAgIHN0eWxlPSJmaWxsOiMxYjE4MTc7c3Ryb2tlOm5vbmUiCiAgICAgZD0iTSA1Ljc0NjA0LDAgQyAyLjU3MjgxMDEsMCAwLDIuNTcyODA4IDAsNS43NDY3NSBjIDAsMi41Mzg5NDA4IDEuNjQ2NDEsNC42OTI2NSAzLjkyOTk0LDUuNDUyODg2IDAuMjg3NTIsMC4wNTI1NiAwLjM5MjI5LC0wLjEyNDg4NCAwLjM5MjI5LC0wLjI3NzI4NCAwLC0wLjEzNjE3MiAtMC4wMDUsLTAuNDk3NzY5IC0wLjAwOCwtMC45NzcxOTQyIC0xLjU5ODQzOTksMC4zNDcxMzMyIC0xLjkzNTY4OTksLTAuNzcwNDY3IC0xLjkzNTY4OTksLTAuNzcwNDY3IC0wLjI2MTQxLC0wLjY2MzU3NSAtMC42MzgxOCwtMC44NDAzMTYgLTAuNjM4MTgsLTAuODQwMzE2IC0wLjUyMTc2MDEsLTAuMzU2NjU5IDAuMDM5NSwtMC4zNDk2MDMgMC4wMzk1LC0wLjM0OTYwMyAwLjU3NjgsMC4wNDA5MiAwLjg4MDE5LDAuNTkyMzE0IDAuODgwMTksMC41OTIzMTQgMC41MTI1OCwwLjg3ODA2NCAxLjM0NTEzOTksMC42MjQ0MTYgMS42NzI1MDk5LDAuNDc3NjYxIDAuMDUyMiwtMC4zNzE0NzUgMC4yMDAzOCwtMC42MjQ3NjkgMC4zNjQ3OCwtMC43NjgzNSBDIDMuNDIxMzQwMSw4LjE0MTQwNDggMi4wNzk3MzAxLDcuNjQ4MjIyIDIuMDc5NzMwMSw1LjQ0NjE4MyBjIDAsLTAuNjI3MjM5IDAuMjI0MDEsLTEuMTQwMTc4IDAuNTkxNiwtMS41NDE5OTEgLTAuMDU5MywtMC4xNDUzNDUgLTAuMjU2NDcsLTAuNzI5NTQ1IDAuMDU2MSwtMS41MjA4MjYgMCwwIDAuNDgyNiwtMC4xNTQ1MTYgMS41ODA0Mzk5LDAuNTg5MTM5IEMgNC43NjYxMywyLjg0NTE1MyA1LjI1NzksMi43ODEzIDUuNzQ2NSwyLjc3OTE4MyA2LjIzNDM5LDIuNzgxMjgzIDYuNzI2MTYsMi44NDUxNTMgNy4xODUxMywyLjk3MjUwNSA4LjI4MjI2LDIuMjI4ODUgOC43NjM4MSwyLjM4MzM2NiA4Ljc2MzgxLDIuMzgzMzY2IGMgMC4zMTM2MSwwLjc5MTI4MSAwLjExNjQxLDEuMzc1NDgxIDAuMDU3MSwxLjUyMDgyNiAwLjM2ODMsMC40MDE4MTMgMC41OTA5LDAuOTE0NzUyIDAuNTkwOSwxLjU0MTk5MSAwLDIuMjA3NjgzIC0xLjM0MzczLDIuNjkzNDU3OCAtMi42MjM5NiwyLjgzNTYyNzggMC4yMDYzNywwLjE3NzQ0NyAwLjM5MDE3LDAuNTI4MTA4IDAuMzkwMTcsMS4wNjQzMyAwLDAuNzY3OTk4MiAtMC4wMDcsMS4zODc4MjgyIC0wLjAwNywxLjU3NjIxMTIgMCwwLjE1MzgxMiAwLjEwMzM2LDAuMzMyNjcgMC4zOTUxMSwwLjI3NjU3OCBDIDkuODQ3OSwxMC40MzcyODMgMTEuNDkyOSw4LjI4NDk4NTggMTEuNDkyOSw1Ljc0Njc1IDExLjQ5MjksMi41NzI4MDggOC45MTk3NCwwIDUuNzQ1OCwwIiAvPgo8L3N2Zz4K" alt="" style="height: 1.75rem;"/> #{contribute_edit_text}</a></div>)
+
+      result.join LF
+    end
   end
 
   # Extend original convert_inline_quoted method to support inline syntax highlighting.
@@ -107,4 +131,5 @@ class GbifHtmlConverter < (Asciidoctor::Converter.for 'html5')
 
     node.id ? %(<a id="#{node.id}"></a>#{quoted_text}) : quoted_text
   end
+
 end

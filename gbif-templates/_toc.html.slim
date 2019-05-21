@@ -3,8 +3,9 @@
     a href="https://www.gbif.org/"
       img src="https://rs.gbif.org/style/logo.svg" alt="GBIF – Global Biodiversity Information Facility"
   br
-  #toctitle =(attr 'other-formats')
   = converter.convert document, 'alternate'
+  br
+  = converter.convert document, 'contribute_edit'
   br
   #toctitle =(attr 'toc-title')
   / Renders block_outline.html.
