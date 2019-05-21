@@ -7,7 +7,7 @@ Extensions.register {
   if @document.attr? 'lang'
     preprocessor do
       process do |document, reader|
-        path = '/usr/lib/ruby/gems/2.5.0/gems/asciidoctor-2.0.8/data/locale/attributes-'+document.attr('lang')+'.adoc'
+        path = '/usr/lib/ruby/gems/2.5.0/gems/asciidoctor-2.0.9/data/locale/attributes-'+document.attr('lang')+'.adoc'
         if File.file?(path)
           file = File.expand_path path
           data = File.read file
