@@ -1,0 +1,4 @@
+:other_formats_text: Autres Formats
+:pdf_file_text: Fichier PDF
+:contribute_title_text: Contribuer
+:contribute_edit_text: Contribuer sur GitHub
