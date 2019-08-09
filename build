@@ -71,7 +71,6 @@ for lang in $PRIMARY_LANGUAGE translations/??.po; do
 	echo "Generating $langcode HTML"
 	asciidoctor \
 		-a toc=left \
-		-a toclevels=3 \
 		-a numbered \
 		-a icons=font \
 		-a xrefstyle=short \
@@ -94,7 +93,6 @@ for lang in $PRIMARY_LANGUAGE translations/??.po; do
 	echo "Generating $langcode PDF"
 	asciidoctor-pdf \
 		-a toc \
-		-a toclevels=3 \
 		-a numbered \
 		-a icons=font \
 		-a pagenums \
