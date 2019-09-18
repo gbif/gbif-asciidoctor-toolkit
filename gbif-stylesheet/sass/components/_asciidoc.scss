@@ -380,16 +380,21 @@ b.button:after {
   }
 }
 
-#toctitle {
+#toctitle, #toc h3 {
   @extend h3;
   color: $subheader-font-color;
   // shrink font-size below breakpoint
   font-size: 1.2em;
 }
 
+#toc h3 {
+  margin: 0 0 0.8rem 0;
+  line-height: 1.2;
+}
+
 // IMPORTANT below this breakpoint, toc2 acts as the header toc!!
 @media #{$small} {
-  #toctitle {
+  #toctitle, #toc h3 {
     // restore font size above breakpoint
     font-size: 1.375em;
   }
@@ -414,7 +419,7 @@ b.button:after {
     padding: 1.25em 1em;
     height: 100%;
     overflow: auto;
-    #toctitle {
+    #toctitle, #toc h3 {
       margin-top: 0;
       margin-bottom: 0.8rem;
       font-size: 1.2em;
@@ -457,7 +462,7 @@ b.button:after {
   #toc.toc2 {
     width: 20em;
 
-    #toctitle {
+    #toctitle, #toc h3 {
       font-size: 1.375em;
     }
 
