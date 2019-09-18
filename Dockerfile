@@ -29,17 +29,18 @@ RUN gem install rugged
 #go get github.com/asciitosvg/asciitosvg/cmd/a2s
 
 # Stylesheet compiler:
-#apk add ruby-rdoc ruby-bundler
-#cd asciidoctor-stylesheet-factory/
-#bundle install
-#compass compile
-#asciidoctor ... -a stylesheet=asciidoctor-stylesheet-factory/stylesheets/readthedocs.css
+RUN apk add --no-cache ruby-rdoc ruby-bundler
+RUN gem install compass --version 0.12.7 && \
+    gem install zurb-foundation --version 4.3.2
 
 # Needed by build script.
 RUN apk add --no-cache git
 
 COPY inline-syntax-highlighting.patch /adoc/patches/
 RUN cd /usr/lib/ruby/gems/2.5.0/gems/asciidoctor-2.0.10/ && patch -p1 < /adoc/patches/inline-syntax-highlighting.patch
+
+COPY gbif-stylesheet/ /adoc/gbif-stylesheet/
+RUN cd /adoc/gbif-stylesheet && compass compile
 
 COPY asciidoctor-extensions-lab /adoc/asciidoctor-extensions-lab
 COPY gbif-extensions/ /adoc/gbif-extensions/

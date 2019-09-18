@@ -79,6 +79,7 @@ for lang in $PRIMARY_LANGUAGE translations/??.po; do
 		-a sectanchors \
 		-a pdf_filename=$title.$langcode.pdf \
 		-a contribute_url=$contribute_url \
+		-a stylesheet=/adoc/gbif-stylesheet/stylesheets/foundation-potion.css \
 		-r asciidoctor-diagram \
 		-r /adoc/asciidoctor-extensions-lab/lib/git-metadata-preprocessor.rb \
 		-r /adoc/gbif-extensions/lib/translate-labels.rb \
