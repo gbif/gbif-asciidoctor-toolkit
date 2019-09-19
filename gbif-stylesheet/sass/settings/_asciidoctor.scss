@@ -19,8 +19,9 @@
 // Body (IMPORTANT $body-* variables must be defined above the defaults import)
 
 $body-bg: white;
-$body-font-color: rgba(0,0,0,0.8);
-$body-font-family: "Noto Serif", "DejaVu Serif", serif;
+// These two lines commented out so the GBIF stylesheet applies.
+//$body-font-color: rgba(0,0,0,0.8);
+//$body-font-family: "Noto Serif", "DejaVu Serif", serif;
 
 @import "defaults";
 

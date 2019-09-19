@@ -1,0 +1,42 @@
+$body-font-family: "Roboto", "DejaVu Sans", sans-serif;
+$body-font-color: #4e565f;
+
+@import "asciidoctor";
+//@import "fonts/gbif";
+
+$primary-color: #4e565f;
+$alert-color: #46a138;
+
+$title-font-color: $primary-color;
+$header-font-family: "Roboto", "DejaVu Sans", sans-serif;
+$header-font-color: #46a138;
+$header-font-weight: 400;
+$subheader-font-color: $body-font-color;
+$title-font-weight: $header-font-weight;
+
+$hr-border-color: #ccc;
+$hr-border-style: dotted;
+$sect-divider-color: $hr-border-color;
+
+$anchor-font-color: #4ba2ce;
+$anchor-font-color-hover: #2c79a1;
+
+$panel-font-color: $body-font-color;
+
+$blockquote-font-color: $body-font-color;
+$blockquote-cite-font-color: darken($blockquote-font-color, 10%);
+$blockquote-border: 1px solid #efefef;
+
+$code-color: darken($alert-color, 15%);
+
+$pre-bg: #efefef;
+$pre-padding: emCalc(12px) emCalc(12px) emCalc(10px) emCalc(12px);
+
+$table-head-font-color: $header-font-color;
+$table-head-font-weight: normal;
+$table-row-font-color: $body-font-color;
+
+$footer-bg: #222222;
+$footer-font-color: #ffffff;
+//$footer-anchor-font-color: $footer-font-color;
+//$footer-anchor-font-color-hover: darken($footer-anchor-font-color, 5%);
