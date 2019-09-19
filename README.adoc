@@ -16,7 +16,7 @@ The Asciidoctor Docker container provides:
 * Asciidoctor EPUB3
 * Asciidoctor Mathematical
 * AsciiMath
-* Source highlighting using CodeRay or Pygments
+* Source highlighting using CodeRay or Rouge
 * Asciidoctor Confluence
 
 == How to use it
