@@ -34,7 +34,8 @@ RUN gem install compass --version 0.12.7 && \
     gem install zurb-foundation --version 4.3.2
 
 # Needed by build script.
-RUN apk add --no-cache git
+RUN apk add --no-cache git python3 py3-setuptools
+RUN pip3 install Unidecode
 
 COPY inline-syntax-highlighting.patch /adoc/patches/
 RUN cd /usr/lib/ruby/gems/2.5.0/gems/asciidoctor-2.0.10/ && patch -p1 < /adoc/patches/inline-syntax-highlighting.patch

@@ -65,7 +65,7 @@ for lang in $PRIMARY_LANGUAGE translations/??.po; do
 	mkdir -p $langcode
 
 	# Document title for PDF filename
-	title=$(grep -m 1 '^=[^=]' index.$langcode.adoc | rev | cut -d: -f2- | rev | tr : - | tr / - | sed 's/^= *//; s/ /-/g; s/--*/-/g; s/^-*//; s/-*$//;' | tr '[:upper:]' '[:lower:]')
+	title=$(grep -m 1 '^=[^=]' index.$langcode.adoc | rev | cut -d: -f2- | rev | unidecode | tr '[:upper:]`~!@"#$%^&*(){}[]/=?+_<>,.\| '"'" '[:lower:]-----------------------------'"-" | sed 's/--*/-/g; s/^-*//; s/-*$//;')
 	echo "Document title in $langcode is “$title”"
 
 	echo "Generating $langcode HTML"
