@@ -80,8 +80,10 @@ for lang in $PRIMARY_LANGUAGE translations/??.po; do
 		-a pdf_filename=$title.$langcode.pdf \
 		-a contribute_url=$contribute_url \
 		-a stylesheet=/adoc/gbif-stylesheet/stylesheets/gbif.css \
+		-a google-analytics-account=UA-42057855-10 \
 		-r asciidoctor-diagram \
 		-r /adoc/asciidoctor-extensions-lab/lib/git-metadata-preprocessor.rb \
+		-r /adoc/asciidoctor-extensions-lab/lib/google-analytics-docinfoprocessor.rb \
 		-r /adoc/gbif-extensions/lib/translate-labels.rb \
 		-r /adoc/gbif-extensions/lib/license-url-docinfoprocessor.rb \
 		-r /adoc/gbif-extensions/lib/translation-links.rb \
