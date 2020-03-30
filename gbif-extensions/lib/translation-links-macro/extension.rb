@@ -42,6 +42,7 @@ class TranslationLinksMacro < Extensions::InlineMacroProcessor
     "vi" => "Ti&#7871;ng Vi&#7879;t",
     "tr" => "T&uuml;rk&ccedil;e",
     "uk" => "&#1091;&#1082;&#1088;&#1072;&#1111;&#1085;&#1089;&#1100;&#1082;&#1072;&nbsp;(ukrajins'ka)",
+    "zh" => "&#20013;&#25991;",
     "zh-CN" => "&#20013;&#25991;(&#31616;)",
     "zh-HK" => "&#20013;&#25991;(HK)",
     "zh-TW" => "&#20013;&#25991;(&#32321;)"
@@ -75,9 +76,11 @@ class TranslationLinksMacro < Extensions::InlineMacroProcessor
       end
 
       if links.length == attributes['preText'].length
+        # Only the main language, so abandon this.
         links = ''
       else
-        links += attributes['linkText']
+        # Close the sentance.
+        unless attributes['linkText'].nil? links += attributes['linkText']
       end
 
       links
