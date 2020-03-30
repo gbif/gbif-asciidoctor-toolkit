@@ -65,7 +65,7 @@ for lang in $PRIMARY_LANGUAGE translations/??.po; do
 	mkdir -p $langcode
 
 	# Document title for PDF filename
-	title=$(grep -m 1 '^=[^=]' index.$langcode.adoc | rev | cut -d: -f2- | rev | tr : - | tr / - | sed 's/^= *//; s/ /-/g; s/--*/-/g; s/^-*//; s/-*$//;' | tr '[:upper:]' '[:lower:]')
+	title=$(grep -m 1 '^=[^=]' index.$langcode.adoc | rev | cut -d: -f2- | rev | unidecode | tr '[:upper:]`~!@"#$%^&*(){}[]/=?+_<>,.\| '"'" '[:lower:]-----------------------------'"-" | sed 's/--*/-/g; s/^-*//; s/-*$//;')
 	echo "Document title in $langcode is “$title”"
 
 	echo "Generating $langcode HTML"
@@ -80,8 +80,10 @@ for lang in $PRIMARY_LANGUAGE translations/??.po; do
 		-a pdf_filename=$title.$langcode.pdf \
 		-a contribute_url=$contribute_url \
 		-a stylesheet=/adoc/gbif-stylesheet/stylesheets/gbif.css \
+		-a google-analytics-account=UA-42057855-10 \
 		-r asciidoctor-diagram \
 		-r /adoc/asciidoctor-extensions-lab/lib/git-metadata-preprocessor.rb \
+		-r /adoc/asciidoctor-extensions-lab/lib/google-analytics-docinfoprocessor.rb \
 		-r /adoc/gbif-extensions/lib/translate-labels.rb \
 		-r /adoc/gbif-extensions/lib/license-url-docinfoprocessor.rb \
 		-r /adoc/gbif-extensions/lib/translation-links.rb \
