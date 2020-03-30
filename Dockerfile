@@ -1,4 +1,4 @@
-FROM asciidoctor/docker-asciidoctor:latest
+FROM asciidoctor/docker-asciidoctor:1.0.0
 LABEL MAINTAINERS="Matthew Blissett <mblissett@gbif.org>"
 
 # FixUID: https://github.com/boxboat/fixuid
