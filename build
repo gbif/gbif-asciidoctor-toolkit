@@ -13,11 +13,11 @@ echo "Primary language is $PRIMARY_LANGUAGE."
 # Check this is run from a reasonable directory.
 # (Advanced users can run /bin/bash as a Docker target command.)
 if [[ ! -e index.$PRIMARY_LANGUAGE.adoc ]]; then
-    echo >&2 "There is no index.$PRIMARY_LANGUAGE.adoc file in this directory."
+	echo >&2 "There is no index.$PRIMARY_LANGUAGE.adoc file in this directory."
 	echo >&2
 	echo >&2 "Check you are running this from the top-level of your document,"
 	echo >&2 "and that there is an $PRIMARY_LANGUAGE source document called index.$PRIMARY_LANGUAGE.adoc."
-    exit 1
+	exit 1
 fi
 
 # Clean any old files
@@ -30,12 +30,20 @@ touch --no-create --date @$(git rev-list --max-count=1 --pretty=%ct HEAD | tail 
 # Produce the translated adoc source from the po-files.
 if [[ -e po4a.conf ]]; then
 	echo "Translating sources"
+	for pri_adoc in *.$PRIMARY_LANGUAGE.adoc; do
+		grep -q $pri_adoc po4a.conf || echo >&2 "WARNING: Source file $pri_adoc not present in the translation configuration (po4a.conf)"
+	done
+	# Set up for a newly translatable document if necessary.
+	mkdir -p translations/
+	[[ -e translations/index.pot ]] || touch translations/index.pot
 	# --force is used because Git usage has probably made timestamps unrelated to actual modification time.
 	po4a -v po4a.conf --force
 	# If index.pot has only one changed line, it's the "POT-Creation-Date", and we don't want to commit that.
 	if [[ $(git diff --numstat translations/index.pot | cut -f 1) -eq 1 ]]; then
 		echo "No change to index.pot"
 		git checkout translations/index.pot
+	else
+		git add translations/index.pot
 	fi
 	for lang in translations/??.po; do
 		langcode=$(basename $lang .po)
