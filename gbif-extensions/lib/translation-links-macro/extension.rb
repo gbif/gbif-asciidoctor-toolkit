@@ -78,9 +78,9 @@ class TranslationLinksMacro < Extensions::InlineMacroProcessor
       if links.length == attributes['preText'].length
         # Only the main language, so abandon this.
         links = ''
-      else
+      elsif attributes['linkText']
         # Close the sentance.
-        unless attributes['linkText'].nil? links += attributes['linkText']
+        links += attributes['linkText']
       end
 
       links
