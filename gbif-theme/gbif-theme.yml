@@ -1,0 +1,81 @@
+# GBIF theme, using GBIF colours.
+# However, using easily-available open source TTF fonts.
+# See https://github.com/chloerei/asciidoctor-pdf-cjk-kai_gen_gothic for CJK fonts.
+
+font:
+  catalog:
+    KaiGen Gothic CN:
+      normal: KaiGenGothicCN-Regular.ttf
+      bold: KaiGenGothicCN-Bold.ttf
+      italic: KaiGenGothicCN-Regular-Italic.ttf
+      bold_italic: KaiGenGothicCN-Bold-Italic.ttf
+#    Roboto Mono:
+#      normal: RobotoMono-Regular.ttf
+#      bold: RobotoMono-Bold.ttf
+#      italic: RobotoMono-Italic.ttf
+#      bold_italic: RobotoMono-BoldItalic.ttf
+    Noto Sans:
+      normal: NotoSans-Regular.ttf
+      bold: NotoSans-Bold.ttf
+      italic: NotoSans-Italic.ttf
+      bold_italic: NotoSans-BoldItalic.ttf
+    Noto Sans Medium:
+      italic: NotoSans-MediumItalic.ttf
+      normal: NotoSans-Medium.ttf
+      bold_italic: NotoSans-SemiBoldItalic.ttf
+      bold: NotoSans-SemiBold.ttf
+    Noto Emoji:
+      normal: NotoEmoji-Regular.ttf
+      bold: NotoEmoji-Regular.ttf
+      italic: NotoEmoji-Regular.ttf
+      bold_italic: NotoEmoji-Regular.ttf
+
+    # The fonts below are part of the default distribution/theme.
+    # Noto Serif supports Latin, Latin-1 Supplement, Latin Extended-A, Greek, Cyrillic, Vietnamese & an assortment of symbols
+    Noto Serif:
+      normal: notoserif-regular-subset.ttf
+      bold: notoserif-bold-subset.ttf
+      italic: notoserif-italic-subset.ttf
+      bold_italic: notoserif-bold_italic-subset.ttf
+    # M+ 1mn supports ASCII and the circled numbers used for conums
+    M+ 1mn:
+      normal: mplus1mn-regular-subset.ttf
+      bold: mplus1mn-bold-subset.ttf
+      italic: mplus1mn-italic-subset.ttf
+      bold_italic: mplus1mn-bold_italic-subset.ttf
+    M+ 1p Fallback:
+      bold: mplus1p-regular-fallback.ttf
+      bold_italic: mplus1p-regular-fallback.ttf
+      italic: mplus1p-regular-fallback.ttf
+      normal: mplus1p-regular-fallback.ttf
+  fallbacks:
+    - M+ 1p Fallback
+    - KaiGen Gothic CN
+
+extends: default-with-fallback-font
+
+base:
+  font-family: Noto Sans
+  font-color: #000000
+
+title-page:
+  background-image: image:/adoc/gbif-theme/img/gbif-cover-lines.svg[fit=contain]
+  title:
+    font-family: Noto Sans Medium
+    font-color: #000000
+  authors:
+    font-color: #534B4A
+  revision:
+    font-color: #534B4A
+
+heading:
+  font-color: #694121
+  font-family: Noto Sans Medium
+  font-style: bold
+
+link:
+  font-color: #7d466a
+  font-family: Noto Sans Medium
+
+footer:
+  font-color: #534B4A

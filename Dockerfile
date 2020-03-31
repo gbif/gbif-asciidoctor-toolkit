@@ -33,6 +33,13 @@ RUN apk add --no-cache ruby-rdoc ruby-bundler
 RUN gem install compass --version 0.12.7 && \
     gem install zurb-foundation --version 4.3.2
 
+# Fonts for GBIF style (in particular, Chinese-Japanese-Korean support)
+RUN mkdir -p /adoc/fonts && \
+    curl -SsL https://download.gbif.org/2020/03/KaiGenGothic.txz | tar -JxvC /adoc/fonts && \
+    curl -SsLO https://noto-website-2.storage.googleapis.com/pkgs/NotoSans-hinted.zip && unzip -jod /adoc/fonts NotoSans-hinted.zip && rm -f NotoSans-hinted.zip && \
+    curl -SsLO https://noto-website-2.storage.googleapis.com/pkgs/NotoEmoji-unhinted.zip && unzip -jod /adoc/fonts NotoEmoji-unhinted.zip && rm -f NotoEmoji-unhinted.zip && \
+    chmod a+r -R /adoc/fonts
+
 # Needed by build script.
 RUN apk add --no-cache git python3 py3-setuptools
 RUN pip3 install Unidecode
@@ -46,6 +53,7 @@ RUN cd /adoc/gbif-stylesheet && compass compile
 COPY asciidoctor-extensions-lab /adoc/asciidoctor-extensions-lab
 COPY gbif-extensions/ /adoc/gbif-extensions/
 COPY gbif-templates/ /adoc/gbif-templates/
+COPY gbif-theme/ /adoc/gbif-theme/
 COPY GbifHtmlConverter.rb /adoc/
 
 # GBIF build script
