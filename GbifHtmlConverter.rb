@@ -40,6 +40,7 @@ class GbifHtmlConverter < (Asciidoctor::Converter.for 'html5')
     "tr" => "T&uuml;rk&ccedil;e",
     "uk" => "&#1091;&#1082;&#1088;&#1072;&#1111;&#1085;&#1089;&#1100;&#1082;&#1072;&nbsp;(ukrajins'ka)",
     "zh" => "&#20013;&#25991;(&#31616;)",
+    "zh-CN" => "&#20013;&#25991;(&#31616;)",
     "zh-HK" => "&#20013;&#25991;(HK)",
     "zh-TW" => "&#20013;&#25991;(&#32321;)"
   }
@@ -65,7 +66,7 @@ class GbifHtmlConverter < (Asciidoctor::Converter.for 'html5')
 
     Dir["index.??.adoc"].sort.each do |file|
       langCode = file[6,2]
-      if langCode != currentLangCode
+      if langCode != currentLangCode && !File.file?("translations/#{langCode}.hidden")
         result << %(<li><a hreflang="#{langCode}" href="../#{langCode}/">#{LANGUAGE_NAMES[langCode]}</a></li>)
       end
     end
