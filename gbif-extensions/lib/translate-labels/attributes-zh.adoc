@@ -1,4 +1,13 @@
-:other_formats_text: 其他格式 
+// The text for the links to the PDF document, and documents in other languages:
+//     This document is also available in [PDF format] and in other languages: [español], [中文].
+// :also_links_pre_text:[:also_links_pdf_link_text:]:also_links_languages_pre_text:[lang]:also_links_languages_separator:[lang]:also_links_post_text:
+:also_links_pre_text: 此文件也可用于
+:also_links_pdf_link_text: PDF格式
+:also_links_languages_pre_text: 和其他语言：
+:also_links_languages_separator: 、
+:also_links_post_text: 。
+
+:other_formats_text: 其他格式
 :pdf_file_text: PDF文件
 :contribute_title_text: 参与
 :contribute_edit_text: 在GitHub上编辑

@@ -1,3 +1,12 @@
+// The text for the links to the PDF document, and documents in other languages:
+//     This document is also available in [PDF format] and in other languages: [español], [中文].
+// :also_links_pre_text:[:also_links_pdf_link_text:]:also_links_languages_pre_text:[lang]:also_links_languages_separator:[lang]:also_links_post_text:
+:also_links_pre_text: pass:[Este documento también está disponible en ]
+:also_links_pdf_link_text: formato PDF
+:also_links_languages_pre_text: pass:[ y en otros idiomas: ]
+:also_links_languages_separator: pass:[, ]
+:also_links_post_text: .
+
 :other_formats_text: Otros Formatos
 :pdf_file_text: PDF format
 :contribute_title_text: Para contribuciciones

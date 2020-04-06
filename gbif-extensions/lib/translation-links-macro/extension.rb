@@ -57,8 +57,9 @@ class TranslationLinksMacro < Extensions::InlineMacroProcessor
       currentLangCode = 'en'
     end
 
+    pdfFilename = parent.document.attributes['pdf_filename']
+
     if target == 'pdf'
-      pdfFilename = parent.document.attributes['pdf_filename']
       linkText = attributes['linkText']
       %(#{attributes['preText']} <a hreflang="#{currentLangCode}" type="application/pdf" href="#{pdfFilename}">#{attributes['linkText']}</a> #{attributes['postText']})
 
@@ -84,6 +85,39 @@ class TranslationLinksMacro < Extensions::InlineMacroProcessor
       end
 
       links
+    elsif target == 'combined'
+      preText = parent.document.attributes['also_links_pre_text'] || 'This document is also available in '
+      pdfLinkText = parent.document.attributes['also_links_pdf_link_text'] || 'PDF format'
+      langPreText = parent.document.attributes['also_links_languages_pre_text'] || ' and in other languages: '
+      langSeparator = parent.document.attributes['also_links_languages_separator'] || ', '
+      postText = parent.document.attributes['also_links_post_text'] || '.'
+
+      pdfLink = %(#{preText}<a hreflang="#{currentLangCode}" type="application/pdf" href="#{pdfFilename}">#{pdfLinkText}</a>)
+      allLinks = pdfLink + langPreText
+
+      translationsExist = false
+      Dir["index.??.adoc"].sort.each do |file|
+        langCode = file[6,2]
+        if langCode != currentLangCode
+          if translationsExist
+            allLinks += langSeparator
+          end
+          allLinks += %(<a hreflang="#{langCode}" href="../#{langCode}/">#{LANGUAGE_NAMES[langCode]}</a>)
+          translationsExist = true
+        end
+      end
+
+      if not translationsExist
+        # Only the main language, so abandon this.
+        allLinks = pdfLink
+      end
+
+      if postText
+        # Close the sentence.
+        allLinks += postText
+      end
+
+      %(<em>#{allLinks}</em>)
     else
       %(Unknown syntax "#{target}")
     end
