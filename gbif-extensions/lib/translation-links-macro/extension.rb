@@ -68,7 +68,7 @@ class TranslationLinksMacro < Extensions::InlineMacroProcessor
 
       Dir["index.??.adoc"].sort.each do |file|
         langCode = file[6,2]
-        if langCode != currentLangCode
+        if langCode != currentLangCode && !File.file?("translations/#{langCode}.hidden")
           if links.length > attributes['preText'].length
             links += ','
           end
@@ -98,7 +98,7 @@ class TranslationLinksMacro < Extensions::InlineMacroProcessor
       translationsExist = false
       Dir["index.??.adoc"].sort.each do |file|
         langCode = file[6,2]
-        if langCode != currentLangCode
+        if langCode != currentLangCode && !File.file?("translations/#{langCode}.hidden")
           if translationsExist
             allLinks += langSeparator
           end
@@ -138,7 +138,7 @@ class TranslationLinksDocinfoProcessor < Extensions::DocinfoProcessor
 
     Dir["index.??.adoc"].sort.each do |file|
       langCode = file[6,2]
-      if langCode != currentLangCode
+      if langCode != currentLangCode && !File.file?("translations/#{langCode}.hidden")
         links += %(<link rel="alternate" hreflang="#{langCode}" href="../#{langCode}/" />)
       end
     end
