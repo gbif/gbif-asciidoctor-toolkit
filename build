@@ -98,6 +98,7 @@ for lang in $PRIMARY_LANGUAGE translations/??.po; do
 		-T /adoc/gbif-templates/ \
 		-o $langcode/index.$langcode.html \
 		--trace \
+		--verbose \
 		index.$langcode.adoc
 
 	echo "Generating $langcode PDF"
@@ -116,6 +117,7 @@ for lang in $PRIMARY_LANGUAGE translations/??.po; do
 		-r /adoc/asciidoctor-extensions-lab/lib/git-metadata-preprocessor.rb \
 		-o $langcode/$title.$langcode.pdf \
 		--trace \
+		--verbose \
 		index.$langcode.adoc
 
 	cat > index.$langcode.asis <<-EOF
