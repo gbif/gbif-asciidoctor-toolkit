@@ -81,7 +81,6 @@ for lang in $PRIMARY_LANGUAGE translations/??.po; do
 		-a toc=left \
 		-a numbered \
 		-a icons=font \
-		-a xrefstyle=short \
 		-a lang=$langcode \
 		-a imagesdir=../ \
 		-a sectanchors \
@@ -107,7 +106,6 @@ for lang in $PRIMARY_LANGUAGE translations/??.po; do
 		-a numbered \
 		-a icons=font \
 		-a pagenums \
-		-a xrefstyle=short \
 		-a lang=$langcode \
 		-a media=print \
 		-a title-page \
