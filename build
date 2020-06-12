@@ -76,6 +76,13 @@ for lang in $PRIMARY_LANGUAGE translations/??.po; do
 	title=$(grep -m 1 '^=[^=]' index.$langcode.adoc | rev | cut -d: -f2- | rev | unidecode | tr '[:upper:]`~!@"#$%^&*(){}[]/=?+_<>,.\| '"'" '[:lower:]-----------------------------'"-" | sed 's/--*/-/g; s/^-*//; s/-*$//;')
 	echo "Document title in $langcode is “$title”"
 
+	# Only add the BibTeX plugin if required
+	if grep -q :bibtex-file: index.$langcode.adoc; then
+		bibtex_plugin="-r asciidoctor-bibtex"
+	else
+		bibtex_plugin=
+	fi
+
 	echo "Generating $langcode HTML"
 	asciidoctor \
 		-a toc=left \
@@ -89,7 +96,7 @@ for lang in $PRIMARY_LANGUAGE translations/??.po; do
 		-a stylesheet=/adoc/gbif-stylesheet/stylesheets/gbif.css \
 		-a google-analytics-account=UA-42057855-10 \
 		-r asciidoctor-diagram \
-		-r asciidoctor-bibtex \
+		$bibtex_plugin \
 		-r /adoc/asciidoctor-extensions-lab/lib/git-metadata-preprocessor.rb \
 		-r /adoc/asciidoctor-extensions-lab/lib/google-analytics-docinfoprocessor.rb \
 		-r /adoc/gbif-extensions/lib/translate-labels.rb \
@@ -114,7 +121,7 @@ for lang in $PRIMARY_LANGUAGE translations/??.po; do
 		-a pdf-theme=/adoc/gbif-theme/gbif-theme.yml \
 		-a pdf-fontsdir='/adoc/fonts;GEM_FONTS_DIR' \
 		-r asciidoctor-diagram \
-		-r asciidoctor-bibtex \
+		$bibtex_plugin \
 		-r /adoc/gbif-extensions/lib/translate-labels.rb \
 		-r /adoc/asciidoctor-extensions-lab/lib/git-metadata-preprocessor.rb \
 		-o $langcode/$title.$langcode.pdf \

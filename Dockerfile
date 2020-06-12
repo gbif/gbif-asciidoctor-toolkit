@@ -21,6 +21,7 @@ RUN gem install rugged
 
 # BibTeX plugin
 RUN gem install asciidoctor-bibtex
+COPY gbif.csl /usr/lib/ruby/gems/2.5.0/gems/csl-styles-1.0.1.10/vendor/styles/
 
 # A2S diagrams (needs Go)
 #RUN apk add --no-cache git make musl-dev go
