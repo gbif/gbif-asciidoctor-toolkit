@@ -89,6 +89,7 @@ for lang in $PRIMARY_LANGUAGE translations/??.po; do
 		-a stylesheet=/adoc/gbif-stylesheet/stylesheets/gbif.css \
 		-a google-analytics-account=UA-42057855-10 \
 		-r asciidoctor-diagram \
+		-r asciidoctor-bibtex \
 		-r /adoc/asciidoctor-extensions-lab/lib/git-metadata-preprocessor.rb \
 		-r /adoc/asciidoctor-extensions-lab/lib/google-analytics-docinfoprocessor.rb \
 		-r /adoc/gbif-extensions/lib/translate-labels.rb \
@@ -113,6 +114,7 @@ for lang in $PRIMARY_LANGUAGE translations/??.po; do
 		-a pdf-theme=/adoc/gbif-theme/gbif-theme.yml \
 		-a pdf-fontsdir='/adoc/fonts;GEM_FONTS_DIR' \
 		-r asciidoctor-diagram \
+		-r asciidoctor-bibtex \
 		-r /adoc/gbif-extensions/lib/translate-labels.rb \
 		-r /adoc/asciidoctor-extensions-lab/lib/git-metadata-preprocessor.rb \
 		-o $langcode/$title.$langcode.pdf \

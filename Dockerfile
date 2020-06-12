@@ -19,6 +19,9 @@ RUN apk add --no-cache diffutils perl-unicode-linebreak po4a
 RUN apk add --no-cache openssl openssl-dev cmake ruby-dev ruby-rdoc gcc musl-dev
 RUN gem install rugged
 
+# BibTeX plugin
+RUN gem install asciidoctor-bibtex
+
 # A2S diagrams (needs Go)
 #RUN apk add --no-cache git make musl-dev go
 #ENV GOROOT /usr/lib/go
