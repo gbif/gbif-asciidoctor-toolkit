@@ -117,7 +117,7 @@ class TranslationLinksMacro < Extensions::InlineMacroProcessor
         allLinks += postText
       end
 
-      %(<em>#{allLinks}</em>)
+      %(<p class="translationLinks"><em>#{allLinks}</em></p>)
     else
       %(Unknown syntax "#{target}")
     end

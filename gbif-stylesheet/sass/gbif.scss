@@ -10,3 +10,10 @@ h1 {
   margin-left: 2em;
   margin-right: 2em;
 }
+
+:not(.translationLinks) > {
+  em:lang(zh), em:lang(ja) {
+    font-style: normal;
+    text-emphasis: dot;
+  }
+}

@@ -11,3 +11,28 @@
 :pdf_file_text: PDF文件
 :contribute_title_text: 参与
 :contribute_edit_text: 在GitHub上编辑
+
+// Copied here as we are using the language code zh rather than zh_CN.
+// Source is https://github.com/asciidoctor/asciidoctor/blob/master/data/locale/attributes-zh_CN.adoc
+// Simplified Chinese translation, courtesy of John Dong <dongwqs@gmail.com>
+:appendix-caption: 附录
+:appendix-refsig: {appendix-caption}
+:caution-caption: 注意
+//:chapter-label: ???
+//:chapter-refsig: {chapter-label}
+:example-caption: 示例
+:figure-caption: 图表
+:important-caption: 重要
+:last-update-label: 最后更新
+ifdef::listing-caption[:listing-caption: 列表]
+ifdef::manname-title[:manname-title: 名称]
+:note-caption: 笔记
+//:part-refsig: ???
+ifdef::preface-title[:preface-title: 序言]
+//:section-refsig: ???
+:table-caption: 表格
+:tip-caption: 提示
+:toc-title: 目录
+:untitled-label: 暂无标题
+:version-label: 版本
+:warning-caption: 警告
