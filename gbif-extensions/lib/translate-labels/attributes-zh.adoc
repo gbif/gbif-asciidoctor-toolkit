@@ -11,6 +11,7 @@
 :pdf_file_text: PDF文件
 :contribute_title_text: 参与
 :contribute_edit_text: 在GitHub上编辑
+:contribute_issue_text: 创造议题
 
 // Copied here as we are using the language code zh rather than zh_CN.
 // Source is https://github.com/asciidoctor/asciidoctor/blob/master/data/locale/attributes-zh_CN.adoc

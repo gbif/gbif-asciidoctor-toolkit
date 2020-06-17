@@ -61,8 +61,10 @@ echo
 
 if git remote get-url origin &> /dev/null; then
 	contribute_url=https://github.com/gbif/$(git remote get-url origin | rev | cut -d/ -f1 | rev | cut -d. -f1)
+	issue_url=$contribute_url/issues/new
 else
 	contribute_url=
+	issue_url=
 fi
 
 # Generate the output HTML and PDF.
@@ -93,6 +95,7 @@ for lang in $PRIMARY_LANGUAGE translations/??.po; do
 		-a sectanchors \
 		-a pdf_filename=$title.$langcode.pdf \
 		-a contribute_url=$contribute_url \
+		-a issue_url=$issue_url \
 		-a stylesheet=/adoc/gbif-stylesheet/stylesheets/gbif.css \
 		-a google-analytics-account=UA-42057855-10 \
 		-r asciidoctor-diagram \

@@ -11,3 +11,4 @@
 :pdf_file_text: PDF file
 :contribute_title_text: Contribute
 :contribute_edit_text: Edit on GitHub
+:contribute_issue_text: Create an issue

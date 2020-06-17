@@ -11,3 +11,4 @@
 :pdf_file_text: PDF format
 :contribute_title_text: Para contribuciciones
 :contribute_edit_text: Editar en GitHub
+:contribute_issue_text: Crear una propuesta
