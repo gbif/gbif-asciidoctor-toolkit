@@ -61,7 +61,7 @@ echo
 
 if git remote get-url origin &> /dev/null; then
 	contribute_url=https://github.com/gbif/$(git remote get-url origin | rev | cut -d/ -f1 | rev | cut -d. -f1)
-	issue_url=$contribute_url/issues/new
+	issue_url=$contribute_url/issues/new/choose
 else
 	contribute_url=
 	issue_url=
