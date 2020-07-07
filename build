@@ -93,6 +93,8 @@ for lang in $PRIMARY_LANGUAGE translations/??.po; do
 		-a lang=$langcode \
 		-a imagesdir=../ \
 		-a sectanchors \
+		-a idprefix= \
+		-a idseparator=- \
 		-a pdf_filename=$title.$langcode.pdf \
 		-a contribute_url=$contribute_url \
 		-a issue_url=$issue_url \
@@ -119,6 +121,8 @@ for lang in $PRIMARY_LANGUAGE translations/??.po; do
 		-a icons=font \
 		-a pagenums \
 		-a lang=$langcode \
+		-a idprefix= \
+		-a idseparator=- \
 		-a media=print \
 		-a title-page \
 		-a pdf-theme=/adoc/gbif-theme/gbif-theme.yml \
