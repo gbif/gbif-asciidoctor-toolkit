@@ -59,9 +59,10 @@ else
 fi
 echo
 
+improve_url=https://docs.gbif.org/contributing/
 if git remote get-url origin &> /dev/null; then
 	contribute_url=https://github.com/gbif/$(git remote get-url origin | rev | cut -d/ -f1 | rev | cut -d. -f1)
-	issue_url=$contribute_url/issues/new/choose
+	issue_url=$contribute_url/issues/new
 else
 	contribute_url=
 	issue_url=
@@ -87,8 +88,6 @@ for lang in $PRIMARY_LANGUAGE translations/??.po; do
 
 	echo "Generating $langcode HTML"
 	asciidoctor \
-		-a toc=left \
-		-a numbered \
 		-a icons=font \
 		-a lang=$langcode \
 		-a imagesdir=../ \
@@ -96,6 +95,7 @@ for lang in $PRIMARY_LANGUAGE translations/??.po; do
 		-a idprefix= \
 		-a idseparator=- \
 		-a pdf_filename=$title.$langcode.pdf \
+		-a improve_url=$improve_url \
 		-a contribute_url=$contribute_url \
 		-a issue_url=$issue_url \
 		-a stylesheet=/adoc/gbif-stylesheet/stylesheets/gbif.css \
@@ -116,8 +116,6 @@ for lang in $PRIMARY_LANGUAGE translations/??.po; do
 
 	echo "Generating $langcode PDF"
 	asciidoctor-pdf \
-		-a toc \
-		-a numbered \
 		-a icons=font \
 		-a pagenums \
 		-a lang=$langcode \
