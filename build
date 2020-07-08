@@ -8,7 +8,10 @@ shopt -s globstar
 # In case there are no translations.
 shopt -s nullglob
 
-echo "Primary language is $PRIMARY_LANGUAGE."
+RED='\033[1;31m'
+NC='\033[0m'
+
+echo -e "${RED}Primary language is $PRIMARY_LANGUAGE.${NC}"
 
 # Check this is run from a reasonable directory.
 # (Advanced users can run /bin/bash as a Docker target command.)
@@ -26,10 +29,11 @@ git clean -f -X
 
 # Set timestamp on index.$PRIMARY_LANGUAGE.adoc to latest commit time (shown in document footer)
 touch --no-create --date @$(git rev-list --max-count=1 --pretty=%ct HEAD | tail -n 1) index.$PRIMARY_LANGUAGE.adoc
+echo
 
 # Produce the translated adoc source from the po-files.
 if [[ -e po4a.conf ]]; then
-	echo "Translating sources"
+	echo -e "${RED}Translating sources${NC}"
 	for pri_adoc in *.$PRIMARY_LANGUAGE.adoc; do
 		grep -q $pri_adoc po4a.conf || echo >&2 "WARNING: Source file $pri_adoc not present in the translation configuration (po4a.conf)"
 	done
@@ -59,6 +63,17 @@ else
 fi
 echo
 
+# Spell-check the document using Aspell
+if [[ -e index.en.adoc ]]; then
+	echo -e "${RED}Checking document spelling (Oxford dictionary)${NC}"
+	echo "(NB many names and technical terms are not in the dictionary.)"
+	for d in *.en.adoc; do
+		echo "Checking $d…"
+		aspell --run-together -d en_GB-ize-w_accents -p /adoc/asciidoc.dict list < $d | sed 's/^/	/'
+	done
+fi
+echo
+
 improve_url=https://docs.gbif.org/contributing/
 if git remote get-url origin &> /dev/null; then
 	contribute_url=https://github.com/gbif/$(git remote get-url origin | rev | cut -d/ -f1 | rev | cut -d. -f1)
@@ -72,7 +87,7 @@ fi
 rm -f **/*.??.html **/*.??.pdf *.??.asis
 for lang in $PRIMARY_LANGUAGE translations/??.po; do
 	langcode=$(basename $lang .po)
-	echo "Building language $langcode"
+	echo -e "${RED}Building document in language $langcode${NC}"
 	mkdir -p $langcode
 
 	# Document title for PDF filename
@@ -86,7 +101,7 @@ for lang in $PRIMARY_LANGUAGE translations/??.po; do
 		bibtex_plugin=
 	fi
 
-	echo "Generating $langcode HTML"
+	echo -e "${RED}Generating $langcode HTML${NC}"
 	asciidoctor \
 		-a icons=font \
 		-a lang=$langcode \
@@ -114,7 +129,7 @@ for lang in $PRIMARY_LANGUAGE translations/??.po; do
 		--verbose \
 		index.$langcode.adoc
 
-	echo "Generating $langcode PDF"
+	echo -e "${RED}Generating $langcode PDF${NC}"
 	asciidoctor-pdf \
 		-a icons=font \
 		-a pagenums \

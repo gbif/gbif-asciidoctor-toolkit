@@ -44,6 +44,14 @@ RUN mkdir -p /adoc/fonts && \
     curl -SsLO https://noto-website-2.storage.googleapis.com/pkgs/NotoEmoji-unhinted.zip && unzip -jod /adoc/fonts NotoEmoji-unhinted.zip && rm -f NotoEmoji-unhinted.zip && \
     chmod a+r -R /adoc/fonts
 
+# GNU Aspell for Oxford English (UN English) spellcheck
+RUN apk add --no-cache aspell aspell-utils && \
+    mkdir /adoc/aspell && \
+    curl -Ss https://ftp.gnu.org/gnu/aspell/dict/en/aspell6-en-2019.10.06-0.tar.bz2 | tar -jxC /adoc/aspell && \
+    cd /adoc/aspell/aspell6-en-2019.10.06-0 && \
+    ./configure && make && make install && \
+    rm -Rf /adoc/aspell
+
 # Needed by build script.
 RUN apk add --no-cache git python3 py3-setuptools
 RUN pip3 install Unidecode
@@ -59,6 +67,7 @@ COPY gbif-extensions/ /adoc/gbif-extensions/
 COPY gbif-templates/ /adoc/gbif-templates/
 COPY gbif-theme/ /adoc/gbif-theme/
 COPY GbifHtmlConverter.rb /adoc/
+COPY asciidoc.dict /adoc/
 
 # GBIF build script
 ENV PRIMARY_LANGUAGE=en
