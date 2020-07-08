@@ -10,6 +10,7 @@
 :other_formats_text: 其他格式
 :pdf_file_text: PDF文件
 :contribute_title_text: 参与
+:contribute_improve_text: 完善这份文件
 :contribute_edit_text: 在GitHub上编辑
 :contribute_issue_text: 创造议题
 

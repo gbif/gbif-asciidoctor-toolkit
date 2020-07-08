@@ -10,5 +10,6 @@
 :other_formats_text: Autres Formats
 :pdf_file_text: Fichier PDF
 :contribute_title_text: Contribuer
+:contribute_improve_text: Améliorez ce document
 :contribute_edit_text: Contribuer sur GitHub
 :contribute_issue_text: Créer une issue

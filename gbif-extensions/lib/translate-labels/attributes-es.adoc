@@ -10,5 +10,6 @@
 :other_formats_text: Otros Formatos
 :pdf_file_text: PDF format
 :contribute_title_text: Para contribuciciones
+:contribute_improve_text: Mejora este documento
 :contribute_edit_text: Editar en GitHub
 :contribute_issue_text: Crear una propuesta
