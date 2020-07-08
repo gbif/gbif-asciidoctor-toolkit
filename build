@@ -8,8 +8,13 @@ shopt -s globstar
 # In case there are no translations.
 shopt -s nullglob
 
-RED='\033[1;31m'
-NC='\033[0m'
+if [[ -t 0 ]]; then
+	RED='\033[1;31m'
+	NC='\033[0m'
+else
+	RED='▶'
+	NC=''
+fi
 
 echo -e "${RED}Primary language is $PRIMARY_LANGUAGE.${NC}"
 
