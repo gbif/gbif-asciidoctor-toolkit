@@ -1107,6 +1107,11 @@ table.stripes-hover tr:hover {
 //  background: none;
 //}
 
+// Matt: but "stripes-none" needs to be active
+table.stripes-none tr {
+  background: none;
+}
+
 @each $halign in (left, right, center) {
   th.halign-#{$halign},
   td.halign-#{$halign} {
