@@ -69,7 +69,7 @@ if [[ -e index.en.adoc ]]; then
 	echo "(NB many names and technical terms are not in the dictionary.)"
 	for d in *.en.adoc; do
 		echo "Checking $d…"
-		aspell --run-together -d en_GB-ize-w_accents -p /adoc/asciidoc.dict list < $d | sed 's/^/	/'
+		aspell --run-together --ignore=3 -d en_GB-ize-w_accents -p /adoc/asciidoc.dict list < $d | sed 's/^/	/'
 	done
 fi
 echo
