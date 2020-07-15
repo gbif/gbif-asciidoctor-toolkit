@@ -1,0 +1,2 @@
+Icons are embedded as data URIs in the generated source.  These files
+are only useful if the icons need to be changed in an editor.
