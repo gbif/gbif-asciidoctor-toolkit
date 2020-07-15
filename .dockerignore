@@ -1,6 +1,7 @@
-tests
 .git*
 README.adoc
 README.md
+README
 cache
-tests
+icons
+*~
