@@ -17,3 +17,10 @@ h1 {
     text-emphasis: dot;
   }
 }
+
+.term {
+  color: inherit;
+  font: 0.9em "Droid Sans Mono", "DejaVu Sans Mono", monospace;
+  text-decoration: dashed underline;
+  word-wrap: break-word;
+}

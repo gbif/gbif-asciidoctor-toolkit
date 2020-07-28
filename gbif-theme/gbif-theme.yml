@@ -79,3 +79,10 @@ link:
 
 footer:
   font-color: #534B4A
+
+role:
+  term:
+    font-family: $literal_font_family
+    font-size: ceil($base_font_size)
+    font-color: ~
+    font-style: italic
