@@ -83,8 +83,6 @@ class TranslationLinksMacro < Extensions::InlineMacroProcessor
         # Close the sentance.
         links += attributes['linkText']
       end
-
-      links
     elsif target == 'combined'
       preText = parent.document.attributes['also_links_pre_text'] || 'This document is also available in '
       pdfLinkText = parent.document.attributes['also_links_pdf_link_text'] || 'PDF format'
@@ -117,10 +115,12 @@ class TranslationLinksMacro < Extensions::InlineMacroProcessor
         allLinks += postText
       end
 
-      %(<p class="translationLinks"><em>#{allLinks}</em></p>)
+      links = %(<p class="translationLinks"><em>#{allLinks}</em></p>)
     else
-      %(Unknown syntax "#{target}")
+      links = %(Unknown syntax "#{target}")
     end
+
+    Asciidoctor::Inline.new(parent, :quoted, links)
   end
 end
 
