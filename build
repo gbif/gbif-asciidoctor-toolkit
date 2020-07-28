@@ -124,6 +124,7 @@ for lang in $PRIMARY_LANGUAGE translations/??.po; do
 		$bibtex_plugin \
 		-r /adoc/asciidoctor-extensions-lab/lib/git-metadata-preprocessor.rb \
 		-r /adoc/asciidoctor-extensions-lab/lib/google-analytics-docinfoprocessor.rb \
+		-r /adoc/gbif-extensions/lib/glossary.rb \
 		-r /adoc/gbif-extensions/lib/license-url-docinfoprocessor.rb \
 		-r /adoc/gbif-extensions/lib/term.rb \
 		-r /adoc/gbif-extensions/lib/translate-labels.rb \
@@ -148,9 +149,10 @@ for lang in $PRIMARY_LANGUAGE translations/??.po; do
 		-a pdf-fontsdir='/adoc/fonts;GEM_FONTS_DIR' \
 		-r asciidoctor-diagram \
 		$bibtex_plugin \
+		-r /adoc/asciidoctor-extensions-lab/lib/git-metadata-preprocessor.rb \
+		-r /adoc/gbif-extensions/lib/glossary.rb \
 		-r /adoc/gbif-extensions/lib/term.rb \
 		-r /adoc/gbif-extensions/lib/translate-labels.rb \
-		-r /adoc/asciidoctor-extensions-lab/lib/git-metadata-preprocessor.rb \
 		-o $langcode/$title.$langcode.pdf \
 		--trace \
 		--verbose \
