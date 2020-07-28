@@ -72,10 +72,13 @@ echo
 if [[ -e index.en.adoc ]]; then
 	echo -e "${RED}Checking document spelling (Oxford dictionary)${NC}"
 	echo "(NB many names and technical terms are not in the dictionary.)"
+	set +e
 	for d in *.en.adoc; do
 		echo "Checking $d…"
-		aspell --run-together --ignore=3 -d en_GB-ize-w_accents -p /adoc/asciidoc.dict list < $d | sed 's/^/	/'
+		aspell --ignore=3 -d en_GB-ize-w_accents -p /adoc/asciidoc.dict list < $d | sed 's/^/	/' | grep -v '[A-Z]'
+		aspell --ignore=3 -d en_GB-ize-w_accents -p /adoc/asciidoc.dict list < $d | sed 's/^/	/' | grep '[A-Z]'
 	done
+	set -e
 fi
 echo
 
