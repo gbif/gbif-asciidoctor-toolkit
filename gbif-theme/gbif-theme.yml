@@ -86,3 +86,6 @@ role:
     font-size: ceil($base_font_size)
     font-color: ~
     font-style: italic
+  glossary:
+    font-color: ~
+    font-style: italic

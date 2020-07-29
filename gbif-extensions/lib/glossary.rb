@@ -34,10 +34,9 @@ class GlossaryTreeprocessor < Extensions::Treeprocessor
   end
 
   # Replace any <<crossreferences>> with a similar crossreference, but with a role.
-  # (Temporary just make it red and obvious.)
   def replaceG line
     @@replacements.map {|r|
-      line = line.gsub(/ <<(#{r}(,.+?|))>>/i, ' [.red]#Gloss<<\1>>#')
+      line = line.gsub(/<<(#{r}),?(.*?)>>/i, ' xref:\1[\2,role=glossary]')
     }
     line
   end
@@ -64,24 +63,25 @@ class GlossaryTreeprocessor < Extensions::Treeprocessor
   def traverse block
     #puts ""
     #puts "#{block.class}"
-    if defined? block.lines then
-      s = []
-      s.replace(block.subs)
-      s.map{|ss| block.remove_sub(ss)}
-      #puts "CONTENT1 #{block.lines}"
+    # Check for :macros sub.
+    if defined? block.subs then
+      if block.sub?(:macros) then
+        s = []
+        s.replace(block.subs)
+        s.map{|ss| block.remove_sub(ss)}
 
-      block.lines = block.lines.map{|l| l = replaceG(l)}
+        if defined? block.lines then
+          #puts "CONTENT1 #{block.lines}"
+          block.lines = block.lines.map{|l| l = replaceG(l)}
+        end
+        if defined? block.text then
+          text = block.text
+          #puts "CONTENT2 #{block.text}"
+          block.text = replaceG(block.text)
+        end
 
-      s.map{|ss| block.subs.append(ss)}
-    end
-    if defined? block.text then
-      s = []
-      s.replace(block.subs)
-      s.map{|ss| block.remove_sub(ss)}
-      text = block.text
-      #puts "CONTENT2 #{block.text}"
-      block.text = replaceG(block.text)
-      s.map{|ss| block.subs.append(ss)}
+        s.map{|ss| block.subs.append(ss)}
+      end
     end
 
     if ::Array === block then
