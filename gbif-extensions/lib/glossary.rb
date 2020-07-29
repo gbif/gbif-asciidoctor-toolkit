@@ -24,29 +24,15 @@ end
 class GlossaryTreeprocessor < Extensions::Treeprocessor
   @@replacements = []
 
-  # Add a reference identifier to the list
-  def addG line
-    line.match(/\[\[(.*)\]\]/) { |m|
-      puts "Added #{m[1]} to glossary #{@@replacements}"
-      mt = m.captures[0]
-      @@replacements.append(mt.gsub(/[ _-]/, '[ _-]'))
-    }
-  end
-
-  # Replace any <<crossreferences>> with a similar crossreference, but with a role.
-  def replaceG line
-    @@replacements.map {|r|
-      line = line.gsub(/<<(#{r}),?(.*?)>>/i, ' xref:\1[\2,role=glossary]')
-    }
-    line
-  end
-
-  # Look through the glossary, and extract the reference identifiers
+  # Look through the glossary block, and extract the anchor identifiers
   def buildGlossary block
     block.find_by(context: :dlist).each do |dlist|
 
       dlist.items.each do |item|
+        # TODO: multi-term glossaries (more than one word defined).
         i = item[0][0]
+        # Disable all inline substitutions before reading text.
+        # Is there no better way?
         s = []
         s.replace(i.subs)
         s.map{|ss| i.remove_sub(ss)}
@@ -59,10 +45,19 @@ class GlossaryTreeprocessor < Extensions::Treeprocessor
     end
   end
 
+  # Add a reference identifier to the list
+  def addG line
+    line.match(/\[\[(.*)(,?.+|)\]\]/) { |m|
+      puts "Added #{m[1]} to glossary #{@@replacements}"
+      mt = m.captures[0]
+      # TODO: How does AsciiDoctor match references?
+      @@replacements.append(mt.gsub(/[ _-]/, '[ _-]'))
+    }
+  end
+
   # Recurse the document tree, processing any text to find glossary crossreferences.
   def traverse block
     #puts ""
-    #puts "#{block.class}"
     # Check for :macros sub.
     if defined? block.subs then
       if block.sub?(:macros) then
@@ -100,8 +95,17 @@ class GlossaryTreeprocessor < Extensions::Treeprocessor
     end
   end
 
-  def process document
+  # Replace any <<crossreferences>> with a similar crossreference, but with a role.
+  # I am surprised not to find a better way to do this, e.g. an object representing
+  # the crossreference macro within the line.
+  def replaceG line
+    @@replacements.map {|r|
+      line = line.gsub(/<<(#{r}),?(.*?)>>/i, ' xref:\1[\2,role=glossary]')
+    }
+    line
+  end
 
+  def process document
     document.blocks.each do |block|
       if block.id == "glossary" then
         buildGlossary block
