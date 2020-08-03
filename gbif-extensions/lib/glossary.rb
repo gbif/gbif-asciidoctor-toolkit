@@ -29,7 +29,7 @@ class GlossaryTreeprocessor < Extensions::Treeprocessor
   def find_glossary_anchor_identifiers glossary_block
     glossary_block.find_by(context: :dlist).each do |dlist|
       dlist.items.each do |item|
-        #puts "Glossary definition item #{text}"
+        #puts "Glossary definition item #{item[0][0]}"
         extract_glossary_anchor_identifier(item[0][0].text_source)
       end
     end

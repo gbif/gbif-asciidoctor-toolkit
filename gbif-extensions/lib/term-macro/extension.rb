@@ -5,13 +5,14 @@ include Asciidoctor
 
 # Include a link to a Darwin Core term, with an optional namespace short prefix.
 # Usage:
-#   term:[decimalLatitude]
-#   term:[dwc:geodeticDatum]
+#   term:dwc[decimalLatitude]
+#   term:dwc[dwc:geodeticDatum]
 class TermMacro < Extensions::InlineMacroProcessor
   use_dsl
 
   named :term
-  using_format :short
+  # TODO: support a short form term:[decimalLatitude] which defaults to DWC.
+  #using_format :short
   name_positional_attributes 'shortName'
 
   def process parent, target, attributes
@@ -20,8 +21,14 @@ class TermMacro < Extensions::InlineMacroProcessor
     attributes['role'] = 'term'
 
     shortName = attributes['shortName']
-    # Remove a dwc: prefix if it exists
-    fullLink = "http://rs.tdwg.org/dwc/terms/"+(shortName.gsub(/^dwc:/, ''))
+
+    case target
+    when "dwc"
+      # Remove a dwc: prefix if it exists
+      fullLink = "http://rs.tdwg.org/dwc/terms/"+(shortName.gsub(/^dwc:/, ''))
+    when "mixs"
+      fullLink = "http://rs.gbif.org/sandbox/extension/mixs_sample_2020-06-15.xml#"+(shortName.gsub(/^mixs:/, ''))
+    end
     anchor = %(<a class="term" href="#{fullLink}">#{shortName}</a>)
 
     Asciidoctor::Inline.new(parent, :quoted, anchor)
