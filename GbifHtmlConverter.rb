@@ -14,6 +14,7 @@ class GbifHtmlConverter < (Asciidoctor::Converter.for 'html5')
     "en" => "English",
     "es" => "espa&ntilde;ol",
     "es-CO" => "espa&ntilde;ol&nbsp;(Colombia)",
+    "es-ES" => "espa&ntilde;ol&nbsp;(Espa&ntilde;a)",
     "es-419" => "espa&ntilde;ol&nbsp;(Latinoam&eacute;rica)",
     "eo" => "Esperanto",
     "fa" => "&#x0641;&#x0627;&#x0631;&#x0633;&#x06cc;&nbsp;(Farsi)",
