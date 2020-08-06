@@ -13,9 +13,12 @@ class GbifHtmlConverter < (Asciidoctor::Converter.for 'html5')
     "el" => "&#917;&#955;&#955;&#951;&#957;&#953;&#954;&#940;&nbsp;(Ellinika)",
     "en" => "English",
     "es" => "espa&ntilde;ol",
+    "es-CO" => "espa&ntilde;ol&nbsp;(Colombia)",
+    "es-419" => "espa&ntilde;ol&nbsp;(Latinoam&eacute;rica)",
     "eo" => "Esperanto",
     "fa" => "&#x0641;&#x0627;&#x0631;&#x0633;&#x06cc;&nbsp;(Farsi)",
     "fr" => "fran&ccedil;ais",
+    "fr-FR" => "fran&ccedil;ais&nbsp;(La&nbsp;France)",
     "gl" => "Galego",
     "hy" => "&#1344;&#1377;&#1397;&#1381;&#1408;&#1381;&#1398;&nbsp;(hayeren)",
     "hr" => "hrvatski",
@@ -30,6 +33,7 @@ class GbifHtmlConverter < (Asciidoctor::Converter.for 'html5')
     "nb" => "norsk&nbsp;(bokm&aring;l)",
     "pl" => "polski",
     "pt" => "Portugu&ecirc;s",
+    "pt-PT" => "Portugu&ecirc;s&nbsp;(Portugal)",
     "ro" => "rom&acirc;n&#259;",
     "ru" => "&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;&nbsp;(Russkij)",
     "sk" => "slovenčina",
@@ -64,8 +68,9 @@ class GbifHtmlConverter < (Asciidoctor::Converter.for 'html5')
     pdf_file_text = node.document.attributes['pdf_file_text'] || FALLBACK_LABEL
     result << %(<li><a hreflang="#{currentLangCode}" type="application/pdf" href="#{pdf_filename}">#{pdf_file_text}</a></li>)
 
-    Dir["index.??.adoc"].sort.each do |file|
-      langCode = file[6,2]
+    Dir["index.??.adoc", "index.??-??.adoc", "index.??-???.adoc"]
+      .map { |file| file.match(/index\.(.+)\.adoc/)[1] }
+      .sort.each do |langCode|
       if langCode != currentLangCode && !File.file?("translations/#{langCode}.hidden")
         result << %(<li><a hreflang="#{langCode}" href="../#{langCode}/">#{LANGUAGE_NAMES[langCode]}</a></li>)
       end

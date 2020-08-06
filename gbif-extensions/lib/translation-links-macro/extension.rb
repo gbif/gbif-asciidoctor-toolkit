@@ -16,9 +16,12 @@ class TranslationLinksMacro < Extensions::InlineMacroProcessor
     "el" => "&#917;&#955;&#955;&#951;&#957;&#953;&#954;&#940;&nbsp;(Ellinika)",
     "en" => "English",
     "es" => "espa&ntilde;ol",
+    "es-CO" => "espa&ntilde;ol&nbsp;(Colombia)",
+    "es-419" => "espa&ntilde;ol&nbsp;(Latinoam&eacute;rica)",
     "eo" => "Esperanto",
     "fa" => "&#x0641;&#x0627;&#x0631;&#x0633;&#x06cc;&nbsp;(Farsi)",
     "fr" => "fran&ccedil;ais",
+    "fr-FR" => "fran&ccedil;ais&nbsp;(La&nbsp;France)",
     "gl" => "Galego",
     "hy" => "&#1344;&#1377;&#1397;&#1381;&#1408;&#1381;&#1398;&nbsp;(hayeren)",
     "hr" => "hrvatski",
@@ -33,6 +36,7 @@ class TranslationLinksMacro < Extensions::InlineMacroProcessor
     "nb" => "norsk&nbsp;(bokm&aring;l)",
     "pl" => "polski",
     "pt" => "Portugu&ecirc;s",
+    "pt-PT" => "Portugu&ecirc;s&nbsp;(Portugal)",
     "ro" => "rom&acirc;n&#259;",
     "ru" => "&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;&nbsp;(Russkij)",
     "sk" => "slovenčina",
@@ -66,8 +70,9 @@ class TranslationLinksMacro < Extensions::InlineMacroProcessor
     elsif target == 'languages'
       links = attributes['preText']
 
-      Dir["index.??.adoc"].sort.each do |file|
-        langCode = file[6,2]
+      Dir["index.??.adoc", "index.??-??.adoc", "index.??-???.adoc"]
+        .map { |file| file.match(/index\.(.+)\.adoc/)[1] }
+        .sort.each do |langCode|
         if langCode != currentLangCode && !File.file?("translations/#{langCode}.hidden")
           if links.length > attributes['preText'].length
             links += ','
@@ -94,8 +99,9 @@ class TranslationLinksMacro < Extensions::InlineMacroProcessor
       allLinks = pdfLink + langPreText
 
       translationsExist = false
-      Dir["index.??.adoc"].sort.each do |file|
-        langCode = file[6,2]
+      Dir["index.??.adoc", "index.??-??.adoc", "index.??-???.adoc"]
+        .map { |file| file.match(/index\.(.+)\.adoc/)[1] }
+        .sort.each do |langCode|
         if langCode != currentLangCode && !File.file?("translations/#{langCode}.hidden")
           if translationsExist
             allLinks += langSeparator
@@ -129,16 +135,17 @@ class TranslationLinksDocinfoProcessor < Extensions::DocinfoProcessor
   at_location :head
 
   def process doc
-    links = ''
+    links = %(<link rel="alternate" hreflang="x-default" href="../" />)
 
     currentLangCode = (doc.attr 'lang')
     if ! currentLangCode
       currentLangCode = 'en'
     end
 
-    Dir["index.??.adoc"].sort.each do |file|
-      langCode = file[6,2]
-      if langCode != currentLangCode && !File.file?("translations/#{langCode}.hidden")
+    Dir["index.??.adoc", "index.??-??.adoc", "index.??-???.adoc"]
+      .map { |file| file.match(/index\.(.+)\.adoc/)[1] }
+      .sort.each do |langCode|
+      if !File.file?("translations/#{langCode}.hidden")
         links += %(<link rel="alternate" hreflang="#{langCode}" href="../#{langCode}/" />)
       end
     end

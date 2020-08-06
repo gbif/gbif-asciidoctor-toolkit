@@ -56,8 +56,19 @@ RUN apk add --no-cache aspell aspell-utils && \
 RUN apk add --no-cache git python3 py3-setuptools
 RUN pip3 install Unidecode
 
+# TODO: Move further up when the next AsciiDoctor is released.
+ARG adoc_path=/usr/lib/ruby/gems/2.5.0/gems/asciidoctor-2.0.10
+
 COPY inline-syntax-highlighting.patch /adoc/patches/
-RUN cd /usr/lib/ruby/gems/2.5.0/gems/asciidoctor-2.0.10/ && patch -p1 < /adoc/patches/inline-syntax-highlighting.patch
+RUN cd $adoc_path/ && patch -p1 < /adoc/patches/inline-syntax-highlighting.patch
+
+# Use dashes for attribute translations language, and set zh to zh-CN.
+RUN ln -s $adoc_path/data/locale/attributes-es.adoc $adoc_path/data/locale/attributes-es-419.adoc && \
+    ln -s $adoc_path/data/locale/attributes-es.adoc $adoc_path/data/locale/attributes-es-CO.adoc && \
+    ln -s $adoc_path/data/locale/attributes-es.adoc $adoc_path/data/locale/attributes-es-ES.adoc && \
+    ln -s $adoc_path/data/locale/attributes-fr.adoc $adoc_path/data/locale/attributes-fr-FR.adoc && \
+    ln -s $adoc_path/data/locale/attributes-pt.adoc $adoc_path/data/locale/attributes-pt-PT.adoc && \
+    ln -s $adoc_path/data/locale/attributes-zh_CN.adoc $adoc_path/data/locale/attributes-zh.adoc
 
 COPY gbif-stylesheet/ /adoc/gbif-stylesheet/
 RUN cd /adoc/gbif-stylesheet && compass compile

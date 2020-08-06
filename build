@@ -54,7 +54,7 @@ if [[ -e po4a.conf ]]; then
 	else
 		git add translations/index.pot
 	fi
-	for lang in translations/??.po; do
+	for lang in translations/??.po translations/??-??.po translations/??-???.po; do
 		langcode=$(basename $lang .po)
 		# Replace include and image links to translated alternatives
 		for tdoc in $(grep -l -E -e '\.[a-z][a-z]\.adoc' **/*.$langcode.adoc); do
@@ -70,7 +70,7 @@ echo
 
 # Spell-check the document using Aspell
 if [[ -e index.en.adoc ]]; then
-	echo -e "${RED}Checking document spelling (Oxford dictionary)${NC}"
+	echo -e "${RED}Checking document spelling (Oxford English dictionary)${NC}"
 	echo "(NB many names and technical terms are not in the dictionary.)"
 	set +e
 	for d in *.en.adoc; do
@@ -92,8 +92,10 @@ else
 fi
 
 # Generate the output HTML and PDF.
-rm -f **/*.??.html **/*.??.pdf *.??.asis
-for lang in $PRIMARY_LANGUAGE translations/??.po; do
+rm -f **/*.??.html **/*.??.pdf *.??.asis \
+   **/*.??-??.html **/*.??-??.pdf *.??-??.asis \
+   **/*.??-???.html **/*.??-???.pdf *.??-???.asis
+for lang in $PRIMARY_LANGUAGE translations/??.po translations/??-??.po translations/??-???.po; do
 	langcode=$(basename $lang .po)
 	echo -e "${RED}Building document in language $langcode${NC}"
 	mkdir -p $langcode
