@@ -75,8 +75,12 @@ if [[ -e index.en.adoc ]]; then
 	set +e
 	for d in *.en.adoc; do
 		echo "Checking $d…"
-		aspell --ignore=3 -d en_GB-ize-w_accents -p /adoc/asciidoc.dict list < $d | sed 's/^/	/' | grep -v '[A-Z]'
-		aspell --ignore=3 -d en_GB-ize-w_accents -p /adoc/asciidoc.dict list < $d | sed 's/^/	/' | grep '[A-Z]'
+		# Lowercase words
+		aspell --ignore=3 -d en_GB-ize-w_accents -p /adoc/asciidoc.dict list < $d | grep -v '[A-Z]' | sed 's/^/	/'
+		# First letter uppercase
+		aspell --ignore=3 -d en_GB-ize-w_accents -p /adoc/asciidoc.dict list < $d | grep '^[A-Z]' | sed 's/^/	/'
+		# Subsequent letter uppercase
+		aspell --ignore=3 -d en_GB-ize-w_accents -p /adoc/asciidoc.dict list < $d | grep '^[^A-Z].*[A-Z]' | sed 's/^/	/'
 	done
 	set -e
 fi
