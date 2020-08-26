@@ -1,4 +1,4 @@
-personal_ws-1.1 en 604 utf-8
+personal_ws-1.1 en 618 utf-8
 ABCD
 ADBC
 ALWIN
@@ -70,6 +70,7 @@ CSDM
 Canadensys
 Caraguitatuba
 Caryophyllales
+CentOS
 Centropyge
 Chironomid
 Colecciones
@@ -80,6 +81,7 @@ Copas
 CoreTrustSeal
 Corporación
 Covid
+Crowdin
 CyVerse
 Cyperus
 DCOLL
@@ -88,6 +90,7 @@ DGfM
 DIKU
 DOIs
 DREI
+DataCite
 Derry
 DiGIR
 DiSSCo
@@ -166,6 +169,7 @@ INRAM
 IOGP
 IPBES
 IPNI
+IPT's
 IPTs
 IRMNG
 ITIS
@@ -240,6 +244,7 @@ OECD
 ORCID
 ORNIS
 OTUs
+OpenJDK
 OpenPSD
 OpenStreetMap
 Ornitho
@@ -307,6 +312,7 @@ UNAVCO
 UNEP
 URIs
 USGS
+UUID
 UUIDs
 UkrBin
 Universidad
@@ -358,6 +364,8 @@ bioGEOTRACES
 bioGUID
 biogeographic
 bioinformatic
+bioinformaticians
+bioinformatics
 biome
 bioregions
 bolded
@@ -367,6 +375,7 @@ capacitated
 capensis
 centroid
 centroids
+checksums
 chipsets
 científicas
 citable
@@ -492,12 +501,14 @@ mellifera
 memoranda
 metabarcodes
 metabarcoding
+metafile
 microbiomes
 minimumDepthInMeters
 minimumDistanceAboveSurfaceInMeters
 minimumElevationInMeters
 mischaracterized
 misidentification
+misidentifications
 multibeam
 multipath
 multipolygons
@@ -512,12 +523,13 @@ ontologies
 onwards
 oomycetes
 ordinated
+organismQuantity
 organismQuantityType
 orthometric
 pagenums
-paleontologic
-paleontological
-paleontologists
+palaeontologic
+palaeontological
+palaeontologists
 parsable
 parásitos
 pdfwidth
@@ -526,14 +538,15 @@ phenological
 photogrammetry
 phycological
 phylogenetic
+phylogenetically
 phytoplankton
 pointRadiusSpatialFit
 polylines
 precisionDataProvided
 precisionDataStored
 precisions
-procaryote
-procaryotes
+prokaryote
+prokaryotes
 proto
 pulldown
 pygments
@@ -541,6 +554,7 @@ pylei
 qPCR
 quasigeoid
 radiolocation
+rainforest
 recalibrating
 recalibration
 reflectance
