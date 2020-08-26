@@ -136,18 +136,19 @@ class TranslationLinksDocinfoProcessor < Extensions::DocinfoProcessor
   at_location :head
 
   def process doc
-    links = %(<link rel="alternate" hreflang="x-default" href="../" />)
-
     currentLangCode = (doc.attr 'lang')
     if ! currentLangCode
       currentLangCode = 'en'
     end
 
+    links = %(<link rel="alternate" hreflang="x-default" href="../" />\n)
+    links += %(<link rel="alternate" hreflang="#{currentLangCode}" href="./" />\n)
+
     Dir["index.??.adoc", "index.??-??.adoc", "index.??-???.adoc"]
       .map { |file| file.match(/index\.(.+)\.adoc/)[1] }
       .sort.each do |langCode|
-      if !File.file?("translations/#{langCode}.hidden")
-        links += %(<link rel="alternate" hreflang="#{langCode}" href="../#{langCode}/" />)
+      if langCode != currentLangCode && !File.file?("translations/#{langCode}.hidden")
+        links += %(<link rel="alternate" hreflang="#{langCode}" href="../#{langCode}/" />\n)
       end
     end
     links
