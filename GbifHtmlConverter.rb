@@ -153,3 +153,82 @@ class GbifHtmlConverter < (Asciidoctor::Converter.for 'html5')
   end
 
 end
+
+# This (and the following method) adds support for defining
+# :section-refsig: §, and not having it followed by a space.
+# See https://github.com/asciidoctor/asciidoctor/issues/3498
+# It is a copy of the original method, with the commented lines
+# added/changed.
+class Asciidoctor::Section
+  # (see AbstractBlock#xreftext)
+  def xreftext xrefstyle = nil
+    if (val = reftext) && !val.empty?
+      val
+    elsif xrefstyle
+      if @numbered
+        case xrefstyle
+        when 'full'
+          if (type = @sectname) == 'chapter' || type == 'appendix'
+            quoted_title = sub_placeholder (sub_quotes '_%s_'), title
+          else
+            quoted_title = sub_placeholder (sub_quotes @document.compat_mode ? %q(``%s'') : '"`%s`"'), title
+          end
+          if (signifier = @document.attributes[%(#{type}-refsig)])
+            # These two lines added/modified.
+            space = (signifier.match? /§$/) ? '' : ' '
+            %(#{signifier}#{space}#{sectnum '.', ','} #{quoted_title})
+          else
+            %(#{sectnum '.', ','} #{quoted_title})
+          end
+        when 'short'
+          if (signifier = @document.attributes[%(#{@sectname}-refsig)])
+            # These two lines added/modified.
+            space = (signifier.match? /§$/) ? '' : ' '
+            %(#{signifier}#{space}#{sectnum '.', ''})
+          else
+            sectnum '.', ''
+          end
+        else # 'basic'
+          (type = @sectname) == 'chapter' || type == 'appendix' ? (sub_placeholder (sub_quotes '_%s_'), title) : title
+        end
+      else # apply basic styling
+        (type = @sectname) == 'chapter' || type == 'appendix' ? (sub_placeholder (sub_quotes '_%s_'), title) : title
+      end
+    else
+      title
+    end
+  end
+end
+
+class Asciidoctor::AbstractBlock
+  def xreftext xrefstyle = nil
+    if (val = reftext) && !val.empty?
+      val
+    # NOTE xrefstyle only applies to blocks with a title and a caption or number
+    elsif xrefstyle && @title && @caption
+      case xrefstyle
+      when 'full'
+        quoted_title = sub_placeholder (sub_quotes @document.compat_mode ? %q(``%s'') : '"`%s`"'), title
+        if @numeral && (caption_attr_name = CAPTION_ATTR_NAMES[@context]) && (prefix = @document.attributes[caption_attr_name])
+          # These two lines added/modified.
+          space = (prefix.match? /§$/) ? '' : ' '
+          %(#{prefix}#{space}#{@numeral}, #{quoted_title})
+        else
+          %(#{@caption.chomp '. '}, #{quoted_title})
+        end
+      when 'short'
+        if @numeral && (caption_attr_name = CAPTION_ATTR_NAMES[@context]) && (prefix = @document.attributes[caption_attr_name])
+          # These two lines added/modified.
+          space = (prefix.match? /§$/) ? '' : ' '
+          %(#{prefix}#{space}#{@numeral})
+        else
+          @caption.chomp '. '
+        end
+      else # 'basic'
+        title
+      end
+    else
+      title
+    end
+  end
+end
