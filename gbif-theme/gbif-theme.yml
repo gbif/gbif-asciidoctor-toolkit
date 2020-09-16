@@ -90,3 +90,8 @@ role:
     font-color: ~
     text-decoration: underline
     text-decoration-color: #666666
+  ui-element:
+    font-color: ~
+    font-style: italic
+    text-decoration: underline
+    text-decoration-color: #666666

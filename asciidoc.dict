@@ -1,4 +1,4 @@
-personal_ws-1.1 en 669 utf-8
+personal_ws-1.1 en 676 utf-8
 ABCD
 ADBC
 ALA's
@@ -409,6 +409,7 @@ biosystems
 bolded
 bona
 bycatch
+cadastral
 capacitated
 capensis
 centroid
@@ -479,6 +480,7 @@ geocoding
 geodeticDatum
 geoid
 geolocation
+geologicalContext
 geomatics
 geopotential
 georectification
@@ -501,6 +503,7 @@ geospatial
 gravimetric
 gridded
 hackathon
+headwater
 helpdesk
 herbaria
 herbarium
@@ -528,6 +531,7 @@ interpretational
 intersessional
 invasively
 isobaths
+isohypse
 iteratively
 lang
 languageLinks
@@ -587,6 +591,7 @@ phylogenetically
 phylogeography
 phytoplankton
 pointRadiusSpatialFit
+polyline
 polylines
 precisionDataProvided
 precisionDataStored
@@ -599,6 +604,7 @@ pygments
 pylei
 qPCR
 quasigeoid
+radialUnits
 radiolocation
 rainforest
 recalibrating
@@ -627,6 +633,7 @@ sobre
 socio
 spatio
 stateProvince
+steading
 stratigraphic
 subcollections
 subtype
