@@ -12,7 +12,7 @@ if [[ -t 0 ]]; then
 	RED='\033[1;31m'
 	NC='\033[0m'
 else
-	RED='▶'
+	RED='▶ '
 	NC=''
 fi
 
@@ -145,27 +145,31 @@ for lang in $PRIMARY_LANGUAGE translations/??.po translations/??-??.po translati
 		--verbose \
 		index.$langcode.adoc
 
-	echo -e "${RED}Generating $langcode PDF${NC}"
-	asciidoctor-pdf \
-		-a icons=font \
-		-a pagenums \
-		-a lang=$langcode \
-		-a idprefix= \
-		-a idseparator=- \
-		-a media=print \
-		-a title-page \
-		-a pdf-theme=/adoc/gbif-theme/gbif-theme.yml \
-		-a pdf-fontsdir='/adoc/fonts;GEM_FONTS_DIR' \
-		-r asciidoctor-diagram \
-		$bibtex_plugin \
-		-r /adoc/asciidoctor-extensions-lab/lib/git-metadata-preprocessor.rb \
-		-r /adoc/gbif-extensions/lib/glossary.rb \
-		-r /adoc/gbif-extensions/lib/term.rb \
-		-r /adoc/gbif-extensions/lib/translate-labels.rb \
-		-o $langcode/$title.$langcode.pdf \
-		--trace \
-		--verbose \
-		index.$langcode.adoc
+	if [[ -n $SKIP_PDF ]]; then
+		echo -e "${RED}Not generating $langcode PDF${NC}"
+	else
+		echo -e "${RED}Generating $langcode PDF${NC}"
+		asciidoctor-pdf \
+			-a icons=font \
+			-a pagenums \
+			-a lang=$langcode \
+			-a idprefix= \
+			-a idseparator=- \
+			-a media=print \
+			-a title-page \
+			-a pdf-theme=/adoc/gbif-theme/gbif-theme.yml \
+			-a pdf-fontsdir='/adoc/fonts;GEM_FONTS_DIR' \
+			-r asciidoctor-diagram \
+			$bibtex_plugin \
+			-r /adoc/asciidoctor-extensions-lab/lib/git-metadata-preprocessor.rb \
+			-r /adoc/gbif-extensions/lib/glossary.rb \
+			-r /adoc/gbif-extensions/lib/term.rb \
+			-r /adoc/gbif-extensions/lib/translate-labels.rb \
+			-o $langcode/$title.$langcode.pdf \
+			--trace \
+			--verbose \
+			index.$langcode.adoc
+	fi
 
 	cat > index.$langcode.asis <<-EOF
 		Status: 303 See Other

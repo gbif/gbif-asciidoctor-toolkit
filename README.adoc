@@ -30,6 +30,12 @@ docker run --rm -it --user $(id -u):$(id -g) -v $PWD:/documents/ gbif/asciidocto
 
 Your documents will be processed, and output in the same directory.
 
+To have the HTML document rebuild as changes to the source files are saved, use
+[source,bash]
+----
+docker run --rm -it --user $(id -u):$(id -g) -v $PWD:/documents/ gbif/asciidoctor-toolkit continuous
+----
+
 == Component details
 
 There are multiple ways to change Asciidoctor templates, two are used here.  This can help me decide

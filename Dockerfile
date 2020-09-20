@@ -84,6 +84,10 @@ COPY asciidoc.dict /adoc/
 ENV PRIMARY_LANGUAGE=en
 COPY build /usr/local/bin/build
 
+# GBIF continuous build script
+RUN apk add --no-cache inotify-tools
+COPY continuous /usr/local/bin/continuous
+
 WORKDIR /documents
 VOLUME /documents
 

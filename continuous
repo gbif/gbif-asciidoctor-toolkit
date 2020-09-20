@@ -1,0 +1,25 @@
+#!/bin/bash -e
+#
+# Watch for changes to files, triggering a build when changes are noticed.
+#
+
+export SKIP_PDF=1
+
+RED='\033[1;31m'
+YELLOW='\033[1;33m'
+NC='\033[0m'
+
+build=0
+
+while true; do
+    echo -e "${YELLOW}Watching for changes.  Press ^C to stop.${NC}"
+    inotifywait --quiet --event modify *.$PRIMARY_LANGUAGE.adoc | \
+        while read src event; do
+            build=$(( $build + 1 ))
+            ts=$(date +%H:%M:%S)
+            echo -e "${YELLOW}[Build $build at $ts] $src changed${NC}"
+            build
+            echo -e "${YELLOW}[Build $build at $ts] Completed (caused by change to $src)${NC}"
+            echo
+        done
+done

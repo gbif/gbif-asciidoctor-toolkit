@@ -91,7 +91,6 @@ role:
     text-decoration: underline
     text-decoration-color: #666666
   ui-element:
-    font-color: ~
+    font-color: #000000
     font-style: italic
-    text-decoration: underline
     text-decoration-color: #666666
