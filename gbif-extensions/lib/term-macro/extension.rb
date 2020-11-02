@@ -29,7 +29,7 @@ class TermMacro < Extensions::InlineMacroProcessor
     when "mixs"
       fullLink = "http://rs.gbif.org/sandbox/extension/mixs_sample_2020-06-15.xml#"+(shortName.gsub(/^mixs:/, ''))
     end
-    anchor = %(<a class="term" href="#{fullLink}">#{shortName}</a>)
+    anchor = %(<a class="term" href="#{fullLink}" target="_blank">#{shortName}</a>)
 
     Asciidoctor::Inline.new(parent, :quoted, anchor)
   end
