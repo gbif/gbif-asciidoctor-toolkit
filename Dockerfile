@@ -57,7 +57,7 @@ RUN apk add --no-cache git python3 py3-setuptools
 RUN pip3 install Unidecode
 
 # Continuous build script and Brotli compression
-RUN apk add --no-cache inotify-tools brotli
+RUN apk add --no-cache inotify-tools brotli libwebp-tools
 
 # TODO: Move further up when the next AsciiDoctor is released.
 ARG adoc_path=/usr/lib/ruby/gems/2.5.0/gems/asciidoctor-2.0.10

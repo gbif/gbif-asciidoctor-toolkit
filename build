@@ -144,11 +144,12 @@ for lang in $PRIMARY_LANGUAGE translations/??.po translations/??-??.po translati
 		--trace \
 		--verbose \
 		index.$langcode.adoc
-	brotli --keep --force --output=$langcode/index.$langcode.html.brotli --best $langcode/index.$langcode.html &
 
 	if [[ -n $SKIP_PDF ]]; then
 		echo -e "${RED}Not generating $langcode PDF${NC}"
 	else
+		brotli --keep --force --output=$langcode/index.$langcode.html.brotli --best $langcode/index.$langcode.html &
+
 		echo -e "${RED}Generating $langcode PDF${NC}"
 		asciidoctor-pdf \
 			-a icons=font \
@@ -187,8 +188,22 @@ for lang in $PRIMARY_LANGUAGE translations/??.po translations/??-??.po translati
 	echo
 done
 
-echo "Compressing SVG files"
-find . -type f -iname '*.svg' -exec brotli --verbose --keep --force --suffix=.brotli --best '{}' \;
+if [[ -n $SKIP_PDF ]]; then
+	echo -e "${RED}Not compressing files${NC}"
+else
+	echo -e "${RED}Compressing files${NC}"
+
+	echo "Compressing SVG files with Brotli compression"
+	find . -type f -iname '*.svg' -exec brotli --verbose --keep --force --suffix=.brotli --best '{}' \;
+
+	echo "Compressing PNG files to WebP format"
+	find . -type f -iname '*.png' -exec cwebp -short -near_lossless 10 -o '{}.webp' '{}' \;
+
+	echo "Compressing JPG files to WebP format"
+	find . -type f -iname '*.jp*g' -exec cwebp -short -o '{}.webp' '{}' \;
+
+	echo "Waiting for HTML and PDF compression (with Brotli) to complete"
+fi
 
 wait
 
