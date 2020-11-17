@@ -144,6 +144,7 @@ for lang in $PRIMARY_LANGUAGE translations/??.po translations/??-??.po translati
 		--trace \
 		--verbose \
 		index.$langcode.adoc
+	brotli --keep --force --output=$langcode/index.$langcode.html.brotli --best $langcode/index.$langcode.html &
 
 	if [[ -n $SKIP_PDF ]]; then
 		echo -e "${RED}Not generating $langcode PDF${NC}"
@@ -169,6 +170,7 @@ for lang in $PRIMARY_LANGUAGE translations/??.po translations/??-??.po translati
 			--trace \
 			--verbose \
 			index.$langcode.adoc
+		brotli --verbose --keep --force --output=$langcode/$title.$langcode.pdf.brotli --best $langcode/$title.$langcode.pdf &
 	fi
 
 	cat > index.$langcode.asis <<-EOF
@@ -184,6 +186,11 @@ for lang in $PRIMARY_LANGUAGE translations/??.po translations/??-??.po translati
 	echo "$langcode completed"
 	echo
 done
+
+echo "Compressing SVG files"
+find . -type f -iname '*.svg' -exec brotli --verbose --keep --force --suffix=.brotli --best '{}' \;
+
+wait
 
 # Make translation template
 # po4a-gettextize -f asciidoc -M utf-8 -m index.adoc -p translations/index.pot

@@ -56,6 +56,9 @@ RUN apk add --no-cache aspell aspell-utils && \
 RUN apk add --no-cache git python3 py3-setuptools
 RUN pip3 install Unidecode
 
+# Continuous build script and Brotli compression
+RUN apk add --no-cache inotify-tools brotli
+
 # TODO: Move further up when the next AsciiDoctor is released.
 ARG adoc_path=/usr/lib/ruby/gems/2.5.0/gems/asciidoctor-2.0.10
 
@@ -73,20 +76,15 @@ RUN ln -s $adoc_path/data/locale/attributes-es.adoc $adoc_path/data/locale/attri
 COPY gbif-stylesheet/ /adoc/gbif-stylesheet/
 RUN cd /adoc/gbif-stylesheet && compass compile
 
-COPY asciidoctor-extensions-lab /adoc/asciidoctor-extensions-lab
+COPY asciidoctor-extensions-lab/ /adoc/asciidoctor-extensions-lab/
 COPY gbif-extensions/ /adoc/gbif-extensions/
 COPY gbif-templates/ /adoc/gbif-templates/
 COPY gbif-theme/ /adoc/gbif-theme/
-COPY GbifHtmlConverter.rb /adoc/
-COPY asciidoc.dict /adoc/
+COPY GbifHtmlConverter.rb asciidoc.dict /adoc/
 
-# GBIF build script
+# GBIF build scripts
 ENV PRIMARY_LANGUAGE=en
-COPY build /usr/local/bin/build
-
-# GBIF continuous build script
-RUN apk add --no-cache inotify-tools
-COPY continuous /usr/local/bin/continuous
+COPY build continuous /usr/local/bin/
 
 WORKDIR /documents
 VOLUME /documents
