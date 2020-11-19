@@ -63,6 +63,7 @@ title-page:
   title:
     font-family: Noto Sans Medium
     font-color: #000000
+    top: 75%
   authors:
     font-color: #534B4A
   revision:

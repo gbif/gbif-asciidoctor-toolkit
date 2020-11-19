@@ -12,10 +12,11 @@ if [[ -t 0 ]]; then
 	RED='\033[1;31m'
 	NC='\033[0m'
 else
-	RED='▶ '
+	RED='▶▶▶ '
 	NC=''
 fi
 
+echo
 echo -e "${RED}Primary language is $PRIMARY_LANGUAGE.${NC}"
 
 # Check this is run from a reasonable directory.
@@ -121,12 +122,12 @@ for lang in $PRIMARY_LANGUAGE translations/??.po translations/??-??.po translati
 		-a lang=$langcode \
 		-a imagesdir=../ \
 		-a sectanchors \
-		-a idprefix= \
-		-a idseparator=- \
+		-a idprefix=@ \
+		-a idseparator=-@ \
 		-a pdf_filename=$title.$langcode.pdf \
-		-a improve_url=$improve_url \
-		-a contribute_url=$contribute_url \
-		-a issue_url=$issue_url \
+		-a improve_url=$improve_url@ \
+		-a contribute_url=$contribute_url@ \
+		-a issue_url=$issue_url@ \
 		-a stylesheet=/adoc/gbif-stylesheet/stylesheets/gbif.css \
 		-a google-analytics-account=UA-42057855-10 \
 		-r asciidoctor-diagram \
@@ -155,9 +156,8 @@ for lang in $PRIMARY_LANGUAGE translations/??.po translations/??-??.po translati
 			-a icons=font \
 			-a pagenums \
 			-a lang=$langcode \
-			-a idprefix= \
-			-a idseparator=- \
-			-a media=print \
+			-a idprefix=@ \
+			-a idseparator=-@ \
 			-a title-page \
 			-a pdf-theme=/adoc/gbif-theme/gbif-theme.yml \
 			-a pdf-fontsdir='/adoc/fonts;GEM_FONTS_DIR' \
@@ -204,9 +204,12 @@ else
 
 	echo "Waiting for HTML and PDF compression (with Brotli) to complete"
 fi
+echo
 
 wait
 
+echo -e "${RED}Document build completed.${NC}"
+echo
 # Make translation template
 # po4a-gettextize -f asciidoc -M utf-8 -m index.adoc -p translations/index.pot
 
