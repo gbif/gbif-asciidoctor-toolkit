@@ -21,14 +21,17 @@ h1 {
 .term {
   color: inherit;
   font: 0.9em "Droid Sans Mono", "DejaVu Sans Mono", monospace;
-  text-decoration: dashed underline;
-  text-decoration-skip-ink: none;
+  text-decoration: dotted underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
   word-wrap: break-word;
 }
 
 a.glossary {
   color: inherit;
-  text-decoration: dashed underline;
+  text-decoration: dotted underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
 }
 
 .break-all {

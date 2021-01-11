@@ -1,4 +1,4 @@
-personal_ws-1.1 en 676 utf-8
+personal_ws-1.1 en 682 utf-8
 ABCD
 ADBC
 ALA's
@@ -112,6 +112,7 @@ Dyntaxa
 Döring
 EBVs
 ECSA
+EIAs
 ELViS
 EOSC
 EP's
@@ -372,6 +373,7 @@ Zermoglio
 ZooBank
 Zooniverse
 Zschuschen
+abiotic
 accuracies
 adoc
 agrobiodiversity
@@ -596,6 +598,7 @@ polylines
 precisionDataProvided
 precisionDataStored
 precisions
+programmatically
 prokaryote
 prokaryotes
 proto
@@ -614,6 +617,8 @@ refsig
 regionalization
 replicability
 repo
+reputational
+reusability
 revdate
 revnumber
 ribosomal
@@ -645,6 +650,7 @@ toclevels
 toolkits
 toponyms
 transactional
+traversable
 troglobiont
 unassessed
 uncitable
