@@ -15,5 +15,7 @@ build:
 
 deploy:
 	docker push $(DOCKER_IMAGE_NAME_TO_TEST)
+	docker tag $(DOCKER_IMAGE_NAME_TO_TEST) docker.gbif.org/$(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG)
+	docker push docker.gbif.org/$(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG)
 
 .PHONY: all build test deploy
