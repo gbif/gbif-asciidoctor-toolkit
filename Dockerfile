@@ -73,6 +73,10 @@ RUN ln -s $adoc_path/data/locale/attributes-es.adoc $adoc_path/data/locale/attri
     ln -s $adoc_path/data/locale/attributes-pt.adoc $adoc_path/data/locale/attributes-pt-PT.adoc && \
     ln -s $adoc_path/data/locale/attributes-zh_CN.adoc $adoc_path/data/locale/attributes-zh.adoc
 
+# RUN gem install asciidoctor-question
+COPY asciidoctor-question /adoc/asciidoctor-question/
+RUN cd /adoc/asciidoctor-question && rake build && rake install
+
 COPY gbif-stylesheet/ /adoc/gbif-stylesheet/
 RUN cd /adoc/gbif-stylesheet && compass compile
 

@@ -1,0 +1,42 @@
+@import "settings/gbif";
+@import "settings/gbif-training";
+@import "components/asciidoc";
+@import "components/awesome-icons";
+
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap');
+
+h1 {
+  text-align: center;
+}
+
+.imageblock .title {
+  margin-left: 2em;
+  margin-right: 2em;
+}
+
+:not(.translationLinks) > {
+  em:lang(zh), em:lang(ja) {
+    font-style: normal;
+    text-emphasis: dot;
+  }
+}
+
+.term {
+  color: inherit;
+  font: 0.9em "Droid Sans Mono", "DejaVu Sans Mono", monospace;
+  text-decoration: dotted underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  word-wrap: break-word;
+}
+
+a.glossary {
+  color: inherit;
+  text-decoration: dotted underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.break-all {
+  word-break: break-all;
+}

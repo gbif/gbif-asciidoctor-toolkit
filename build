@@ -128,10 +128,11 @@ for lang in $PRIMARY_LANGUAGE translations/??.po translations/??-??.po translati
 		-a improve_url=$improve_url@ \
 		-a contribute_url=$contribute_url@ \
 		-a issue_url=$issue_url@ \
-		-a stylesheet=/adoc/gbif-stylesheet/stylesheets/gbif.css \
+		-a stylesheet=/adoc/gbif-stylesheet/stylesheets/gbif.css@ \
 		-a google-analytics-account=UA-42057855-10 \
 		-r asciidoctor-diagram \
 		$bibtex_plugin \
+		-r asciidoctor-question \
 		-r /adoc/asciidoctor-extensions-lab/lib/git-metadata-preprocessor.rb \
 		-r /adoc/asciidoctor-extensions-lab/lib/google-analytics-docinfoprocessor.rb \
 		-r /adoc/gbif-extensions/lib/glossary.rb \
@@ -163,6 +164,7 @@ for lang in $PRIMARY_LANGUAGE translations/??.po translations/??-??.po translati
 			-a pdf-fontsdir='/adoc/fonts;GEM_FONTS_DIR' \
 			-r asciidoctor-diagram \
 			$bibtex_plugin \
+			-r asciidoctor-question \
 			-r /adoc/asciidoctor-extensions-lab/lib/git-metadata-preprocessor.rb \
 			-r /adoc/gbif-extensions/lib/glossary.rb \
 			-r /adoc/gbif-extensions/lib/term.rb \

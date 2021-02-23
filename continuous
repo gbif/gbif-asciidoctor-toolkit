@@ -9,7 +9,10 @@ RED='\033[1;31m'
 YELLOW='\033[1;33m'
 NC='\033[0m'
 
-build=0
+build
+echo -e "${YELLOW}Initial build completed.${NC}"
+
+build=1
 
 while true; do
     echo -e "${YELLOW}Watching for changes.  Press ^C to stop.${NC}"

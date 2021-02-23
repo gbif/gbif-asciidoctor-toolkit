@@ -1,3 +1,6 @@
 [submodule "asciidoctor-extensions-lab"]
 	path = asciidoctor-extensions-lab
 	url = https://github.com/asciidoctor/asciidoctor-extensions-lab.git
+[submodule "asciidoctor-question"]
+	path = asciidoctor-question
+	url = https://github.com/vifito/asciidoctor-question.git
