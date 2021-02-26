@@ -97,9 +97,9 @@ else
 fi
 
 # Generate the output HTML and PDF.
-rm -f **/*.??.html **/*.??.pdf *.??.asis \
-   **/*.??-??.html **/*.??-??.pdf *.??-??.asis \
-   **/*.??-???.html **/*.??-???.pdf *.??-???.asis
+rm -f **/*.??.html **/*.??.html.brotli **/*.??.pdf **/*.??.pdf.brotli *.??.asis \
+   **/*.??-??.html **/*.??-??.html.brotli **/*.??-??.pdf  **/*.??-??.pdf.brotli *.??-??.asis \
+   **/*.??-???.html **/*.??-???.html.brotli **/*.??-???.pdf **/*.??-???.pdf.brotli *.??-???.asis
 for lang in $PRIMARY_LANGUAGE translations/??.po translations/??-??.po translations/??-???.po; do
 	langcode=$(basename $lang .po)
 	echo -e "${RED}Building document in language $langcode${NC}"
@@ -116,6 +116,13 @@ for lang in $PRIMARY_LANGUAGE translations/??.po translations/??-??.po translati
 		bibtex_plugin=
 	fi
 
+	# Only add the Multipage plugin if configured
+	if grep -q :multipage: index.$langcode.adoc; then
+		multipage_plugin="-r asciidoctor-multipage -b multipage_html5"
+	else
+		multipage_plugin="-T /adoc/gbif-templates/"
+	fi
+
 	echo -e "${RED}Generating $langcode HTML${NC}"
 	asciidoctor \
 		-a icons=font \
@@ -130,6 +137,7 @@ for lang in $PRIMARY_LANGUAGE translations/??.po translations/??-??.po translati
 		-a issue_url=$issue_url@ \
 		-a stylesheet=/adoc/gbif-stylesheet/stylesheets/gbif.css@ \
 		-a google-analytics-account=UA-42057855-10 \
+		$multipage_plugin \
 		-r asciidoctor-diagram \
 		$bibtex_plugin \
 		-r asciidoctor-question \
@@ -141,7 +149,6 @@ for lang in $PRIMARY_LANGUAGE translations/??.po translations/??-??.po translati
 		-r /adoc/gbif-extensions/lib/translate-labels.rb \
 		-r /adoc/gbif-extensions/lib/translation-links.rb \
 		-r /adoc/GbifHtmlConverter.rb \
-		-T /adoc/gbif-templates/ \
 		-o $langcode/index.$langcode.html \
 		--trace \
 		--verbose \

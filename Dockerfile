@@ -1,4 +1,4 @@
-FROM asciidoctor/docker-asciidoctor:1.0.0
+FROM asciidoctor/docker-asciidoctor:1.3.0
 LABEL MAINTAINERS="Matthew Blissett <mblissett@gbif.org>"
 
 # FixUID: https://github.com/boxboat/fixuid
@@ -12,6 +12,9 @@ RUN USER=asciidoctor && \
     printf "user: $USER\ngroup: $GROUP\n" > /etc/fixuid/config.yml
 ENTRYPOINT ["fixuid", "-q"]
 
+ARG gems_path=/usr/lib/ruby/gems/2.7.0/gems
+ARG adoc_path=$gems_path/asciidoctor-2.0.12
+
 # PO4A translation tool
 RUN apk add --no-cache diffutils perl-unicode-linebreak po4a
 
@@ -19,23 +22,23 @@ RUN apk add --no-cache diffutils perl-unicode-linebreak po4a
 RUN apk add --no-cache openssl openssl-dev cmake ruby-dev ruby-rdoc gcc musl-dev
 RUN gem install rugged
 
-# BibTeX plugin
-RUN gem install asciidoctor-bibtex
-COPY gbif.csl /usr/lib/ruby/gems/2.5.0/gems/csl-styles-1.0.1.10/vendor/styles/
-
 # A2S diagrams (needs Go)
-#RUN apk add --no-cache git make musl-dev go
+#RUN apk add --no-cache make musl-dev go
 #ENV GOROOT /usr/lib/go
 #ENV GOPATH /go
 #ENV PATH /go/bin:$PATH
 #RUN mkdir -p ${GOPATH}/src ${GOPATH}/bin
-#RUN apk add --no-cache go git gcc musl-dev
+#RUN apk add --no-cache go gcc musl-dev
 #go get github.com/asciitosvg/asciitosvg/cmd/a2s
 
 # Stylesheet compiler:
 RUN apk add --no-cache ruby-rdoc ruby-bundler
 RUN gem install compass --version 0.12.7 && \
     gem install zurb-foundation --version 4.3.2
+
+# Required for PDF handling of certain images
+RUN apk add graphicsmagick-dev
+RUN gem install prawn-gmagick
 
 # Fonts for GBIF style (in particular, Chinese-Japanese-Korean support)
 RUN mkdir -p /adoc/fonts && \
@@ -47,20 +50,14 @@ RUN mkdir -p /adoc/fonts && \
 # GNU Aspell for Oxford English (UN English) spellcheck
 RUN apk add --no-cache aspell aspell-utils && \
     mkdir /adoc/aspell && \
-    curl -Ss https://ftp.gnu.org/gnu/aspell/dict/en/aspell6-en-2019.10.06-0.tar.bz2 | tar -jxC /adoc/aspell && \
-    cd /adoc/aspell/aspell6-en-2019.10.06-0 && \
+    curl -Ss https://ftp.gnu.org/gnu/aspell/dict/en/aspell6-en-2020.12.07-0.tar.bz2 | tar -jxC /adoc/aspell && \
+    cd /adoc/aspell/aspell6-en-2020.12.07-0 && \
     ./configure && make && make install && \
     rm -Rf /adoc/aspell
 
-# Needed by build script.
-RUN apk add --no-cache git python3 py3-setuptools
+# Python for Unidecode; inotify for continuous build script.  Image compression.
+RUN apk add --no-cache python3 py3-setuptools py3-pip inotify-tools brotli libwebp-tools patch
 RUN pip3 install Unidecode
-
-# Continuous build script and Brotli compression
-RUN apk add --no-cache inotify-tools brotli libwebp-tools
-
-# TODO: Move further up when the next AsciiDoctor is released.
-ARG adoc_path=/usr/lib/ruby/gems/2.5.0/gems/asciidoctor-2.0.10
 
 COPY inline-syntax-highlighting.patch /adoc/patches/
 RUN cd $adoc_path/ && patch -p1 < /adoc/patches/inline-syntax-highlighting.patch
@@ -77,8 +74,15 @@ RUN ln -s $adoc_path/data/locale/attributes-es.adoc $adoc_path/data/locale/attri
 COPY asciidoctor-question /adoc/asciidoctor-question/
 RUN cd /adoc/asciidoctor-question && rake build && rake install
 
+# See https://github.com/owenh000/asciidoctor-multipage/issues/8 for the chmod.
+RUN gem install asciidoctor-multipage && \
+    chmod 644 /usr/lib/ruby/gems/2.7.0/gems/asciidoctor-multipage-0.0.5/lib/asciidoctor-multipage.rb
+
 COPY gbif-stylesheet/ /adoc/gbif-stylesheet/
 RUN cd /adoc/gbif-stylesheet && compass compile
+
+# BibTeX style
+COPY gbif.csl $gems_path/csl-styles-1.0.1.10/vendor/styles/
 
 COPY asciidoctor-extensions-lab/ /adoc/asciidoctor-extensions-lab/
 COPY gbif-extensions/ /adoc/gbif-extensions/

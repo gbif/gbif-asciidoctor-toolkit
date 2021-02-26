@@ -252,7 +252,7 @@ class Asciidoctor::AbstractBlock
       case xrefstyle
       when 'full'
         quoted_title = sub_placeholder (sub_quotes @document.compat_mode ? %q(``%s'') : '"`%s`"'), title
-        if @numeral && (caption_attr_name = CAPTION_ATTR_NAMES[@context]) && (prefix = @document.attributes[caption_attr_name])
+        if @numeral && (caption_attr_name = CAPTION_ATTRIBUTE_NAMES[@context]) && (prefix = @document.attributes[caption_attr_name])
           # These two lines added/modified.
           space = (prefix.match? /§$/) ? '' : ' '
           %(#{prefix}#{space}#{@numeral}, #{quoted_title})
@@ -260,7 +260,7 @@ class Asciidoctor::AbstractBlock
           %(#{@caption.chomp '. '}, #{quoted_title})
         end
       when 'short'
-        if @numeral && (caption_attr_name = CAPTION_ATTR_NAMES[@context]) && (prefix = @document.attributes[caption_attr_name])
+        if @numeral && (caption_attr_name = CAPTION_ATTRIBUTE_NAMES[@context]) && (prefix = @document.attributes[caption_attr_name])
           # These two lines added/modified.
           space = (prefix.match? /§$/) ? '' : ' '
           %(#{prefix}#{space}#{@numeral})
