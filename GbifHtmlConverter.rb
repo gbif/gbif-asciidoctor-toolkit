@@ -1,7 +1,5 @@
 # coding: utf-8
-class GbifHtmlConverter < (Asciidoctor::Converter.for 'html5')
-  register_for 'html5'
-
+module GbifHtmlConverterBase
   # Language names in their own language, for use linking to translated documents.
   LANGUAGE_NAMES = {
     "ar" => "&#1593;&#1585;&#1576;&#1610;&#1577;&nbsp;(Arabiya)",
@@ -115,8 +113,8 @@ class GbifHtmlConverter < (Asciidoctor::Converter.for 'html5')
   # Example: [source javascript]`map.put("value")` or [.source.javascript]`map.put("value")`.
   #
   # See https://github.com/asciidoctor/asciidoctor/issues/1043
-  def convert_inline_quoted node
-    open, close, is_tag = QUOTE_TAGS[node.type]
+  def convert_inline_quoted_impl node, quote_tags
+    open, close, is_tag = quote_tags[node.type]
     if (role = node.role)
       if is_tag
         if node.has_role? 'source'
@@ -151,7 +149,52 @@ class GbifHtmlConverter < (Asciidoctor::Converter.for 'html5')
 
     node.id ? %(<a id="#{node.id}"></a>#{quoted_text}) : quoted_text
   end
+end
 
+class GbifHtml5Converter < (Asciidoctor::Converter.for 'html5')
+  include GbifHtmlConverterBase
+  register_for 'html5'
+
+  def convert_inline_quoted node
+    convert_inline_quoted_impl node, QUOTE_TAGS
+  end
+end
+
+# Allow inline syntax highlighting with either Pygments or Coderay.
+# Note the patch in inline-syntax-highlighting.patch, which replaces the root CSS class for Pygments.
+# See also https://github.com/asciidoctor/asciidoctor/issues/1043#issuecomment-487235035
+module SyntaxHighlighterBaseWithInline
+  def format node, lang, opts
+    class_attr_val = opts[:nowrap] ? %(#{@pre_class} highlight nowrap) : %(#{@pre_class} highlight)
+    if (transform = opts[:transform])
+      transform[(pre = { 'class' => class_attr_val }), (code = lang ? { 'data-lang' => lang } : {})]
+      # NOTE: make sure data-lang is the last attribute on the code tag to remain consistent with 1.5.x
+      if (lang = code.delete 'data-lang')
+        code['data-lang'] = lang
+      end
+      if (node.block?)
+        %(<pre#{pre.map {|k, v| %[ #{k}="#{v}"] }.join}><code#{code.map {|k, v| %[ #{k}="#{v}"] }.join}>#{node.content}</code></pre>)
+      else
+        %(<span#{pre.map {|k, v| %[ #{k}="#{v}"] }.join}><code#{code.map {|k, v| %[ #{k}="#{v}"] }.join}>#{node.text}</code></span>)
+      end
+    else
+      if (node.block?)
+        %(<pre class="#{class_attr_val}"><code#{lang ? %[ data-lang="#{lang}"] : ''}>#{node.content}</code></pre>)
+      else
+        %(<span class="#{class_attr_val}"><code#{lang ? %[ data-lang="#{lang}"] : ''}>#{node.text}</code></span>)
+      end
+    end
+  end
+end
+
+class Asciidoctor::SyntaxHighlighter::CodeRayWithInlineAdapter < Asciidoctor::SyntaxHighlighter.for('coderay')
+  include SyntaxHighlighterBaseWithInline
+  register_for 'coderay'
+end
+
+class Asciidoctor::SyntaxHighlighter::PygmentsWithInlineAdapter < Asciidoctor::SyntaxHighlighter.for('pygments')
+  include SyntaxHighlighterBaseWithInline
+  register_for 'pygments'
 end
 
 # This (and the following method) adds support for defining
