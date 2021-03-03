@@ -1,0 +1,17 @@
+=== Styled table
+[cols="^.^1h,<.^2a",role="arrows",stripes=none,grid=none,frame=none]
+|===
+|*Discussions*
+ifdef::backend-html5[{table-arrow}]
+|
+* Understand…
+
+|[.small]#Process# +
+*Defining…*
+ifdef::backend-html5[{table-arrow}]
+|
+* Define…
+
+2+|*Recommendation…* +
+[.small]#including…#
+|===

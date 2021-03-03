@@ -2,8 +2,14 @@
 @import "components/asciidoc";
 @import "components/awesome-icons";
 
-h1 {
+h1, #header > h1:first-child {
   text-align: center;
+  color: $header-font-color;
+}
+
+#header h1 small {
+  display: block;
+  line-height: inherit;
 }
 
 .imageblock .title {

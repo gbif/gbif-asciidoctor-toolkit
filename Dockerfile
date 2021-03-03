@@ -31,6 +31,9 @@ RUN gem install rugged
 #RUN apk add --no-cache go gcc musl-dev
 #go get github.com/asciitosvg/asciitosvg/cmd/a2s
 
+# "Meme" diagram type
+#RUN apk add --no-cache imagemagick
+
 # Stylesheet compiler:
 RUN apk add --no-cache ruby-rdoc ruby-bundler
 RUN gem install compass --version 0.12.7 && \
@@ -86,7 +89,6 @@ COPY gbif.csl $gems_path/csl-styles-1.0.1.10/vendor/styles/
 
 COPY asciidoctor-extensions-lab/ /adoc/asciidoctor-extensions-lab/
 COPY gbif-extensions/ /adoc/gbif-extensions/
-COPY gbif-templates/ /adoc/gbif-templates/
 COPY gbif-theme/ /adoc/gbif-theme/
 COPY GbifHtmlConverter.rb asciidoc.dict /adoc/
 

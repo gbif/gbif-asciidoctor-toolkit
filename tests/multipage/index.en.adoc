@@ -1,0 +1,64 @@
+= General test document
+:authorcount: 1
+:author_1: Matthew Blissett
+:multipage:
+:toc: left
+:toclevels: 3
+:numbered:
+:revdate: {localdate}
+:title-logo-image: Apis-mellifera-thebugroomno2-iNat.jpg
+:icons: font
+:pagenums:
+:license: https://creativecommons.org/licenses/by/4.0
+:source-highlighter: pygments
+:source-language: javascript
+:experimental:
+:xrefstyle: short
+:section-refsig: §
+:stem:
+// Citation style
+:bibtex-file: references.bib
+:bibtex-style: gbif
+:bibtex-order: alphabetical
+:bibtex-locale: en-GB
+//
+:docinfo: shared-head
+:table-arrow: pass:[<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24.42576 8.8668518"><path d="M 12.21288,8.2129266 1.6295474,0.52916664 H 22.796213 Z"/></svg>]
+
+ifdef::backend-html5[]
+//languageLinks:combined[]
+endif::backend-html5[]
+
+include::blocks.en.adoc[]
+
+include::styled-table.en.adoc[]
+
+=== Translatable SVG image
+image::example-of-staff-roles-participant-node.en.svg[]
+
+include::inline.en.adoc[]
+
+include::syntax-highlighting.en.adoc[]
+
+== Other checks
+
+* Google Analytics plugin active
++
+Look for the `UA-` text at the very end of the HTML
+* Git metadata preprocessor
+* License URI docinfo post-processor
++
+Look for [source,html]`<link rel="license" href="https://creativecommons.org/licenses/by/4.0">` in the source
+* "Improve this document" should be translated in the Chinese version
+
+[glossary]
+== Glossary
+
+[glossary]
+another definition:: This one links to the <<definition>> below, and the section on <<crossreferences>> above.
+
+[[definition]]definition:: This is a definition in a glossary.
+
+== References
+
+bibliography::[]

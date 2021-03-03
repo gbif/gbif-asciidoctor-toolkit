@@ -1,0 +1,19 @@
+== Blocks
+
+=== Question blocks
+
+****
+[question, mc]
+....
+If you open a data file and see the following, what would you suspect is the issue?
+
+```
+�tre, ou ne pas �tre, c�est l� la question.
+```
+
+- [ ] Nothing
+- [ ] It is corrupt
+- [x] The wrong encoding was used to open the file
+- [ ] The sender used a weird font
+....
+****

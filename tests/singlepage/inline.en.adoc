@@ -1,0 +1,20 @@
+== Inline
+
+=== Darwin Core
+
+This is the GBIF term:dwc[dwc:georeferenceRemarks] or term:dwc[basisOfRecord] macro.
+
+=== Crossreferences
+
+A link to
+
+* <<darwin-core>> above (defaulting to the § symbol), and with <<darwin-core,a custom name>>
+* to <<block-highlighting>> in the following section, and with <<block-highlighting,a name>>
+* and to a <<definition>> in the <<glossary>>
+
+=== Mathematics
+
+A formula: stem:[sqrt(0.35^2 + x^2)]
+
+=== BibTeX support
+Sources of *EPSG* codes include epsg.io (Maptiler 2019), citenp:[ApacheCRS], EPSG Dataset version 9.1 (IOGP 2019), and Geomatic Solutions (2018).

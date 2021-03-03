@@ -1,6 +1,6 @@
 == Syntax highlighting
 
-=== Block
+=== Block highlighting
 
 [source,javascript]
 ----
@@ -14,4 +14,4 @@
 
 === Inline
 
-Las coordenadas: [source,javascript]`"coordinates": [-64.471941, -23.643418]` and some `normal monospace`.
+Las coordenadas: [source,javascript]`"coordinates": [-64.471941, -23.643418]` and some `normal monospace`.  (`coordinates` should be a different colour to the numbers).

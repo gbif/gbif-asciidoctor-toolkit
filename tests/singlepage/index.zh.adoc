@@ -1,0 +1,20 @@
+= General test document
+:authorcount: 1
+:author_1: Matthew Blissett
+:toc: left
+:toclevels: 3
+:numbered:
+:revdate: {localdate}
+
+ifdef::backend-html5[]
+languageLinks:combined[]
+endif::backend-html5[]
+
+== Chinese document
+
+Also check the PDF.
+
+本文档探讨改进全球协作的想法，从而建立、维护和使用一个综合性的**世界自然历史馆藏名录**。
+每个想法都是作为一个单独的议题提出的，每个议题包含一系列问题，以引导大家在线讨论link:https://www.gbif.org/zh/news/6TvOkvpPlxRm5vHxljYNN5/[_建立全球自然历史馆藏名录_]。
+
+This should have bold, a link, and the link text should be emphasized with _dots_ *not* italics.

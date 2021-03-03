@@ -2,7 +2,7 @@ $body-font-family: "Roboto", "DejaVu Sans", sans-serif;
 $body-font-color: #4e565f;
 
 @import "asciidoctor";
-//@import "fonts/gbif";
+@import "fonts/gbif";
 
 $primary-color: #4e565f;
 $alert-color: #46a138;

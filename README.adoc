@@ -5,32 +5,35 @@
 
 This is a Docker container derived from https://github.com/asciidoctor/docker-asciidoctor[docker-asciidoctor], but with the addition of:
 
+* https://github.com/hobbypunk90/asciidoctor-question[Asciidoctor Question]
 * GBIF templates and styling
+* Custom GBIF macros and extensions
 * GBIF document build script
 
 The Asciidoctor Docker container provides:
 
 * Asciidoctor
+* Asciidoctor BibTeX
 * Asciidoctor Diagram with Graphviz integration (supports plantuml and graphiz diagrams)
 * Asciidoctor PDF
 * Asciidoctor EPUB3
 * Asciidoctor Mathematical
 * AsciiMath
-* Source highlighting using CodeRay or Rouge
+* Source highlighting using Pygments, CodeRay or Rouge
 * Asciidoctor Confluence
 
 == How to use it
 
-From the top-level directory containing the GBIF document, run:
+From the top-level directory containing the GBIF document named `index.en.adoc` (where `en` is normally a two-letter language code), run:
 
 [source,bash]
 ----
 docker run --rm -it --user $(id -u):$(id -g) -v $PWD:/documents/ gbif/asciidoctor-toolkit
 ----
 
-Your documents will be processed, and output in the same directory.
+Your documents will be processed, and output in the directory `en` (etc).
 
-To have the HTML document rebuild as changes to the source files are saved, use
+To have the HTML document build automatically as changes to the source files are saved, use
 [source,bash]
 ----
 docker run --rm -it --user $(id -u):$(id -g) -v $PWD:/documents/ gbif/asciidoctor-toolkit continuous
@@ -38,17 +41,23 @@ docker run --rm -it --user $(id -u):$(id -g) -v $PWD:/documents/ gbif/asciidocto
 
 == Component details
 
-There are multiple ways to change Asciidoctor templates, two are used here.  This can help me decide
-whether I should only use one method.
+=== `glossary` extension
 
-=== `gbif-templates`
+This adds a role (style) to `<<crossreference>>` links to the glossary, to avoid a "link soup" appearance where there are many such links.
 
-These templates are copied from https://github.com/asciidoctor/asciidoctor-backends, which are examples
-(no longer maintained).
+=== `term` extension macros
 
-Only the templates that need to be overridden are copied, with some changes to bring them up-to-date
-with the HTML converter.
+The `term` extension macro converts e.g. `term:dwc[basisOfRecord]` into a styled link to the property URI.
 
 === `GbifHtmlConverter.rb`
 
-This overrides just particular methods of the Ruby converter.
+This overrides particular methods of the Ruby converter.
+
+* Handling short crossreferences with the § symbol without a following space, e.g. "§1.3"
+* Inline syntax highlighting using the syntax `pass:[[source,javascript]`var x = [];`]`
+* "This document is also available in PDF format and in other languages: español, français, 中文." with the `languageLinks[]` macro.
+
+== Limitations
+
+* Multipage documents can't use block-content (`a`) table cells, see the https://github.com/owenh000/asciidoctor-multipage/issues/1[issue in Asciidoctor Multipage]
+* PDF output does not support inline syntax highlighting or all fonts

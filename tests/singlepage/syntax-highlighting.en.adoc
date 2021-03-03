@@ -1,0 +1,17 @@
+== Syntax highlighting
+
+=== Block highlighting
+
+[source,javascript]
+----
+{
+  "engineVersion" : "GLC:7.0|U:1.01374|eng:1.0",
+  "numResults" : 0, <1>
+  "executionTimems" : 578.1462
+}
+----
+<1> Ningún resultado encontrado.
+
+=== Inline
+
+Las coordenadas: [source,javascript]`"coordinates": [-64.471941, -23.643418]` and some `normal monospace`.  (`coordinates` should be a different colour to the numbers).

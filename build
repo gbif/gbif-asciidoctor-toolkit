@@ -16,10 +16,62 @@ else
 	NC=''
 fi
 
+OPTS=$(getopt --options 'h' --long 'help,no-compress,no-git,no-pdf,no-spellcheck,no_translations' -n $0 -- "$@")
+
+if [[ $? -ne 0 ]]; then
+	echo 'Invalid arguments.' >&2
+	exit 1
+fi
+
+eval set -- "$OPTS"
+unset OPTS
+
+while true; do
+	case "$1" in
+		'--no-compress')
+			no_compress=1
+			shift 1
+			continue
+			;;
+		'--no-git')
+			no_git=1
+			shift 1
+			continue
+			;;
+		'--no-pdf')
+			no_pdf=1
+			shift 1
+			continue
+			;;
+		'--no-spellcheck')
+			no_spellcheck=1
+			shift 1
+			continue
+			;;
+		'--no-translations')
+			no_translations=1
+			shift 1
+			continue
+			;;
+		'-h'|'--help')
+			echo "Usage:"
+			echo "$0 [--no-compress] [--no-git] [--no-pdf] [--no-spellcheck] [--no-translations]"
+			exit 0
+			;;
+		'--')
+			shift
+			break
+			;;
+		*)
+			echo "Internal error!" >&2
+			exit 1
+			;;
+	esac
+done
 
 # Check this is run from a reasonable directory.
 # (Advanced users can run /bin/bash as a Docker target command.)
-if ! git ls-files --error-unmatch 'index.??.adoc' > /dev/null; then
+if [[ -z $no_git ]] && ! git ls-files --error-unmatch 'index.??.adoc' > /dev/null; then
 	echo >&2 "There is no index.en.adoc file in this directory."
 	echo >&2
 	echo >&2 "Check you are running this from the top-level of your document,"
@@ -29,21 +81,27 @@ if ! git ls-files --error-unmatch 'index.??.adoc' > /dev/null; then
 	exit 1
 fi
 
-PRIMARY_LANGUAGE=$(git ls-files 'index.??.adoc' | cut -d. -f 2)
+if [[ -z $no_git ]]; then
+	PRIMARY_LANGUAGE=$(git ls-files 'index.??.adoc' | cut -d. -f 2)
+else
+	PRIMARY_LANGUAGE=en
+fi
 
 echo
 echo -e "${RED}Primary language is $PRIMARY_LANGUAGE.${NC}"
 
 # Clean any old files
-echo "Removing files ignored by Git"
-git clean -f -X
+if [[ -z $no_git ]]; then
+	echo "Removing files ignored by Git"
+	git clean -f -X
 
-# Set timestamp on index.$PRIMARY_LANGUAGE.adoc to latest commit time (shown in document footer)
-touch --no-create --date @$(git rev-list --max-count=1 --pretty=%ct HEAD | tail -n 1) index.$PRIMARY_LANGUAGE.adoc
-echo
+	# Set timestamp on index.$PRIMARY_LANGUAGE.adoc to latest commit time (shown in document footer)
+	touch --no-create --date @$(git rev-list --max-count=1 --pretty=%ct HEAD | tail -n 1) index.$PRIMARY_LANGUAGE.adoc
+	echo
+fi
 
 # Produce the translated adoc source from the po-files.
-if [[ -e po4a.conf ]]; then
+if [[ -z $no_translations ]] && [[ -e po4a.conf ]]; then
 	echo -e "${RED}Translating sources${NC}"
 	for pri_adoc in *.$PRIMARY_LANGUAGE.adoc; do
 		grep -q $pri_adoc po4a.conf || echo >&2 "WARNING: Source file $pri_adoc not present in the translation configuration (po4a.conf)"
@@ -75,7 +133,7 @@ fi
 echo
 
 # Spell-check the document using Aspell
-if [[ -e index.en.adoc ]]; then
+if [[ -z $no_spellcheck ]] && [[ -e index.en.adoc ]]; then
 	echo -e "${RED}Checking document spelling (Oxford English dictionary)${NC}"
 	echo "(NB many names and technical terms are not in the dictionary.)"
 	set +e
@@ -89,11 +147,11 @@ if [[ -e index.en.adoc ]]; then
 		aspell --ignore=3 -d en_GB-ize-w_accents -p /adoc/asciidoc.dict list < $d | grep '^[^A-Z].*[A-Z]' | sed 's/^/	/'
 	done
 	set -e
+	echo
 fi
-echo
 
 improve_url=https://docs.gbif.org/contributing/
-if git remote get-url origin &> /dev/null; then
+if [[ -z $no_git ]] && git remote get-url origin &> /dev/null; then
 	contribute_url=https://github.com/gbif/$(git remote get-url origin | rev | cut -d/ -f1 | rev | cut -d. -f1)
 	issue_url=$contribute_url/issues/new
 else
@@ -116,6 +174,7 @@ for lang in $PRIMARY_LANGUAGE translations/??.po translations/??-??.po translati
 
 	# Only add the BibTeX plugin if required
 	if grep -q :bibtex-file: index.$langcode.adoc; then
+		echo "Activating BibTeX plugin"
 		bibtex_plugin="-r asciidoctor-bibtex"
 	else
 		bibtex_plugin=
@@ -123,9 +182,11 @@ for lang in $PRIMARY_LANGUAGE translations/??.po translations/??-??.po translati
 
 	# Only add the Multipage plugin if configured
 	if grep -q :multipage: index.$langcode.adoc; then
-		multipage_plugin="-r asciidoctor-multipage -b multipage_html5"
+		echo "Multi-page document"
+		multipage_plugin="-b gbif_multipage_html5"
 	else
-		multipage_plugin="-T /adoc/gbif-templates/"
+		echo "Single page document"
+		multipage_plugin="-b html5"
 	fi
 
 	echo -e "${RED}Generating $langcode HTML${NC}"
@@ -159,11 +220,15 @@ for lang in $PRIMARY_LANGUAGE translations/??.po translations/??-??.po translati
 		--verbose \
 		index.$langcode.adoc
 
-	if [[ -n $SKIP_PDF ]]; then
+	if [[ -z $no_compress ]]; then
+		brotli --keep --force --output=$langcode/index.$langcode.html.brotli --best $langcode/index.$langcode.html &
+	fi
+
+	echo
+
+	if [[ -n $no_pdf ]]; then
 		echo -e "${RED}Not generating $langcode PDF${NC}"
 	else
-		brotli --keep --force --output=$langcode/index.$langcode.html.brotli --best $langcode/index.$langcode.html &
-
 		echo -e "${RED}Generating $langcode PDF${NC}"
 		asciidoctor-pdf \
 			-a icons=font \
@@ -185,7 +250,10 @@ for lang in $PRIMARY_LANGUAGE translations/??.po translations/??-??.po translati
 			--trace \
 			--verbose \
 			index.$langcode.adoc
-		brotli --verbose --keep --force --output=$langcode/$title.$langcode.pdf.brotli --best $langcode/$title.$langcode.pdf &
+
+		if [[ -z $no_compress ]]; then
+			brotli --verbose --keep --force --output=$langcode/$title.$langcode.pdf.brotli --best $langcode/$title.$langcode.pdf &
+		fi
 	fi
 
 	cat > index.$langcode.asis <<-EOF
@@ -202,7 +270,7 @@ for lang in $PRIMARY_LANGUAGE translations/??.po translations/??-??.po translati
 	echo
 done
 
-if [[ -n $SKIP_PDF ]]; then
+if [[ -n $no_pdf ]]; then
 	echo -e "${RED}Not compressing files${NC}"
 else
 	echo -e "${RED}Compressing files${NC}"

@@ -1,0 +1,7 @@
+*.asis
+*.html
+*.pdf
+*.mo
+*.webp
+*.brotli
+*/??
