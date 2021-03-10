@@ -16,6 +16,9 @@ else
 	NC=''
 fi
 
+echo -e "${RED}GBIF Asciidoctor Toolkit v1.3.0b.${NC}"
+echo
+
 OPTS=$(getopt --options 'h' --long 'help,no-compress,no-git,no-pdf,no-spellcheck,no_translations' -n $0 -- "$@")
 
 if [[ $? -ne 0 ]]; then
@@ -222,6 +225,13 @@ for lang in $PRIMARY_LANGUAGE translations/??.po translations/??-??.po translati
 
 	if [[ -z $no_compress ]]; then
 		brotli --keep --force --output=$langcode/index.$langcode.html.brotli --best $langcode/index.$langcode.html &
+	fi
+
+	node /adoc/lunr/generate-index.js $langcode $langcode/lunr-index.js || \
+		(echo "${RED}Lunr index failed"; echo '{}' > $langcode/lunr-index.js)
+
+	if [[ -z $no_compress ]]; then
+		brotli --keep --force --output=$langcode/lunr-index.js.brotli --best $langcode/lunr-index.js &
 	fi
 
 	echo

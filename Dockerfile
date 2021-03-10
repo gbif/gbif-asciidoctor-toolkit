@@ -96,6 +96,12 @@ COPY GbifHtmlConverter.rb asciidoc.dict /adoc/
 ENV PRIMARY_LANGUAGE=en
 COPY build continuous /usr/local/bin/
 
+# Lunr.JS indexing
+COPY lunr/ /adoc/lunr/
+RUN apk add --no-cache nodejs npm && \
+    cd /adoc/lunr && \
+    npm install
+
 WORKDIR /documents
 VOLUME /documents
 
