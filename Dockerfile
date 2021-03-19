@@ -16,7 +16,7 @@ ARG gems_path=/usr/lib/ruby/gems/2.7.0/gems
 ARG adoc_path=$gems_path/asciidoctor-2.0.12
 
 # PO4A translation tool
-RUN apk add --no-cache diffutils perl-unicode-linebreak po4a
+RUN apk add --no-cache diffutils perl-unicode-linebreak perl-yaml-tiny po4a
 
 # Git commit plugin
 RUN apk add --no-cache openssl openssl-dev cmake ruby-dev ruby-rdoc gcc musl-dev
@@ -77,9 +77,7 @@ RUN ln -s $adoc_path/data/locale/attributes-es.adoc $adoc_path/data/locale/attri
 COPY asciidoctor-question /adoc/asciidoctor-question/
 RUN cd /adoc/asciidoctor-question && rake build && rake install
 
-# See https://github.com/owenh000/asciidoctor-multipage/issues/8 for the chmod.
-RUN gem install asciidoctor-multipage && \
-    chmod 644 /usr/lib/ruby/gems/2.7.0/gems/asciidoctor-multipage-0.0.5/lib/asciidoctor-multipage.rb
+RUN gem install asciidoctor-multipage
 
 COPY gbif-stylesheet/ /adoc/gbif-stylesheet/
 RUN cd /adoc/gbif-stylesheet && compass compile

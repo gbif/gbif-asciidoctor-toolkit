@@ -16,10 +16,10 @@ else
 	NC=''
 fi
 
-echo -e "${RED}GBIF Asciidoctor Toolkit v1.3.0b.${NC}"
+echo -e "${RED}GBIF Asciidoctor Toolkit v1.3.0c.${NC}"
 echo
 
-OPTS=$(getopt --options 'h' --long 'help,no-compress,no-git,no-pdf,no-spellcheck,no_translations' -n $0 -- "$@")
+OPTS=$(getopt --options 'h' --long 'help,no-compress,no-git,no-pdf,no-spellcheck,no-translation' -n $0 -- "$@")
 
 if [[ $? -ne 0 ]]; then
 	echo 'Invalid arguments.' >&2
@@ -51,14 +51,14 @@ while true; do
 			shift 1
 			continue
 			;;
-		'--no-translations')
+		'--no-translation')
 			no_translations=1
 			shift 1
 			continue
 			;;
 		'-h'|'--help')
 			echo "Usage:"
-			echo "$0 [--no-compress] [--no-git] [--no-pdf] [--no-spellcheck] [--no-translations]"
+			echo "$0 [--no-compress] [--no-git] [--no-pdf] [--no-spellcheck] [--no-translation]"
 			exit 0
 			;;
 		'--')
@@ -99,7 +99,7 @@ if [[ -z $no_git ]]; then
 	git clean -f -X
 
 	# Set timestamp on index.$PRIMARY_LANGUAGE.adoc to latest commit time (shown in document footer)
-	touch --no-create --date @$(git rev-list --max-count=1 --pretty=%ct HEAD | tail -n 1) index.$PRIMARY_LANGUAGE.adoc
+	touch --no-create --date @"$(git rev-list --max-count=1 --pretty=%ct HEAD | tail -n 1)" index.$PRIMARY_LANGUAGE.adoc
 	echo
 fi
 
@@ -107,7 +107,7 @@ fi
 if [[ -z $no_translations ]] && [[ -e po4a.conf ]]; then
 	echo -e "${RED}Translating sources${NC}"
 	for pri_adoc in *.$PRIMARY_LANGUAGE.adoc; do
-		grep -q $pri_adoc po4a.conf || echo >&2 "WARNING: Source file $pri_adoc not present in the translation configuration (po4a.conf)"
+		grep -q "$pri_adoc" po4a.conf || echo >&2 "WARNING: Source file $pri_adoc not present in the translation configuration (po4a.conf)"
 	done
 	# Set up for a newly translatable document if necessary.
 	mkdir -p translations/
@@ -124,9 +124,9 @@ if [[ -z $no_translations ]] && [[ -e po4a.conf ]]; then
 	for lang in translations/??.po translations/??-??.po translations/??-???.po; do
 		langcode=$(basename $lang .po)
 		# Replace include and image links to translated alternatives
-		for tdoc in $(grep -l -E -e '\.[a-z][a-z]\.adoc' **/*.$langcode.adoc); do
+		for tdoc in $(grep -l -E -e '\.[a-z][a-z]\.adoc' -- **/*.$langcode.adoc); do
 			echo "Replacing includes in $tdoc for $langcode"
-			perl -pi -e 's/([A-Za-z0-9_-]+).'$PRIMARY_LANGUAGE'.adoc/\1.'$langcode'.adoc/' $tdoc
+			perl -pi -e 's/([A-Za-z0-9_-]+).'$PRIMARY_LANGUAGE'.adoc/\1.'$langcode'.adoc/' "$tdoc"
 		done
 	done
 	echo "Translating source files completed"
@@ -143,11 +143,11 @@ if [[ -z $no_spellcheck ]] && [[ -e index.en.adoc ]]; then
 	for d in *.en.adoc; do
 		echo "Checking $d…"
 		# Lowercase words
-		aspell --ignore=3 -d en_GB-ize-w_accents -p /adoc/asciidoc.dict list < $d | grep -v '[A-Z]' | sed 's/^/	/'
+		aspell --ignore=3 -d en_GB-ize-w_accents -p /adoc/asciidoc.dict list < "$d" | grep -v '[A-Z]' | sed 's/^/	/'
 		# First letter uppercase
-		aspell --ignore=3 -d en_GB-ize-w_accents -p /adoc/asciidoc.dict list < $d | grep '^[A-Z]' | sed 's/^/	/'
+		aspell --ignore=3 -d en_GB-ize-w_accents -p /adoc/asciidoc.dict list < "$d" | grep '^[A-Z]' | sed 's/^/	/'
 		# Subsequent letter uppercase
-		aspell --ignore=3 -d en_GB-ize-w_accents -p /adoc/asciidoc.dict list < $d | grep '^[^A-Z].*[A-Z]' | sed 's/^/	/'
+		aspell --ignore=3 -d en_GB-ize-w_accents -p /adoc/asciidoc.dict list < "$d" | grep '^[^A-Z].*[A-Z]' | sed 's/^/	/'
 	done
 	set -e
 	echo
