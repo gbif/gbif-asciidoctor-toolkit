@@ -9,6 +9,115 @@ const cheerio = require('cheerio')
 const Entities = require('html-entities').AllHtmlEntities
 const entities = new Entities()
 
+// Extract the text from a heading element
+function headingText(node) {
+  let text = '';
+  for (var n = 0; n < node.children.length; n++) {
+    if (node.children[n].type == 'text') {
+      text += node.children[n].data + ' ';
+    }
+  }
+
+  // Decode HTML
+  text = entities.decode(text);
+  // Strip HTML tags
+  return text.replace(/(<([^>]+)>)/ig, '')
+    .replace(/\n/g, ' ')
+    .replace(/\r/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+// Extract all text from this element, including all descendants.
+function extractText(node) {
+  let text = '';
+
+  if (node.type == 'tag') {
+    for (var c = 0; c < node.children.length; c++) {
+      text += extractText(node.children[c]);
+    }
+  }
+
+  if (node.type == 'text') {
+    text = node.data;
+  }
+
+  // Decode HTML
+  text = entities.decode(text);
+  // Strip HTML tags
+  return text.replace(/(<([^>]+)>)/ig, '')
+    .replace(/\n/g, ' ')
+    .replace(/\r/g, ' ')
+    .replace(/\s+/g, ' ');
+}
+
+// Depth-first reverse search to pull out titled sections from node.
+function separateSections(foundSections, language, url, node) {
+
+  //console.log(" — — — ");
+  //console.log("At node", node.type, node.name, node.attribs);
+
+  if (node.type != 'tag') {
+    //console.log("Skipping "+node.type+" node");
+    return [];
+  }
+
+  if (node.children == []) {
+    return [];
+  }
+
+  // Depth-first, reverse order recursion on this node's children
+  for (var c = node.children.length - 1; c >= 0; c--) {
+    let child = node.children[c];
+    //console.log("Subnode", child.name, child.attribs);
+    separateSections(foundSections, language, url, child);
+  }
+
+  // Extract preamble nodes.
+  if (node.attribs['id'] && node.attribs['id'].match(/^(preamble)$/)) {
+    console.log("  Found " + node.attribs['id'] + " special section");
+
+    // Add whole section to index, then remove this section.
+    let text = extractText(node)
+
+    const section = {
+      language: language,
+      text: text,
+      title: 'Preamble',
+      name: 'stem',
+      url: url + '#' + node.attribs['id'],
+      titles: []
+    }
+
+    foundSections.push(section);
+    node.children = [];
+  }
+
+  // Extract sectN nodes.
+  if (node.attribs['class'] && node.attribs['class'].match(/^sect[0-9]+$/)) {
+    // The second child should be the header with an id
+    // (The first child is a text node.)
+    const heading = node.children[1];
+    console.log("  Found " + node.attribs['class'] + " with anchor " + heading.attribs['id']);
+
+    // Add whole section to index, then remove this section.
+    let text = extractText(node)
+
+    const section = {
+      language: language,
+      text: text,
+      title: headingText(heading).trim(),
+      name: 'stem',
+      url: url + '#' + heading.attribs['id'],
+      titles: [{text: headingText(heading).trim(), id: heading.attribs['id']}]
+    }
+
+    foundSections.push(section);
+    node.children = [];
+  }
+  return foundSections
+}
+
 /**
  * Generate a Lunr index.
  *
@@ -37,63 +146,25 @@ function generateIndex (pages) {
     .filter(({ page, $ }) => {
       const $metaRobots = $('meta[name=robots]')
       const metaRobotNoIndex = $metaRobots && $metaRobots.attr('content') === 'noindex'
-      const noIndex = metaRobotNoIndex //|| pageNoIndex
+      const noIndex = metaRobotNoIndex
       return !noIndex
     })
     .map(({ page, $ }) => {
       const language = $('html').attr('lang')
       // Fetch just the article content, so we don't index the TOC and other on-page text
-      // Remove any found headings, to improve search results
       const article = $('#content')
-      const $heading = $('h1,h2,h3,h4,h5,h6', article)
-      const documentTitle = $heading.first().text()
-      $heading.first().remove()
-      const titles = []
-      $('h1,h2,h3,h4,h5,h6', article).each(function () {
-        const $title = $(this)
-        // If the title does not have an id then Lunr will throw a TypeError
-        // cannot read property 'text' of undefined.
-        if ($title.attr('id')) {
-          titles.push({
-            text: $title.text(),
-            id: $title.attr('id')
-          })
-        }
-        $title.remove()
-      })
-
       // don't index navigation elements for pagination on each page
       // as these are the titles of other pages and it would otherwise pollute the index.
-      // TODO for HP
-      $('nav.pagination', article).each(function () {
+      $('.nav-footer', article).each(function () {
         $(this).remove()
       })
 
-      // Pull the text from the article, and convert entities
-      let text = article.text()
-      // Decode HTML
-      text = entities.decode(text)
-      // Strip HTML tags
-      text = text.replace(/(<([^>]+)>)/ig, '')
-        .replace(/\n/g, ' ')
-        .replace(/\r/g, ' ')
-        .replace(/\s+/g, ' ')
-        .trim()
-
-      // Return the indexable content, organized by type
-      return {
-        language: language,
-        text: text,
-        title: documentTitle,
-        component: page.src.component,
-        version: page.src.version,
-        name: page.src.stem,
-        url: page.pub.url,
-        titles: titles // TODO get title id to be able to use fragment identifier
-      }
+      // Run through the document, splitting it into sections with headings
+      console.log("Indexing " + language + ": " + page.pub.url);
+      return separateSections([], language, page.pub.url, article[0]);
     })
+    .flat(1);
 
-//  const languages = ['en']
   const unique = (value, index, self) => {
     return self.indexOf(value) === index
   }
@@ -145,14 +216,13 @@ function generateIndex (pages) {
     self.field('title', { boost: 10 })
     self.field('name')
     self.field('text')
-    self.field('component')
     self.metadataWhitelist = ['position']
     documents.forEach(function (doc) {
       self.add(doc)
       doc.titles.forEach(function (title) {
         self.add({
           title: title.text,
-          url: `${doc.url}#${title.id}`
+          url: `${doc.url}`
         })
       }, self)
     }, self)
@@ -178,13 +248,11 @@ console.log('Creating index from documents in', documentDirectory);
 
 const pages = filesystem.readdirSync(documentDirectory).filter(item => path.extname(item) === '.html').map(item => {
   const path = documentDirectory + '/' + item
-  console.log('Indexing', path)
+  //console.log('Indexing', path)
 
   return {
     contents: filesystem.readFileSync(path, 'utf8'),
     src: {
-      component: 'component-a',
-      version: '1.0',
       stem: 'stem'
     },
     pub: {
@@ -198,8 +266,5 @@ var serializedIdx = JSON.stringify(index)
 
 filesystem.writeFile(process.argv[3], serializedIdx, (err) => {
   if (err) throw err
-  console.log("Index written to", process.argv[3])
 })
-
-//idx = lunr.Index.load(index)
-//console.log(idx.search('quality'))
+console.log("Index written to", process.argv[3])

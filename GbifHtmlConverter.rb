@@ -1,6 +1,6 @@
+# coding: utf-8
 require 'asciidoctor-multipage'
 
-# coding: utf-8
 module GbifHtmlConverterBase
   # Language names in their own language, for use linking to translated documents.
   LANGUAGE_NAMES = {
@@ -477,7 +477,10 @@ class GbifMultipageHtml5Converter < (Asciidoctor::Converter.for 'multipage_html5
           parts_list << Asciidoctor::ListItem.new(parts_list, text)
         end
       end
-      node << parts_list
+      # Matt: Hide the list of sections if we have a table of contents
+      unless node.attr? 'toc'
+        node << parts_list
+      end
 
       # Add navigation links
       add_nav_links(node)
@@ -486,6 +489,42 @@ class GbifMultipageHtml5Converter < (Asciidoctor::Converter.for 'multipage_html5
       node.processed = true
       node.convert
     end
+  end
+
+  # This is a COPY of MultipageHtml5Converter:generate_nav_links, except the "Home" link
+  # is shortened to omit the title, and the text Previous/Up/Next is removed.
+  # Generate navigation links for all pages in document; save HTML to nav_links
+  def generate_nav_links(doc)
+    pages = doc.find_by(context: :section) {|section|
+      [:root, :branch, :leaf].include?(section.mplevel)}
+    pages.insert(0, doc)
+    pages.each do |page|
+      page_index = pages.find_index(page)
+      links = []
+      if page.mplevel != :root
+        previous_page = pages[page_index-1]
+        parent_page = page.parent
+        home_page = doc
+        # NOTE: There are some non-breaking spaces (U+00A0) below, in
+        # the "links <<" lines and "links.join" line.
+        if previous_page != parent_page
+          links << %(← <<#{previous_page.id}>>)
+        end
+        links << %(↑ <<#{parent_page.id}>>)
+        home_label = doc.attributes['navigation_home'] || FALLBACK_LABEL
+        links << %(⌂ <<#{home_page.id},#{home_label}>>) if home_page != parent_page
+      end
+      if page_index != pages.length-1
+        next_page = pages[page_index+1]
+        links << %(<<#{next_page.id}>> →)
+      end
+      block = Asciidoctor::Block.new(parent = doc,
+                                     context = :paragraph,
+                                     opts = {:source => links.join(' | '),
+                                             :subs => :default})
+      page.nav_links = block.content
+    end
+    return
   end
 
   # This is a COPY of MultipageHtml5Converter:convert_outline.  There are no changes,

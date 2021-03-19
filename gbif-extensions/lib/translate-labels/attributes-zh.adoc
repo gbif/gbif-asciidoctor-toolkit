@@ -13,3 +13,5 @@
 :contribute_improve_text: 完善这份文件
 :contribute_edit_text: 在GitHub上编辑
 :contribute_issue_text: 创造议题
+
+:navigation_home: 主頁

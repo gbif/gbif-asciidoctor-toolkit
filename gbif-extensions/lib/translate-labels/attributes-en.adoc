@@ -13,3 +13,5 @@
 :contribute_improve_text: Improve this document
 :contribute_edit_text: Edit on GitHub
 :contribute_issue_text: Create an issue
+
+:navigation_home: Home
