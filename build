@@ -16,7 +16,7 @@ else
 	NC=''
 fi
 
-echo -e "${RED}GBIF Asciidoctor Toolkit v1.3.0d.${NC}"
+echo -e "${RED}GBIF Asciidoctor Toolkit v1.3.0e.${NC}"
 echo
 
 OPTS=$(getopt --options 'h' --long 'help,no-compress,no-git,no-pdf,no-spellcheck,no-translation' -n $0 -- "$@")

@@ -636,9 +636,9 @@ class GbifMultipageHtml5Converter < (Asciidoctor::Converter.for 'multipage_html5
         if previous_page != parent_page
           links << %(← <<#{previous_page.id}>>)
         end
-        links << %(↑ <<#{parent_page.id}>>)
+        links << %(↑ <<#{parent_page.id}>>) unless home_page == parent_page
         home_label = doc.attributes['navigation_home'] || FALLBACK_LABEL
-        links << %(⌂ <<#{home_page.id},#{home_label}>>) if home_page != parent_page
+        links << %(⌂ <<#{home_page.id},#{home_label}>>)
       end
       if page_index != pages.length-1
         next_page = pages[page_index+1]
@@ -674,6 +674,72 @@ class GbifMultipageHtml5Converter < (Asciidoctor::Converter.for 'multipage_html5
     root = %(<span class="#{classes.join(' ')}">#{root_link}</span>)
     # Create and return the HTML
     %(<p>#{root}</p>#{generate_outline(custom_outline_doc, opts)})
+  end
+
+  # This is a COPY of MultipageHtml5Converter:convert_section.  The mini-ToC has been commented.
+  # Process a Section. Each Section will either be split off into its own page
+  # or processed as normal by Html5Converter.
+  def convert_section(node)
+    doc = node.document
+    if doc.processed
+      # This node can now be handled by Html5Converter.
+      super
+    else
+      # This node is from the original document and has not yet been processed.
+
+      # Create a new page for this section
+      page = Asciidoctor::Document.new([],
+                                       {:attributes => doc.attributes.clone,
+                                        :doctype => doc.doctype,
+                                        :header_footer => !doc.attr?(:embedded),
+                                        :safe => doc.safe})
+      # Retain webfonts attribute (why is doc.attributes.clone not adequate?)
+      page.set_attr('webfonts', doc.attr(:webfonts))
+      # Save sectnum for use later (a Document object normally has no sectnum)
+      if node.parent.respond_to?(:numbered) && node.parent.numbered
+        page.sectnum = node.parent.sectnum
+      end
+
+      # Process node according to mplevel
+      if node.mplevel == :branch
+        # Retain any part intro blocks, delete others, and add a list
+        # of sections for the part landing page.
+        chapters_list = Asciidoctor::List.new(node, :ulist)
+        node.blocks.delete_if do |block|
+          if block.context == :section
+            chapter = block
+            chapter.convert
+            text = %(<<#{chapter.id},#{chapter.captioned_title}>>)
+            # NOTE, there is a non-breaking space (Unicode U+00A0) below.
+            if desc = block.attr('desc') then text << %( – #{desc}) end
+            #Matt: Commented.
+            #chapters_list << Asciidoctor::ListItem.new(chapters_list, text)
+            true
+          end
+        end
+        # Add chapters list to node, reparent node to new page, add
+        # node to page, mark as processed, and add page to @pages.
+        node << chapters_list
+        reparent(node, page)
+        page.blocks << node
+      else # :leaf
+        # Reparent node to new page, add node to page, mark as
+        # processed, and add page to @pages.
+        reparent(node, page)
+        page.blocks << node
+      end
+
+      # Add navigation links using saved HTML
+      page.nav_links = node.nav_links
+      add_nav_links(page)
+
+      # Mark page as processed and add to collection of pages
+      @pages << page
+      page.id = node.id
+      page.catalog = @catalog
+      page.mplevel = node.mplevel
+      page.processed = true
+    end
   end
 
   def convert_inline_quoted node
