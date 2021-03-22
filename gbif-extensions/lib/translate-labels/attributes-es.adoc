@@ -13,3 +13,10 @@
 :contribute_improve_text: Mejora este documento
 :contribute_edit_text: Editar en GitHub
 :contribute_issue_text: Crear una propuesta
+
+:search_text: Buscar
+:search_results_header_text: Resultados de la búsqueda
+:search_results_query_text: Resultados de búsqueda de “${query}”
+:search_no_results_text: Sin resultados
+
+:navigation_home: Inicio

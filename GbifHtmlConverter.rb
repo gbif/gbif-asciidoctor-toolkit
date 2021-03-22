@@ -198,6 +198,15 @@ module GbifHtmlConverterBase
 #{convert_alternate node}
   #{br})
           result << %(#{convert_contribute_edit node}#{br}) if contribute_before
+          search_text = node.document.attributes['search_text'] || FALLBACK_LABEL
+          result << %(<h3 id="search">#{search_text}</h3>
+          <div id="search_form">
+            <form onsubmit="return submitForm(event)" method="GET" style="display: flex;">
+              <input type="search" name="q" value="" size="12" id="search_input" style="flex-grow: 1;" />
+              <input type="submit" value="🔍" style="width: 3em;" />
+            </form>
+          </div>
+          #{br})
           result << %(<div id="toctitle">#{node.attr 'toc-title'}</div>
 #{node.converter.convert node, 'outline'})
           result << %(#{br}#{convert_contribute_edit node}) unless contribute_before
@@ -275,6 +284,123 @@ MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
 </script>
 <script src="#{cdn_base_url}/mathjax/#{MATHJAX_VERSION}/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>)
     end
+
+    search_results_header_text = node.document.attributes['search_results_header_text'] || FALLBACK_LABEL
+    search_results_query_text = node.document.attributes['search_results_query_text'] || FALLBACK_LABEL
+    search_no_results_text = node.document.attributes['search_no_results_text'] || FALLBACK_LABEL
+    result << %(<script src="https://unpkg.com/lunr/lunr.js"></script>)
+
+    unless node.document.attributes['lang'] == 'en'
+      result << %(<script src="https://unpkg.com/lunr-languages/lunr.stemmer.support.js"></script>)
+      result << %(<script src="https://unpkg.com/lunr-languages/lunr.#{node.document.attributes['lang']}.js"></script>)
+    end
+
+    result << %(<script type="text/javascript">
+      var inputField = document.getElementById('search_input');
+
+      function searchResults(query) {
+        var documentContent = document.getElementById('content');
+
+        while (documentContent.firstChild) {
+          documentContent.removeChild(documentContent.firstChild)
+        }
+
+        var searchResultsHeader = document.createElement('h2');
+        documentContent.appendChild(searchResultsHeader);
+        searchResultsHeader.innerHTML = `#{search_results_header_text}`
+        window.scrollTo(searchResultsHeader);
+
+        var searchResultsDescription = document.createElement('div');
+        documentContent.appendChild(searchResultsDescription);
+        searchResultsDescription.innerHTML = `#{search_results_query_text}`
+
+        var searchResults = document.createElement('ul');
+        documentContent.appendChild(searchResults);
+
+        return searchResults;
+      }
+
+      function submitForm(event) {
+        event.preventDefault();
+
+        const query = inputField.value;
+
+        const resultsHTML = searchResults(query);
+
+        fetch('lunr-index.json')
+          .then((response) => response.json())
+          .then((data) => {
+            idx = lunr.Index.load(data.index);
+            store = data.store;
+            var results = idx.search(query);
+            console.log("Search for", query, "gave", results.length, "results.");
+            if (results.length === 0) {
+              resultsHTML.innerHTML = '#{search_no_results_text}';
+              return true;
+            }
+            var pages = results.map((x) => {
+              var anchorPosition = -1; //x.ref.indexOf('#');
+              var storeKey = anchorPosition > 0 ? x.ref.substr(0, anchorPosition) : x.ref;
+              return { data: store[storeKey], match: x };
+            });
+            var list = pages.map((x) => template(x));
+            resultsHTML.innerHTML = list.join('');
+          })
+          .catch((err) => function(err){
+            console.error(err);
+            resultsHTML.innerHTML = 'Unable to complete search - please report the error';
+          });
+
+        return true;
+      }
+
+      var hlStart = '<span class="hl">';
+      var hlEnd = '</span>';
+      var template = ({ data, match }) => {
+        var metadata = match.matchData.metadata;
+
+        // use first 200 chars as fallback
+        var text = `${data.text.substr(0, 200)}${data.text.length > 199 ? '...' : ''}`;
+
+        // Lunr has no concept of highlighting it seems. The developer says it is the most frequent request.
+
+        // Instead we try to do a lazy highlighting - I suspect that it will be fine in most cases.
+        // If it isn't then we should look at something like mark.js which seem to solve this issue.
+
+        // if there only one search term, then try to highlight it
+        if (Object.keys(metadata).length === 1) {
+          // only attempt with the first occurrences of the word
+          // (though there may be many more)
+          var matchedTerm = metadata[Object.keys(metadata)[0]];
+
+          // sometimes it can be an a title that match. Lunr does not tell us which. WE cannot do much in that case
+          if (matchedTerm.text && matchedTerm.text.position) {
+            var matchText = matchedTerm.text.position[0];
+
+            text = data.text.slice(0, matchText[0]) + hlStart + data.text.slice(matchText[0]);
+            text = text.slice(0, matchText[0] + matchText[1] + hlStart.length) + hlEnd + text.slice(matchText[0] + matchText[1] + hlStart.length);
+            var start = matchText[0];
+            var length = matchText[1] + hlStart.length + hlEnd.length + 200;
+            var begin = Math.max(0, start - 100);
+            text = text.substr(begin, length)
+          }
+        }
+
+        return `
+        <li>
+          <article>
+            <h5>
+              <a href="${match.ref}">${data.title}</a>
+            </h5>
+            <div>
+              ... ${text} ...
+            </div>
+          </article>
+        </li>
+        `;
+      };
+    </script>
+    )
 
     unless (docinfo_content = node.docinfo :footer).empty?
       result << docinfo_content

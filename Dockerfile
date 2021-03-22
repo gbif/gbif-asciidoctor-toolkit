@@ -79,6 +79,12 @@ RUN cd /adoc/asciidoctor-question && rake build && rake install
 
 RUN gem install asciidoctor-multipage
 
+# Lunr.JS indexing
+COPY lunr/ /adoc/lunr/
+RUN apk add --no-cache nodejs npm && \
+    cd /adoc/lunr && \
+    npm install
+
 COPY gbif-stylesheet/ /adoc/gbif-stylesheet/
 RUN cd /adoc/gbif-stylesheet && compass compile
 
@@ -93,12 +99,6 @@ COPY GbifHtmlConverter.rb asciidoc.dict /adoc/
 # GBIF build scripts
 ENV PRIMARY_LANGUAGE=en
 COPY build continuous /usr/local/bin/
-
-# Lunr.JS indexing
-COPY lunr/ /adoc/lunr/
-RUN apk add --no-cache nodejs npm && \
-    cd /adoc/lunr && \
-    npm install
 
 WORKDIR /documents
 VOLUME /documents

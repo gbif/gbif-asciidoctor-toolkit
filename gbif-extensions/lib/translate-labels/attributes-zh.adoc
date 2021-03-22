@@ -14,4 +14,9 @@
 :contribute_edit_text: 在GitHub上编辑
 :contribute_issue_text: 创造议题
 
+:search_text: 搜索
+:search_results_header_text: 搜索结果
+:search_results_query_text: 搜索结果“${query}”
+:search_no_results_text: 没有结果
+
 :navigation_home: 主頁

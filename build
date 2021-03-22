@@ -16,7 +16,7 @@ else
 	NC=''
 fi
 
-echo -e "${RED}GBIF Asciidoctor Toolkit v1.3.0c.${NC}"
+echo -e "${RED}GBIF Asciidoctor Toolkit v1.3.0d.${NC}"
 echo
 
 OPTS=$(getopt --options 'h' --long 'help,no-compress,no-git,no-pdf,no-spellcheck,no-translation' -n $0 -- "$@")
@@ -165,7 +165,8 @@ fi
 # Generate the output HTML and PDF.
 rm -f **/*.??.html **/*.??.html.brotli **/*.??.pdf **/*.??.pdf.brotli *.??.asis \
    **/*.??-??.html **/*.??-??.html.brotli **/*.??-??.pdf  **/*.??-??.pdf.brotli *.??-??.asis \
-   **/*.??-???.html **/*.??-???.html.brotli **/*.??-???.pdf **/*.??-???.pdf.brotli *.??-???.asis
+   **/*.??-???.html **/*.??-???.html.brotli **/*.??-???.pdf **/*.??-???.pdf.brotli *.??-???.asis \
+   **/lunr-index.json*
 for lang in $PRIMARY_LANGUAGE translations/??.po translations/??-??.po translations/??-???.po; do
 	langcode=$(basename $lang .po)
 	echo -e "${RED}Building document in language $langcode${NC}"
@@ -227,11 +228,11 @@ for lang in $PRIMARY_LANGUAGE translations/??.po translations/??-??.po translati
 		brotli --keep --force --output=$langcode/index.$langcode.html.brotli --best $langcode/index.$langcode.html &
 	fi
 
-	node /adoc/lunr/generate-index.js $langcode $langcode/lunr-index.js || \
-		(echo "${RED}Lunr index failed"; echo '{}' > $langcode/lunr-index.js)
+	node /adoc/lunr/generate-index.js $langcode $langcode/lunr-index.json || \
+		(echo "${RED}Lunr index failed"; echo '{}' > $langcode/lunr-index.json)
 
 	if [[ -z $no_compress ]]; then
-		brotli --keep --force --output=$langcode/lunr-index.js.brotli --best $langcode/lunr-index.js &
+		brotli --keep --force --output=$langcode/lunr-index.json.brotli --best $langcode/lunr-index.json &
 	fi
 
 	echo

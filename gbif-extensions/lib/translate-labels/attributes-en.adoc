@@ -14,4 +14,9 @@
 :contribute_edit_text: Edit on GitHub
 :contribute_issue_text: Create an issue
 
+:search_text: Search
+:search_results_header_text: Search results
+:search_results_query_text: Search results for “${query}”
+:search_no_results_text: No results
+
 :navigation_home: Home
