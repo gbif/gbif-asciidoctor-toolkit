@@ -1,0 +1,22 @@
+// The text for the links to the PDF document, and documents in other languages:
+//     This document is also available in [PDF format] and in other languages: [español], [中文].
+// :also_links_pre_text:[:also_links_pdf_link_text:]:also_links_languages_pre_text:[lang]:also_links_languages_separator:[lang]:also_links_post_text:
+:also_links_pre_text: pass:[Этот документ также доступен в ]
+:also_links_pdf_link_text: формате PDF
+:also_links_languages_pre_text: pass:[ и на других языках: ]
+:also_links_languages_separator: pass:[, ]
+:also_links_post_text: .
+
+:other_formats_text: Другие Форматы
+:pdf_file_text: PDF файл
+:contribute_title_text: Помощь в разработе
+:contribute_improve_text: Улучшить текущий документ
+:contribute_edit_text: Изменить на GitHub
+:contribute_issue_text: Создать issue
+
+:search_text: Поиск
+:search_results_header_text: Результаты поиска
+:search_results_query_text: Результаты поиска для запроса “${query}”
+:search_no_results_text: Ничего не найдено
+
+:navigation_home: На главную
