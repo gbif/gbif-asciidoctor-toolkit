@@ -16,7 +16,7 @@
 
 :search_text: Rechercher
 :search_results_header_text: Résultats de recherche
-:search_results_query_text: Résultats de recherche pour “${query}”
+:search_results_query_text: Résultats de recherche pour « ${query} »
 :search_no_results_text: Aucun résultat
 
 :navigation_home: Accueil
