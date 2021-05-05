@@ -1,4 +1,4 @@
-personal_ws-1.1 en 694 utf-8
+personal_ws-1.1 en 704 utf-8
 ABCD
 ADBC
 ALA's
@@ -126,12 +126,14 @@ EUNIS
 Ebbe
 Elysia
 Enciclovida
+Endresen
 EntSoc
 Epecuen
 Etrex
 FASTA
 FBIP
 FGDC
+Figueira
 FinBIF
 Flemons
 Fluxx
@@ -417,6 +419,7 @@ bioinformatics
 biome
 bioregions
 biosystems
+biotopes
 bolded
 bona
 bycatch
@@ -446,6 +449,7 @@ dataSensitiveReason
 databased
 databasing
 dataset
+dataset's
 datasets
 datums
 decimalLatitude
@@ -456,6 +460,8 @@ denoised
 denoising
 departamentales
 detections
+disaggregate
+disaggregation
 discoverable
 dénombrement
 eBird
@@ -513,6 +519,7 @@ georeferences
 georeferencing
 geoscience
 geospatial
+geotagged
 gravimetric
 gridded
 hackathon
@@ -536,6 +543,7 @@ ifdef
 incentivize
 incentivized
 incertae
+indexable
 informaticians
 integrations
 interoperability
@@ -618,6 +626,7 @@ pygments
 pylei
 qPCR
 quasigeoid
+rGBIF
 radialUnits
 radiolocation
 rainforest
@@ -628,6 +637,7 @@ refsig
 regionalization
 replicability
 repo
+reproducibility
 reputational
 reusability
 revdate
