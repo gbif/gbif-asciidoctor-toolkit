@@ -16,7 +16,7 @@
 
 :search_text: Поиск
 :search_results_header_text: Результаты поиска
-:search_results_query_text: Результаты поиска для запроса “${query}”
+:search_results_query_text: Результаты поиска для запроса «${query}»
 :search_no_results_text: Ничего не найдено
 
 :navigation_home: На главную
