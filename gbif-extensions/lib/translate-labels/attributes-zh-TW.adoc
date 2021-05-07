@@ -1,0 +1,22 @@
+// The text for the links to the PDF document, and documents in other languages:
+//     This document is also available in [PDF format] and in other languages: [español], [中文].
+// :also_links_pre_text:[:also_links_pdf_link_text:]:also_links_languages_pre_text:[lang]:also_links_languages_separator:[lang]:also_links_post_text:
+:also_links_pre_text: 此文件也可用於
+:also_links_pdf_link_text: PDF格式
+:also_links_languages_pre_text: 和其他語言：
+:also_links_languages_separator: 、
+:also_links_post_text: 。
+
+:other_formats_text: 其他格式
+:pdf_file_text: PDF文件
+:contribute_title_text: 參與
+:contribute_improve_text: 完善這份文件
+:contribute_edit_text: 在GitHub上編輯
+:contribute_issue_text: 創造議題
+
+:search_text: 搜索
+:search_results_header_text: 搜索結果
+:search_results_query_text: 搜索結果「${query}」
+:search_no_results_text: 沒有結果
+
+:navigation_home: 主頁

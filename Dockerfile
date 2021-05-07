@@ -59,7 +59,7 @@ RUN apk add --no-cache aspell aspell-utils && \
     rm -Rf /adoc/aspell
 
 # Python for Unidecode; inotify for continuous build script.  Image compression.
-RUN apk add --no-cache python3 py3-setuptools py3-pip inotify-tools brotli libwebp-tools patch
+RUN apk add --no-cache python3 py3-setuptools py3-pip inotify-tools brotli libwebp-tools patch parallel
 RUN pip3 install Unidecode
 
 COPY inline-syntax-highlighting.patch /adoc/patches/
@@ -71,7 +71,8 @@ RUN ln -s $adoc_path/data/locale/attributes-es.adoc $adoc_path/data/locale/attri
     ln -s $adoc_path/data/locale/attributes-es.adoc $adoc_path/data/locale/attributes-es-ES.adoc && \
     ln -s $adoc_path/data/locale/attributes-fr.adoc $adoc_path/data/locale/attributes-fr-FR.adoc && \
     ln -s $adoc_path/data/locale/attributes-pt.adoc $adoc_path/data/locale/attributes-pt-PT.adoc && \
-    ln -s $adoc_path/data/locale/attributes-zh_CN.adoc $adoc_path/data/locale/attributes-zh.adoc
+    ln -s $adoc_path/data/locale/attributes-zh_CN.adoc $adoc_path/data/locale/attributes-zh.adoc && \
+    ln -s $adoc_path/data/locale/attributes-zh_TW.adoc $adoc_path/data/locale/attributes-zh-TW.adoc
 
 # RUN gem install asciidoctor-question
 COPY asciidoctor-question /adoc/asciidoctor-question/

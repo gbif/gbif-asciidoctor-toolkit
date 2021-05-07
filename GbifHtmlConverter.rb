@@ -3,55 +3,58 @@ require 'asciidoctor-multipage'
 
 module GbifHtmlConverterBase
   # Language names in their own language, for use linking to translated documents.
-  LANGUAGE_NAMES = {
-    "ar" => "&#1593;&#1585;&#1576;&#1610;&#1577;&nbsp;(Arabiya)",
-    "bg" => "&#1041;&#1098;&#1083;&#1075;&#1072;&#1088;&#1089;&#1082;&#1080;&nbsp;(B&#601;lgarski)",
-    "ca" => "catal&agrave;",
-    "cs" => "&#269;esky",
+  @@language_names = {
+    "ar" => "عربية",
+    "bg" => "Български",
+    "ca" => "català",
+    "cs" => "česky",
     "da" => "dansk",
     "de" => "Deutsch",
-    "el" => "&#917;&#955;&#955;&#951;&#957;&#953;&#954;&#940;&nbsp;(Ellinika)",
+    "el" => "Ελληνικά",
     "en" => "English",
-    "es" => "espa&ntilde;ol",
-    "es-CO" => "espa&ntilde;ol&nbsp;(Colombia)",
-    "es-ES" => "espa&ntilde;ol&nbsp;(Espa&ntilde;a)",
-    "es-419" => "espa&ntilde;ol&nbsp;(Latinoam&eacute;rica)",
+    "es" => "español",
+    "es-CO" => "español (Colombia)",
+    "es-ES" => "español (España)",
+    "es-419" => "español (Latinoamérica)",
     "eo" => "Esperanto",
-    "fa" => "&#x0641;&#x0627;&#x0631;&#x0633;&#x06cc;&nbsp;(Farsi)",
-    "fr" => "fran&ccedil;ais",
-    "fr-FR" => "fran&ccedil;ais&nbsp;(La&nbsp;France)",
+    "fa" => "فارسی",
+    "fr" => "français",
+    "fr-FR" => "français (La France)",
     "gl" => "Galego",
-    "hy" => "&#1344;&#1377;&#1397;&#1381;&#1408;&#1381;&#1398;&nbsp;(hayeren)",
+    "hy" => "Հայերեն",
     "hr" => "hrvatski",
     "id" => "Indonesia",
     "it" => "Italiano",
-    "he" => "&#1506;&#1489;&#1512;&#1497;&#1514;&nbsp;(ivrit)",
-    "ko" => "&#54620;&#44397;&#50612;&nbsp;(Korean)",
-    "lt" => "Lietuvi&#371;",
+    "he" => "עברית",
+    "ko" => "한국어",
+    "lt" => "Lietuvių",
     "hu" => "magyar",
     "nl" => "Nederlands",
-    "ja" => "&#26085;&#26412;&#35486;&nbsp;(Nihongo)",
-    "nb" => "norsk&nbsp;(bokm&aring;l)",
+    "ja" => "日本語",
+    "nb" => "norsk (bokmål)",
     "pl" => "polski",
-    "pt" => "Portugu&ecirc;s",
-    "pt-PT" => "Portugu&ecirc;s&nbsp;(Portugal)",
-    "ro" => "rom&acirc;n&#259;",
-    "ru" => "&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;&nbsp;(Russkij)",
+    "pt" => "Português",
+    "pt-PT" => "Português (Portugal)",
+    "ro" => "română",
+    "ru" => "Русский",
     "sk" => "slovenčina",
     "fi" => "suomi",
     "sv" => "svenska",
-    "ta" => "&#2980;&#2990;&#3007;&#2996;&#3021;&nbsp;(Tamil)",
-    "vi" => "Ti&#7871;ng Vi&#7879;t",
-    "tr" => "T&uuml;rk&ccedil;e",
-    "uk" => "&#1091;&#1082;&#1088;&#1072;&#1111;&#1085;&#1089;&#1100;&#1082;&#1072;&nbsp;(ukrajins'ka)",
-    "zh" => "&#20013;&#25991;(&#31616;)",
-    "zh-CN" => "&#20013;&#25991;(&#31616;)",
-    "zh-HK" => "&#20013;&#25991;(HK)",
-    "zh-TW" => "&#20013;&#25991;(&#32321;)"
+    "ta" => "தமிழ் ",
+    "vi" => "Tiếng Việt",
+    "tr" => "Türkçe",
+    "uk" => "українська",
+    "zh" => "简体中文",
+    "zh-CN" => "简体中文",
+    "zh-TW" => "繁體中文"
   }
 
   # Used when the label hasn't been translated
-  FALLBACK_LABEL = '&#x1f64a;&#x2753;'
+  @@fallback_label = '❓ ❓ ❓'
+
+  def self.language_names
+    @@language_names
+  end
 
   # This is a COPY of Asciidoctor::Converter::Html5Converter:convert_document, with the
   # GBIF theme (logo, "Contribute" links etc) added around the table of contents.
@@ -198,7 +201,7 @@ module GbifHtmlConverterBase
 #{convert_alternate node}
   #{br})
           result << %(#{convert_contribute_edit node}#{br}) if contribute_before
-          search_text = node.document.attributes['search_text'] || FALLBACK_LABEL
+          search_text = node.document.attributes['search_text'] || @@fallback_label
           result << %(<h3 id="search">#{search_text}</h3>
           <div id="search_form">
             <form onsubmit="return submitForm(event)" method="GET" style="display: flex;">
@@ -285,9 +288,9 @@ MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
 <script src="#{cdn_base_url}/mathjax/#{MATHJAX_VERSION}/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>)
     end
 
-    search_results_header_text = node.document.attributes['search_results_header_text'] || FALLBACK_LABEL
-    search_results_query_text = node.document.attributes['search_results_query_text'] || FALLBACK_LABEL
-    search_no_results_text = node.document.attributes['search_no_results_text'] || FALLBACK_LABEL
+    search_results_header_text = node.document.attributes['search_results_header_text'] || @@fallback_label
+    search_results_query_text = node.document.attributes['search_results_query_text'] || @@fallback_label
+    search_no_results_text = node.document.attributes['search_no_results_text'] || @@fallback_label
     result << %(<script src="https://unpkg.com/lunr/lunr.js"></script>)
 
     unless node.document.attributes['lang'] == 'en'
@@ -413,7 +416,7 @@ MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
 
   # Links to alternative versions of the same document (other formats, other languages).
   def convert_alternate node
-    other_formats_text = node.document.attributes['other_formats_text'] || FALLBACK_LABEL
+    other_formats_text = node.document.attributes['other_formats_text'] || @@fallback_label
     # The style is hardcoded here, but should be migrated once we need a custom stylesheet.
     result = [%(<h3 id="otherformatstitle">#{other_formats_text}</h3>)]
     result << [%(<ul class="sectlevel1">)]
@@ -424,14 +427,14 @@ MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
     end
 
     pdf_filename = node.document.attributes['pdf_filename']
-    pdf_file_text = node.document.attributes['pdf_file_text'] || FALLBACK_LABEL
+    pdf_file_text = node.document.attributes['pdf_file_text'] || @@fallback_label
     result << %(<li><a hreflang="#{currentLangCode}" type="application/pdf" href="#{pdf_filename}">#{pdf_file_text}</a></li>)
 
     Dir["index.??.adoc", "index.??-??.adoc", "index.??-???.adoc"]
       .map { |file| file.match(/index\.(.+)\.adoc/)[1] }
       .sort.each do |langCode|
       if langCode != currentLangCode && !File.file?("translations/#{langCode}.hidden")
-        result << %(<li><a hreflang="#{langCode}" href="../#{langCode}/">#{LANGUAGE_NAMES[langCode]}</a></li>)
+        result << %(<li><a hreflang="#{langCode}" href="../#{langCode}/">#{@@language_names[langCode]}</a></li>)
       end
     end
 
@@ -447,10 +450,10 @@ MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
     # contribute_system = 'GitHub'
 
     if ! improve_url.to_s.strip.empty? or ! issue_url.to_s.strip.empty? or ! contribute_url.to_s.strip.empty?
-      contribute_title_text = node.document.attributes['contribute_title_text'] || FALLBACK_LABEL
-      contribute_improve_text = node.document.attributes['contribute_improve_text'] || FALLBACK_LABEL
-      contribute_issue_text = node.document.attributes['contribute_issue_text'] || FALLBACK_LABEL
-      contribute_edit_text = node.document.attributes['contribute_edit_text'] || FALLBACK_LABEL
+      contribute_title_text = node.document.attributes['contribute_title_text'] || @@fallback_label
+      contribute_improve_text = node.document.attributes['contribute_improve_text'] || @@fallback_label
+      contribute_issue_text = node.document.attributes['contribute_issue_text'] || @@fallback_label
+      contribute_edit_text = node.document.attributes['contribute_edit_text'] || @@fallback_label
 
       result = [%(<h3 id="contributetitle">#{contribute_title_text}</h3>)]
 
@@ -637,7 +640,7 @@ class GbifMultipageHtml5Converter < (Asciidoctor::Converter.for 'multipage_html5
           links << %(← <<#{previous_page.id}>>)
         end
         links << %(↑ <<#{parent_page.id}>>) unless home_page == parent_page
-        home_label = doc.attributes['navigation_home'] || FALLBACK_LABEL
+        home_label = doc.attributes['navigation_home'] || @@fallback_label
         links << %(⌂ <<#{home_page.id},#{home_label}>>)
       end
       if page_index != pages.length-1

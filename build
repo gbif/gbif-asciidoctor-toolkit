@@ -16,7 +16,7 @@ else
 	NC=''
 fi
 
-echo -e "${RED}GBIF Asciidoctor Toolkit v1.3.0f.${NC}"
+echo -e "${RED}GBIF Asciidoctor Toolkit v1.3.0g.${NC}"
 echo
 
 OPTS=$(getopt --options 'h' --long 'help,no-compress,no-git,no-pdf,no-spellcheck,no-translation' -n $0 -- "$@")
@@ -163,9 +163,9 @@ else
 fi
 
 # Generate the output HTML and PDF.
-rm -f **/*.??.html **/*.??.html.brotli **/*.??.pdf **/*.??.pdf.brotli *.??.asis \
-   **/*.??-??.html **/*.??-??.html.brotli **/*.??-??.pdf  **/*.??-??.pdf.brotli *.??-??.asis \
-   **/*.??-???.html **/*.??-???.html.brotli **/*.??-???.pdf **/*.??-???.pdf.brotli *.??-???.asis \
+rm -f ??/*.html ??/*.html.brotli ??/*.pdf ??/*.pdf.brotli *.??.asis \
+   ??-??/*.html ??-??/*.html.brotli ??-??/*.pdf ??-??/*.pdf.brotli *.??-??.asis \
+   ??-???/*.html ??-???/*.html.brotli ??-???/*.pdf ??-???/*.pdf.brotli *.??-???.asis \
    **/lunr-index.json*
 for lang in $PRIMARY_LANGUAGE translations/??.po translations/??-??.po translations/??-???.po; do
 	langcode=$(basename $lang .po)
@@ -225,7 +225,7 @@ for lang in $PRIMARY_LANGUAGE translations/??.po translations/??-??.po translati
 		index.$langcode.adoc
 
 	if [[ -z $no_compress ]]; then
-		brotli --keep --force --output=$langcode/index.$langcode.html.brotli --best $langcode/index.$langcode.html &
+		find $langcode -type f -iname '*.html' -print0 | parallel --will-cite --no-run-if-empty -0 brotli --keep --force --suffix=.brotli --best '{}' &
 	fi
 
 	node /adoc/lunr/generate-index.js $langcode $langcode/lunr-index.json || \
@@ -263,19 +263,21 @@ for lang in $PRIMARY_LANGUAGE translations/??.po translations/??-??.po translati
 			index.$langcode.adoc
 
 		if [[ -z $no_compress ]]; then
-			brotli --verbose --keep --force --output=$langcode/$title.$langcode.pdf.brotli --best $langcode/$title.$langcode.pdf &
+			brotli --keep --force --output=$langcode/$title.$langcode.pdf.brotli --best $langcode/$title.$langcode.pdf &
 		fi
 	fi
 
-	cat > index.$langcode.asis <<-EOF
-		Status: 303 See Other
-		Location: ./$langcode/
-		Content-Type: text/html; charset=UTF-8
-		Content-Language: $langcode
-		Vary: negotiate,accept-language
+	if [[ ! -e translations/$langcode.hidden ]]; then
+		cat > index.$langcode.asis <<-EOF
+			Status: 303 See Other
+			Location: ./$langcode/
+			Content-Type: text/html; charset=UTF-8
+			Content-Language: $langcode
+			Vary: negotiate,accept-language
 
-		See <a href="./$langcode/">$langcode</a>.
-	EOF
+			See <a href="./$langcode/">$langcode</a>.
+		EOF
+	fi
 
 	echo "$langcode completed"
 	echo
@@ -287,15 +289,15 @@ else
 	echo -e "${RED}Compressing files${NC}"
 
 	echo "Compressing SVG files with Brotli compression"
-	find . -type f -iname '*.svg' -exec brotli --verbose --keep --force --suffix=.brotli --best '{}' \;
+	find . -type f -iname '*.svg' -print0 | parallel --will-cite --no-run-if-empty -0 brotli --keep --force --suffix=.brotli --best '{}'
 
 	echo "Compressing PNG files to WebP format"
-	find . -type f -iname '*.png' -exec cwebp -short -near_lossless 10 -o '{}.webp' '{}' \;
+	find . -type f -iname '*.png' -size -10000001c -print0 | parallel --will-cite --no-run-if-empty -0 cwebp -short -near_lossless 10 -o '{}.webp' '{}'
 
 	echo "Compressing JPG files to WebP format"
-	find . -type f -iname '*.jp*g' -exec cwebp -short -o '{}.webp' '{}' \;
+	find . -type f -iname '*.jp*g' -size -10000001c -print0 | parallel --will-cite --no-run-if-empty -0 cwebp -short -o '{}.webp' '{}'
 
-	echo "Waiting for HTML and PDF compression (with Brotli) to complete"
+	echo "Waiting for HTML and PDF compression to complete"
 fi
 echo
 
