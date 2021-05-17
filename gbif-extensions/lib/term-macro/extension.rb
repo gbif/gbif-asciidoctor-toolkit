@@ -27,7 +27,7 @@ class TermMacro < Extensions::InlineMacroProcessor
       # Remove a dwc: prefix if it exists
       fullLink = "http://rs.tdwg.org/dwc/terms/"+(shortName.gsub(/^dwc:/, ''))
     when "mixs"
-      fullLink = "http://rs.gbif.org/sandbox/extension/mixs_sample_2020-06-15.xml#"+(shortName.gsub(/^mixs:/, ''))
+      fullLink = "http://rs.gbif.org/sandbox/extension/dna_derived_data_2021-05-14.xml#"+(shortName.gsub(/^mixs:/, ''))
     end
     anchor = %(<a class="term" href="#{fullLink}" target="_blank">#{shortName}</a>)
 
