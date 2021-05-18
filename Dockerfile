@@ -95,10 +95,12 @@ COPY gbif.csl $gems_path/csl-styles-1.0.1.10/vendor/styles/
 COPY asciidoctor-extensions-lab/ /adoc/asciidoctor-extensions-lab/
 COPY gbif-extensions/ /adoc/gbif-extensions/
 COPY gbif-theme/ /adoc/gbif-theme/
-COPY GbifHtmlConverter.rb asciidoc.dict /adoc/
+COPY GbifHtmlConverter.rb asciidoc.dict spelling-skips.sed /adoc/
 
 # GBIF build scripts
 ENV PRIMARY_LANGUAGE=en
+ARG GBIF_ASCIIDOCTOR_TOOLKIT_VERSION=development
+ENV GBIF_ASCIIDOCTOR_TOOLKIT_VERSION=$GBIF_ASCIIDOCTOR_TOOLKIT_VERSION
 COPY build continuous /usr/local/bin/
 
 WORKDIR /documents

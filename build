@@ -16,7 +16,7 @@ else
 	NC=''
 fi
 
-echo -e "${RED}GBIF Asciidoctor Toolkit v1.3.0h.${NC}"
+echo -e "${RED}GBIF Asciidoctor Toolkit v${GBIF_ASCIIDOCTOR_TOOLKIT_VERSION}.${NC}"
 echo
 
 OPTS=$(getopt --options 'h' --long 'help,no-compress,no-git,no-pdf,no-spellcheck,no-translation' -n $0 -- "$@")
@@ -145,11 +145,17 @@ if [[ -z $no_spellcheck ]] && [[ -e index.en.adoc ]]; then
 	for d in *.en.adoc; do
 		echo "Checking $d…"
 		# Lowercase words
-		aspell --ignore=3 -d en_GB-ize-w_accents -p /adoc/asciidoc.dict list < "$d" | grep -v '[A-Z]' | sed 's/^/	/'
+		sed --regexp-extended --file /adoc/spelling-skips.sed < "$d" | \
+			aspell --ignore=3 -d en_GB-ize-w_accents -p /adoc/asciidoc.dict list | \
+			grep -v '[A-Z]' | sed 's/^/	/'
 		# First letter uppercase
-		aspell --ignore=3 -d en_GB-ize-w_accents -p /adoc/asciidoc.dict list < "$d" | grep '^[A-Z]' | sed 's/^/	/'
+		sed --regexp-extended --file /adoc/spelling-skips.sed < "$d" | \
+			aspell --ignore=3 -d en_GB-ize-w_accents -p /adoc/asciidoc.dict list | \
+			grep '^[A-Z]' | sed 's/^/	/'
 		# Subsequent letter uppercase
-		aspell --ignore=3 -d en_GB-ize-w_accents -p /adoc/asciidoc.dict list < "$d" | grep '^[^A-Z].*[A-Z]' | sed 's/^/	/'
+		sed --regexp-extended --file /adoc/spelling-skips.sed < "$d" | \
+			aspell --ignore=3 -d en_GB-ize-w_accents -p /adoc/asciidoc.dict list | \
+			grep '^[^A-Z].*[A-Z]' | sed 's/^/	/'
 	done
 	set -e
 	echo
@@ -230,7 +236,8 @@ for lang in $PRIMARY_LANGUAGE translations/??.po translations/??-??.po translati
 		find $langcode -type f -iname '*.html' -print0 | parallel --will-cite --no-run-if-empty -0 brotli --keep --force --suffix=.brotli --best '{}' &
 	fi
 
-	node /adoc/lunr/generate-index.js $langcode $langcode/lunr-index.json || \
+	echo -e "${RED}Generating $langcode search index${NC}"
+	node /adoc/lunr/generate-index.js $langcode $langcode/lunr-index.json > lunr.log || \
 		(echo "${RED}Lunr index failed"; echo '{}' > $langcode/lunr-index.json)
 
 	if [[ -z $no_compress ]]; then

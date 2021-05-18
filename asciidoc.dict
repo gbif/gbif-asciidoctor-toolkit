@@ -1,4 +1,4 @@
-personal_ws-1.1 en 708 utf-8
+personal_ws-1.1 en 746 utf-8
 ABCD
 ADBC
 ALA's
@@ -30,6 +30,7 @@ BIMF
 BIMFs
 BIMR
 BINs
+BIOM
 BIOSCAN
 Banki
 Bayern
@@ -117,6 +118,8 @@ EBVs
 ECSA
 EIAs
 ELViS
+EMBL
+EMBL's
 EOSC
 EP's
 EPFIs
@@ -132,6 +135,7 @@ EntSoc
 Epecuen
 Etrex
 FASTA
+FASTQ
 FBIP
 FGDC
 Figueira
@@ -160,6 +164,7 @@ GUID
 GUIDs
 Gainesville
 Garmin
+GenBank
 GeologicalContext
 González
 Goodson
@@ -187,6 +192,7 @@ IIIF
 IMBIO
 INDSC
 INRAM
+INSDC
 IOGP
 IPBES
 IPNI
@@ -226,6 +232,7 @@ Lepidoptera
 LifeWatch
 Linnaean
 Linnean
+LivingSpecimen
 Llinás
 Lombok
 Lycidae
@@ -242,6 +249,7 @@ Majaneva
 Maofang
 Marseille
 María
+MaterialSample
 Mauthner
 Medellín
 Meise
@@ -257,6 +265,7 @@ Mélianie
 México
 NBIS
 NCBI
+NCBI's
 NGOs
 NLBIF
 NSF's
@@ -308,7 +317,9 @@ PlutoF
 Poales
 Ponzo
 Pooter
+PreservedSpecimen
 QDGC
+QIIME
 Qiao
 Quindío
 RICAP
@@ -361,6 +372,7 @@ UNAM
 UNAVCO
 UNEP
 URIs
+USEARCH
 USGS
 UUID
 UUIDs
@@ -396,10 +408,12 @@ agroforestry
 alia
 amongst
 amplicon
+amplicons
 analytics
 antimeridian
 aquaria
 archaea
+artefactual
 asciidoc
 asciidoctor
 atomization
@@ -416,12 +430,15 @@ benthic
 billabongs
 bioGEOTRACES
 bioGUID
+biofilms
 biogeographic
 bioinformatic
+bioinformatically
 bioinformaticians
 bioinformatics
 biome
 bioregions
+biosample
 biosystems
 biotopes
 bolded
@@ -435,9 +452,11 @@ centroids
 checksums
 chipsets
 científicas
+citability
 citable
 codebase
 conf
+contig
 convolutional
 coordinatePrecision
 coordinateUncertaintyInMeters
@@ -447,6 +466,7 @@ curvilinear
 curviness
 cycads
 cytometry
+dPCR
 dataSensitiveComments
 dataSensitiveIndicator
 dataSensitiveReason
@@ -456,6 +476,7 @@ dataset
 dataset's
 datasets
 datums
+ddPCR
 decimalLatitude
 decimalLongitude
 deduplication
@@ -466,6 +487,7 @@ departamentales
 detections
 disaggregate
 disaggregation
+discoverability
 discoverable
 dénombrement
 eBird
@@ -480,6 +502,7 @@ endif
 enroll
 ephemerides
 ephemeris
+epibiont
 equipotential
 ethnobotanical
 eukaryotic
@@ -546,14 +569,18 @@ idseparator
 ifdef
 incentivize
 incentivized
+incentivizing
 incertae
 indexable
 informaticians
+ingestible
 integrations
 interoperability
 interoperable
 interpretational
 intersessional
+intra
+intraspecific
 invasively
 isobaths
 isohypse
@@ -575,6 +602,10 @@ memoranda
 metabarcodes
 metabarcoding
 metafile
+metagenome
+metagenomes
+metagenomic
+metagenomics
 microbiomes
 minimumDepthInMeters
 minimumDistanceAboveSurfaceInMeters
@@ -582,11 +613,13 @@ minimumElevationInMeters
 mischaracterized
 misidentification
 misidentifications
+morphologically
 multibeam
 multipath
 multipolygons
 namespace
 natively
+neglections
 nomenclator
 nomenclators
 nomenclatural
@@ -618,9 +651,11 @@ phytoplankton
 pointRadiusSpatialFit
 polyline
 polylines
+polymerase
 precisionDataProvided
 precisionDataStored
 precisions
+prepend
 programmatically
 prokaryote
 prokaryotes
@@ -631,11 +666,13 @@ pylei
 qPCR
 quasigeoid
 rGBIF
+rRNA
 radialUnits
 radiolocation
 rainforest
 recalibrating
 recalibration
+referenceable
 reflectance
 refsig
 regionalization
@@ -654,6 +691,7 @@ runtime
 sampleSizeUnit
 sampleSizeValue
 scalable
+schemas
 sectnumlevels
 sectnums
 sedis
