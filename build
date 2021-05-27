@@ -100,8 +100,10 @@ if [[ -z $no_git ]]; then
 	echo "Removing files ignored by Git"
 	git clean -f -X
 
-	# Set timestamp on index.$PRIMARY_LANGUAGE.adoc to latest commit time (shown in document footer)
-	touch --no-create --date @"$(git rev-list --max-count=1 --pretty=%ct HEAD | tail -n 1)" index.$PRIMARY_LANGUAGE.adoc
+	# Set timestamp on index documents to latest commit time (shown in document footer)
+	for i in index.$PRIMARY_LANGUAGE.adoc translations/index.??.adoc translations/index.??-??.adoc translations/index.??-???.adoc; do
+		touch --no-create --date @"$(git rev-list --max-count=1 --pretty=%ct HEAD | tail -n 1)" $i
+	done
 	echo
 fi
 
@@ -133,7 +135,7 @@ if [[ -z $no_translations ]] && [[ -e po4a.conf ]]; then
 	done
 	echo "Translating source files completed"
 else
-	echo "No po4a.conf exists, this document will not be translated"
+	echo "No po4a.conf exists, this document will not be translated using PO4A"
 fi
 echo
 
@@ -175,17 +177,25 @@ rm -f ??/*.html ??/*.html.brotli ??/*.pdf ??/*.pdf.brotli *.??.asis \
    ??-??/*.html ??-??/*.html.brotli ??-??/*.pdf ??-??/*.pdf.brotli *.??-??.asis \
    ??-???/*.html ??-???/*.html.brotli ??-???/*.pdf ??-???/*.pdf.brotli *.??-???.asis \
    **/lunr-index.json*
-for lang in $PRIMARY_LANGUAGE translations/??.po translations/??-??.po translations/??-???.po; do
-	langcode=$(basename $lang .po)
+for lang in $PRIMARY_LANGUAGE \
+			translations/??.po translations/??-??.po translations/??-???.po \
+			translations/index.??.adoc translations/index.??-??.adoc translations/index.??-???.adoc; do
+	langcode=$(echo $(basename $(basename $lang .po) .adoc) | sed 's/index\.//')
 	echo -e "${RED}Building document in language $langcode${NC}"
 	mkdir -p $langcode
 
+	if [[ -e index.$langcode.adoc ]]; then
+		index=index.$langcode.adoc
+	else
+		index=translations/index.$langcode.adoc
+	fi
+
 	# Document title for PDF filename
-	title=$(grep -m 1 '^=[^=]' index.$langcode.adoc | rev | cut -d: -f2- | rev | unidecode | tr '[:upper:]`~!@"#$%^&*(){}[]/=?+_<>,.\| '"'" '[:lower:]-----------------------------'"-" | sed 's/--*/-/g; s/^-*//; s/-*$//;')
+	title=$(grep -m 1 '^=[^=]' $index | rev | cut -d: -f2- | rev | unidecode | tr '[:upper:]`~!@"#$%^&*(){}[]/=?+_<>,.\| '"'" '[:lower:]-----------------------------'"-" | sed 's/--*/-/g; s/^-*//; s/-*$//;')
 	echo "Document title in $langcode is “$title”"
 
 	# Only add the BibTeX plugin if required
-	if grep -q :bibtex-file: index.$langcode.adoc; then
+	if grep -q :bibtex-file: $index; then
 		echo "Activating BibTeX plugin"
 		bibtex_plugin="-r asciidoctor-bibtex"
 	else
@@ -193,7 +203,7 @@ for lang in $PRIMARY_LANGUAGE translations/??.po translations/??-??.po translati
 	fi
 
 	# Only add the Multipage plugin if configured
-	if grep -q :multipage: index.$langcode.adoc; then
+	if grep -q :multipage: $index; then
 		echo "Multi-page document"
 		multipage_plugin="-b gbif_multipage_html5"
 	else
@@ -230,7 +240,7 @@ for lang in $PRIMARY_LANGUAGE translations/??.po translations/??-??.po translati
 		-o $langcode/index.$langcode.html \
 		--trace \
 		--verbose \
-		index.$langcode.adoc
+		$index
 
 	if [[ -z $no_compress ]]; then
 		find $langcode -type f -iname '*.html' -print0 | parallel --will-cite --no-run-if-empty -0 brotli --keep --force --suffix=.brotli --best '{}' &
@@ -269,7 +279,7 @@ for lang in $PRIMARY_LANGUAGE translations/??.po translations/??-??.po translati
 			-o $langcode/$title.$langcode.pdf \
 			--trace \
 			--verbose \
-			index.$langcode.adoc
+			$index
 
 		if [[ -z $no_compress ]]; then
 			brotli --keep --force --output=$langcode/$title.$langcode.pdf.brotli --best $langcode/$title.$langcode.pdf &
@@ -292,7 +302,7 @@ for lang in $PRIMARY_LANGUAGE translations/??.po translations/??-??.po translati
 	echo
 done
 
-if [[ -n $no_pdf ]]; then
+if [[ -n $no_compress ]]; then
 	echo -e "${RED}Not compressing files${NC}"
 else
 	echo -e "${RED}Compressing files${NC}"
