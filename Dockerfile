@@ -86,6 +86,8 @@ RUN apk add --no-cache nodejs npm && \
     cd /adoc/lunr && \
     npm install
 
+RUN apk add --no-cache ffmpeg jq
+
 COPY gbif-stylesheet/ /adoc/gbif-stylesheet/
 RUN cd /adoc/gbif-stylesheet && compass compile
 

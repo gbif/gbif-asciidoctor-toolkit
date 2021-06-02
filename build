@@ -19,7 +19,7 @@ fi
 echo -e "${RED}GBIF Asciidoctor Toolkit v${GBIF_ASCIIDOCTOR_TOOLKIT_VERSION}.${NC}"
 echo
 
-OPTS=$(getopt --options 'h' --long 'help,no-compress,no-git,no-pdf,no-spellcheck,no-translation' -n $0 -- "$@")
+OPTS=$(getopt --options 'h' --long 'help,no-compress,no-git,no-pdf,no-spellcheck,no-translation,no-video' -n $0 -- "$@")
 
 if [[ $? -ne 0 ]]; then
 	echo 'Invalid arguments.' >&2
@@ -52,13 +52,18 @@ while true; do
 			continue
 			;;
 		'--no-translation')
-			no_translations=1
+			no_translation=1
+			shift 1
+			continue
+			;;
+		'--no-video')
+			no_video=1
 			shift 1
 			continue
 			;;
 		'-h'|'--help')
 			echo "Usage:"
-			echo "$0 [--no-compress] [--no-git] [--no-pdf] [--no-spellcheck] [--no-translation]"
+			echo "$0 [--no-compress] [--no-git] [--no-pdf] [--no-spellcheck] [--no-translation] [--no-video]"
 			exit 0
 			;;
 		'--')
@@ -108,7 +113,7 @@ if [[ -z $no_git ]]; then
 fi
 
 # Produce the translated adoc source from the po-files.
-if [[ -z $no_translations ]] && [[ -e po4a.conf ]]; then
+if [[ -z $no_translation ]] && [[ -e po4a.conf ]]; then
 	echo -e "${RED}Translating sources${NC}"
 	for pri_adoc in *.$PRIMARY_LANGUAGE.adoc; do
 		grep -q "$pri_adoc" po4a.conf || echo >&2 "WARNING: Source file $pri_adoc not present in the translation configuration (po4a.conf)"
@@ -315,11 +320,59 @@ else
 
 	echo "Compressing JPG files to WebP format"
 	find . -type f -iname '*.jp*g' -size -10000001c -print0 | parallel --will-cite --no-run-if-empty -0 cwebp -short -o '{}.webp' '{}'
-
-	echo "Waiting for HTML and PDF compression to complete"
 fi
 echo
 
+# Add translated subtitles as text streams within the videos
+if [[ -n $no_video ]]; then
+	echo -e "${RED}Not processing videos${NC}"
+elif compgen -G 'videos/*.vtt' > /dev/null; then
+	echo -e "${RED}Processing videos${NC}"
+
+	for i in videos/*.mp4; do
+		vid=${i/.mp4/}
+		if compgen -G "$vid.*.vtt" > /dev/null; then
+			echo -n "$vid.mp4: Found these translations: "
+			ffmpeg_command=(ffmpeg -i $i -loglevel level+warning)
+			for vtt in $vid.*.vtt; do
+				ffmpeg_command+=(-i $vtt)
+			done
+			ffmpeg_command+=(-map 0:v -map 0:a)
+			c=1
+			for vtt in $vid.*.vtt; do
+				ffmpeg_command+=(-map $c)
+				c=$((c + 1))
+			done
+			ffmpeg_command+=(-c:v copy -c:a copy -scodec mov_text)
+			c=0
+			for vtt in $vid.*.vtt; do
+				file_with_lang=$(basename $vtt .vtt)
+				lang=${file_with_lang##*.}
+				lang3=$(curl -Ss https://api.gbif.org/v1/enumeration/language | jq -r ".[] | select(.iso2 == \"$lang\").iso3")
+				echo -n "$lang/$lang3 "
+				ffmpeg_command+=(-metadata:s:s:$c language=$lang3)
+				c=$((c + 1))
+			done
+			echo "— inserting into the video."
+			ffmpeg_command+=(-n $i.mp4)
+
+			${ffmpeg_command[@]}
+			rm -f $i
+			mv $i.mp4 $i
+		else
+			echo "$vid.mp4: No translation VTT files found"
+		fi
+	done
+else
+	echo "NO VIDEOS"
+	ls videos/*.vtt
+fi
+echo
+
+if [[ -z $no_compress ]]; then
+	echo "Waiting for HTML and PDF compression to complete"
+	echo
+fi
 wait
 
 echo -e "${RED}Document build completed.${NC}"
