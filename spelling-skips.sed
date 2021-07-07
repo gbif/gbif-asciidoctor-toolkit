@@ -5,7 +5,7 @@ s/[a-z0-9-]+::?[a-z0-9./_-]+\[/[/ig
 # Remove some macro attributes
 s/(align|width|height)="?[a-z0-9]+"?(,|\])?//ig
 # Remove role attributes
-s/^\["?(multipage|lowerroman|loweralpha|arabic|vimeo|youtube)"?,?/[/
+s/^\["?(multipage|lowerroman|upperroman|loweralpha|arabic|vimeo|youtube)"?,?/[/
 # Remove iframes
 s/<iframe.*?<\/iframe>//g
 # Remove comments
