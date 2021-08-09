@@ -539,6 +539,10 @@ class GbifMultipageHtml5Converter < (Asciidoctor::Converter.for 'multipage_html5
   # is replaced by a call to gbif_convert_document from above.
   # Process Document (either the original full document or a processed page)
   def convert_document(node)
+
+    # make sure document has original converter reference
+    check_root(node)
+
     if node.processed
       # This node (an individual page) can now be handled by
       # Html5Converter.
@@ -589,8 +593,16 @@ class GbifMultipageHtml5Converter < (Asciidoctor::Converter.for 'multipage_html5
       # Generate navigation links for all pages
       generate_nav_links(node)
 
-      # Create and save a skeleton document for generating the TOC lists.
-      @@full_outline = new_outline_doc(node)
+      # Create and save a skeleton document for generating the TOC lists,
+      # but don't attempt to create outline for nested documents.
+      unless node.nested?
+        # if the original converter has the @full_outline set already, we are about
+        # to replace it. That's not supposed to happen, and probably means we encountered
+        # a document structure we aren't prepared for. Log an error and move on.
+        logger.error "Regenerating document outline, something wrong?" if node.mp_root.full_outline
+        node.mp_root.full_outline = new_outline_doc(node)
+      end
+
       # Save the document catalog to use for each part/chapter page.
       @catalog = node.catalog
 
@@ -602,7 +614,7 @@ class GbifMultipageHtml5Converter < (Asciidoctor::Converter.for 'multipage_html5
           part = block
           part.convert
           text = %(<<#{part.id},#{part.captioned_title}>>)
-          if desc = block.attr('desc') then text << %( – #{desc}) end
+          if (desc = block.attr('desc')) then text << %( – #{desc}) end
           parts_list << Asciidoctor::ListItem.new(parts_list, text)
         end
       end
@@ -663,10 +675,10 @@ class GbifMultipageHtml5Converter < (Asciidoctor::Converter.for 'multipage_html5
   # outline.
   def convert_outline(node, opts = {})
     doc = node.document
-    # Find this node in the @@full_outline skeleton document
-    page_node = @@full_outline.find_by(id: node.id).first
+    # Find this node in the @full_outline skeleton document
+    page_node = doc.mp_root.full_outline.find_by(id: node.id).first
     # Create a skeleton document for this particular page
-    custom_outline_doc = new_outline_doc(@@full_outline, for_page: page_node)
+    custom_outline_doc = new_outline_doc(doc.mp_root.full_outline, for_page: page_node)
     opts[:page_id] = node.id
     # Generate an extra TOC entry for the root page. Add additional styling if
     # the current page is the root page.
@@ -703,6 +715,8 @@ class GbifMultipageHtml5Converter < (Asciidoctor::Converter.for 'multipage_html5
         page.sectnum = node.parent.sectnum
       end
 
+      page.mp_root = doc.mp_root
+
       # Process node according to mplevel
       if node.mplevel == :branch
         # Retain any part intro blocks, delete others, and add a list
@@ -714,7 +728,7 @@ class GbifMultipageHtml5Converter < (Asciidoctor::Converter.for 'multipage_html5
             chapter.convert
             text = %(<<#{chapter.id},#{chapter.captioned_title}>>)
             # NOTE, there is a non-breaking space (Unicode U+00A0) below.
-            if desc = block.attr('desc') then text << %( – #{desc}) end
+            if desc = block.attr('desc') then text << %( – #{desc}) end
             #Matt: Commented.
             #chapters_list << Asciidoctor::ListItem.new(chapters_list, text)
             true

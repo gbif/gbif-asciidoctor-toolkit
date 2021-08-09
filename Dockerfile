@@ -1,4 +1,4 @@
-FROM asciidoctor/docker-asciidoctor:1.3.0
+FROM asciidoctor/docker-asciidoctor:1.10.0
 LABEL MAINTAINERS="Matthew Blissett <mblissett@gbif.org>"
 
 # FixUID: https://github.com/boxboat/fixuid
@@ -13,7 +13,8 @@ RUN USER=asciidoctor && \
 ENTRYPOINT ["fixuid", "-q"]
 
 ARG gems_path=/usr/lib/ruby/gems/2.7.0/gems
-ARG adoc_path=$gems_path/asciidoctor-2.0.12
+# Also update path in gbif-extensions/lib/translate-labels.rb
+ARG adoc_path=$gems_path/asciidoctor-2.0.16
 
 # PO4A translation tool
 RUN apk add --no-cache diffutils perl-unicode-linebreak perl-yaml-tiny po4a
@@ -78,7 +79,7 @@ RUN ln -s $adoc_path/data/locale/attributes-es.adoc $adoc_path/data/locale/attri
 COPY asciidoctor-question /adoc/asciidoctor-question/
 RUN cd /adoc/asciidoctor-question && rake build && rake install
 
-RUN gem install asciidoctor-multipage
+RUN gem install asciidoctor-multipage --version 0.0.12
 
 # Lunr.JS indexing
 COPY lunr/ /adoc/lunr/

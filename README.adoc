@@ -5,6 +5,7 @@
 
 This is a Docker container derived from https://github.com/asciidoctor/docker-asciidoctor[docker-asciidoctor], but with the addition of:
 
+* https://github.com/owenh000/asciidoctor-multipage/[Asciidoctor Multipage]
 * https://github.com/hobbypunk90/asciidoctor-question[Asciidoctor Question]
 * GBIF templates and styling
 * Custom GBIF macros and extensions
@@ -59,5 +60,4 @@ This overrides particular methods of the Ruby converter.
 
 == Limitations
 
-* Multipage documents can't use block-content (`a`) table cells, see the https://github.com/owenh000/asciidoctor-multipage/issues/1[issue in Asciidoctor Multipage]
-* PDF output does not support inline syntax highlighting or all fonts
+* PDF output does not support inline syntax highlighting, all fonts, or the custom admonitions used in the training courses.
