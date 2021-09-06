@@ -1,4 +1,4 @@
-personal_ws-1.1 en 876 utf-8
+personal_ws-1.1 en 890 utf-8
 ABCD
 ADBC
 ALA's
@@ -34,6 +34,7 @@ BIMR
 BINs
 BIOM
 BIOSCAN
+BONs
 Banki
 Bayern
 Belonoperce
@@ -46,6 +47,7 @@ BioCASe
 BioDATA
 BioData
 BioGeomancer
+Biocollections
 Biodiversidad
 Biología
 Biológicas
@@ -86,6 +88,7 @@ Caryophyllales
 CentOS
 Centropyge
 Cezón
+ChecklistBank
 Chironomid
 CoL's
 Colecciones
@@ -169,6 +172,7 @@ GNSS
 GRBio
 GRIIS
 GRSciColl
+GSBI
 GTDB
 GUID
 GUIDs
@@ -187,6 +191,7 @@ Guterman
 Gutiérrez
 Gzip
 Güntsch
+HKHBIF
 HTTPD
 HTTPS
 Hartter
@@ -251,6 +256,7 @@ Lamiaceae
 Lecoq
 Leese
 Lepidoptera
+LifeStage
 LifeWatch
 Linnaean
 Linnean
@@ -262,6 +268,7 @@ Lycidae
 MEAs
 MGRS
 MGnify
+MIDS
 MIxS
 MNHN
 MaNIS
@@ -379,6 +386,7 @@ SiBBr
 Sinou
 Sistema
 Sitatunga
+SoilBON
 Stjernegaard
 Strasser
 Strzelecki
@@ -398,9 +406,11 @@ Takamura
 Talaván
 TextEdit
 Thiers
+Tomé
 Tuama
 UNAM
 UNAVCO
+UNDP
 UNEP
 URIs
 USEARCH
@@ -507,6 +517,8 @@ convolutional
 coordinatePrecision
 coordinateUncertaintyInMeters
 countryCode
+crowdsource
+crowdsourced
 crowdsourcing
 curation
 curvilinear
@@ -632,6 +644,7 @@ iBOL
 iDigBio
 iDigBio's
 iDigTRiO
+iDiv
 iNat
 iNaturalist
 iconv
@@ -668,6 +681,7 @@ iteratively
 jConfirmation
 jQuery
 journalctl
+knowledgebase
 lang
 languageLinks
 lectotypifications
