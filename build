@@ -145,27 +145,52 @@ fi
 echo
 
 # Spell-check the document using Aspell
-if [[ -z $no_spellcheck ]] && [[ -e index.en.adoc ]]; then
-	echo -e "${RED}Checking document spelling (Oxford English dictionary)${NC}"
-	echo "(NB many names and technical terms are not in the dictionary.)"
+if [[ -z $no_spellcheck ]]; then
 	set +e
-	for d in *.en.adoc; do
-		echo "Checking $d…"
-		# Lowercase words
-		sed --regexp-extended --file /adoc/spelling-skips.sed < "$d" | \
-			aspell --ignore=3 -d en_GB-ize-w_accents -p /adoc/asciidoc.dict list | \
-			grep -v '[A-Z]' | sed 's/^/	/'
-		# First letter uppercase
-		sed --regexp-extended --file /adoc/spelling-skips.sed < "$d" | \
-			aspell --ignore=3 -d en_GB-ize-w_accents -p /adoc/asciidoc.dict list | \
-			grep '^[A-Z]' | sed 's/^/	/'
-		# Subsequent letter uppercase
-		sed --regexp-extended --file /adoc/spelling-skips.sed < "$d" | \
-			aspell --ignore=3 -d en_GB-ize-w_accents -p /adoc/asciidoc.dict list | \
-			grep '^[^A-Z].*[A-Z]' | sed 's/^/	/'
-	done
+	echo -e "${RED}Checking document spelling${NC}"
+	echo "(NB many names and technical terms are not in the dictionary.)"
+
+	if [[ -e index.en.adoc ]]; then
+		echo "English spellcheck uses Oxford English dictionary."
+		for d in *.en.adoc; do
+			echo "Checking $d…"
+			# Lowercase words
+			sed --regexp-extended --file /adoc/spelling-skips.sed < "$d" | \
+				aspell --ignore=3 -d en_GB-ize-w_accents -p /adoc/asciidoc.dict list | \
+				grep -v '[A-Z]' | sed 's/^/	/'
+			# First letter uppercase
+			sed --regexp-extended --file /adoc/spelling-skips.sed < "$d" | \
+				aspell --ignore=3 -d en_GB-ize-w_accents -p /adoc/asciidoc.dict list | \
+				grep '^[A-Z]' | sed 's/^/	/'
+			# Subsequent letter uppercase
+			sed --regexp-extended --file /adoc/spelling-skips.sed < "$d" | \
+				aspell --ignore=3 -d en_GB-ize-w_accents -p /adoc/asciidoc.dict list | \
+				grep '^[^A-Z].*[A-Z]' | sed 's/^/	/'
+		done
+		echo
+	fi
+
+	if [[ -e index.es.adoc ]]; then
+		echo -e "Spanish spellcheck."
+		for d in *.es.adoc; do
+			echo "Checking $d…"
+			# Lowercase words
+			sed --regexp-extended --file /adoc/spelling-skips.sed < "$d" | \
+				aspell --ignore=3 -d es -p /adoc/asciidoc-es.dict list | \
+				grep -v '[A-Z]' | sed 's/^/	/'
+			# First letter uppercase
+			sed --regexp-extended --file /adoc/spelling-skips.sed < "$d" | \
+				aspell --ignore=3 -d es -p /adoc/asciidoc-es.dict list | \
+				grep '^[A-Z]' | sed 's/^/	/'
+			# Subsequent letter uppercase
+			sed --regexp-extended --file /adoc/spelling-skips.sed < "$d" | \
+				aspell --ignore=3 -d es -p /adoc/asciidoc-es.dict list | \
+				grep '^[^A-Z].*[A-Z]' | sed 's/^/	/'
+		done
+		echo
+	fi
+
 	set -e
-	echo
 fi
 
 improve_url=https://docs.gbif.org/contributing/

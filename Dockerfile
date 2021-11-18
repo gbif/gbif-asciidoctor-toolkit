@@ -59,6 +59,13 @@ RUN apk add --no-cache aspell aspell-utils && \
     ./configure && make && make install && \
     rm -Rf /adoc/aspell
 
+# GNU Aspell for Spanish spellcheck
+RUN mkdir /adoc/aspell && \
+    curl -Ss https://ftp.gnu.org/gnu/aspell/dict/es/aspell6-es-1.11-2.tar.bz2 | tar -jxC /adoc/aspell && \
+    cd /adoc/aspell/aspell6-es-1.11-2 && \
+    ./configure && make && make install && \
+    rm -Rf /adoc/aspell
+
 # Python for Unidecode; inotify for continuous build script.  Image compression.
 RUN apk add --no-cache python3 py3-setuptools py3-pip inotify-tools brotli libwebp-tools patch parallel
 RUN pip3 install Unidecode
@@ -98,7 +105,7 @@ COPY gbif.csl $gems_path/csl-styles-1.0.1.10/vendor/styles/
 COPY asciidoctor-extensions-lab/ /adoc/asciidoctor-extensions-lab/
 COPY gbif-extensions/ /adoc/gbif-extensions/
 COPY gbif-theme/ /adoc/gbif-theme/
-COPY GbifHtmlConverter.rb asciidoc.dict spelling-skips.sed /adoc/
+COPY GbifHtmlConverter.rb asciidoc.dict asciidoc-es.dict spelling-skips.sed /adoc/
 
 # GBIF build scripts
 ENV PRIMARY_LANGUAGE=en
