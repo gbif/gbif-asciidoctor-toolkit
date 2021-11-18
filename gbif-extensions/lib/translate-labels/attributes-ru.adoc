@@ -13,6 +13,7 @@
 :contribute_improve_text: Улучшить текущий документ
 :contribute_edit_text: Изменить на GitHub
 :contribute_issue_text: Создать issue
+:contribute_translate_text: Перевести с помощью
 
 :search_text: Поиск
 :search_results_header_text: Результаты поиска

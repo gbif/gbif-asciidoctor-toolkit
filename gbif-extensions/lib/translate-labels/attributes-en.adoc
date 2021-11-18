@@ -13,6 +13,7 @@
 :contribute_improve_text: Improve this document
 :contribute_edit_text: Edit on GitHub
 :contribute_issue_text: Create an issue
+:contribute_translate_text: Translate on Crowdin
 
 :search_text: Search
 :search_results_header_text: Search results
