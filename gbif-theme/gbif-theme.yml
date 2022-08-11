@@ -51,6 +51,7 @@ font:
   fallbacks:
     - M+ 1p Fallback
     - KaiGen Gothic CN
+    - Noto Emoji
 
 extends: default-with-fallback-font
 

@@ -1,4 +1,4 @@
-$body-font-family: "Roboto", "DejaVu Sans", sans-serif;
+$body-font-family: "Roboto", "DejaVu Sans", sans-serif, "Twemoji Country Flags";
 $body-font-color: #4e565f;
 
 @import "asciidoctor";
@@ -8,7 +8,7 @@ $primary-color: #4e565f;
 $alert-color: #46a138;
 
 $title-font-color: $primary-color;
-$header-font-family: "Roboto", "DejaVu Sans", sans-serif;
+$header-font-family: "Roboto", "DejaVu Sans", sans-serif, "Twemoji Country Flags";
 $header-font-color: #46a138;
 $header-font-weight: 400;
 $subheader-font-color: $body-font-color;
