@@ -249,6 +249,13 @@ b.button:after {
 
 #content {
   margin-top: 1.25em;
+  // A bit of a hack: make the footer stick to the bottom.
+  // 2.5em+2.88em is the footer top+bottom padding and two line heights
+  // 2.5em is the top+bottom padding on content
+  // 2.25rem is the h1 top margin
+  // 2.75*1.2rem is the h1 font size * line height
+  // 0.5rem+1.45rem is the padding and line height of the author line
+  min-height: calc(100vh - 2.5em - 2.88em - 2.5em - 2.25rem - 2.75 * 1.2rem - 0.5rem - 1.45rem);
 }
 
 #content:before {
