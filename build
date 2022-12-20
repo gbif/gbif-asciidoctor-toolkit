@@ -255,6 +255,7 @@ for lang in $PRIMARY_LANGUAGE \
 		-a issue_url=$issue_url@ \
 		-a stylesheet=/adoc/gbif-stylesheet/stylesheets/gbif.css@ \
 		-a google-analytics-account=UA-42057855-10 \
+		-a plausible-analytics-data-domain=gbif.org \
 		$multipage_plugin \
 		-r asciidoctor-diagram \
 		$bibtex_plugin \
@@ -263,6 +264,7 @@ for lang in $PRIMARY_LANGUAGE \
 		-r /adoc/asciidoctor-extensions-lab/lib/google-analytics-docinfoprocessor.rb \
 		-r /adoc/gbif-extensions/lib/glossary.rb \
 		-r /adoc/gbif-extensions/lib/license-url-docinfoprocessor.rb \
+		-r /adoc/gbif-extensions/lib/plausible-analytics-docinfoprocessor.rb \
 		-r /adoc/gbif-extensions/lib/term.rb \
 		-r /adoc/gbif-extensions/lib/translate-labels.rb \
 		-r /adoc/gbif-extensions/lib/translation-links.rb \
