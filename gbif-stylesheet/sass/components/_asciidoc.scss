@@ -447,7 +447,7 @@ b.button:after {
     }
   }
 
-  body.toc2.toc-right {
+  body.toc2.toc-right, html[dir="rtl"] body.toc2 {
     padding-left: 0;
     padding-right: 15em;
 
@@ -689,6 +689,11 @@ table.tableblock #preamble > .sectionbody > [class="paragraph"]:first-of-type p 
     > :last-child > :last-child {
       margin-bottom: 0;
     }
+  }
+
+  html[dir="rtl"] td.content {
+    border-left: none;
+    border-right: $hr-border-width $hr-border-style $hr-border-color;
   }
 }
 

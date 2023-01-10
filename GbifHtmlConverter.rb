@@ -49,6 +49,9 @@ module GbifHtmlConverterBase
     "zh-TW" => "繁體中文"
   }
 
+  # Languages written right-to-left
+  @@rtl_languages = ['ar', 'fa', 'he', 'ps', 'ur']
+
   # Used when the label hasn't been translated
   @@fallback_label = '❓ ❓ ❓'
 
@@ -70,7 +73,8 @@ module GbifHtmlConverterBase
     max_width_attr = (node.attr? 'max-width') ? %( style="max-width: #{node.attr 'max-width'};") : ''
     result = ['<!DOCTYPE html>']
     lang_attribute = (node.attr? 'nolang') ? '' : %( lang="#{node.attr 'lang', 'en'}")
-    result << %(<html#{@xml_mode ? ' xmlns="http://www.w3.org/1999/xhtml"' : ''}#{lang_attribute}>)
+    rtl_attribute = (@@rtl_languages.include? (node.attr 'lang')) ? %( dir="rtl") : ''
+    result << %(<html#{@xml_mode ? ' xmlns="http://www.w3.org/1999/xhtml"' : ''}#{lang_attribute}#{rtl_attribute}>)
     result << %(<head>
 <meta charset="#{node.attr 'encoding', 'UTF-8'}"#{slash}>
 <meta http-equiv="X-UA-Compatible" content="IE=edge"#{slash}>

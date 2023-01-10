@@ -53,3 +53,8 @@ a.glossary {
   margin-right: 2em;
   line-height: 1.6;
 }
+
+// Override the strange forcing of LTR direction in SASS 'normalize'
+div, dl, dt, dd, ul, ol, li, h1, h2, h3, #toctitle, #toc h3, .sidebarblock > .content > .title, h4, h5, h6, pre, form, p, blockquote, th, td {
+  direction: inherit;
+}

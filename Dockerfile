@@ -37,7 +37,7 @@ RUN gem install rugged
 
 # Stylesheet compiler:
 RUN apk add --no-cache ruby-rdoc ruby-bundler
-RUN gem install compass --version 0.12.7 && \
+RUN gem install compass --version 1.0.3 && \
     gem install zurb-foundation --version 4.3.2
 
 # Required for PDF handling of certain images
