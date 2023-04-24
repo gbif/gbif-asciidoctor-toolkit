@@ -254,7 +254,6 @@ for lang in $PRIMARY_LANGUAGE \
 		-a contribute_url=$contribute_url@ \
 		-a issue_url=$issue_url@ \
 		-a stylesheet=/adoc/gbif-stylesheet/stylesheets/gbif.css@ \
-		-a google-analytics-account=UA-42057855-10 \
 		-a plausible-analytics-data-domain=docs.gbif.org,gbif.org \
 		$multipage_plugin \
 		-r asciidoctor-diagram \
