@@ -1,4 +1,4 @@
-FROM asciidoctor/docker-asciidoctor:1.10.0
+FROM asciidoctor/docker-asciidoctor:1.49.0
 LABEL MAINTAINERS="Matthew Blissett <mblissett@gbif.org>"
 
 # FixUID: https://github.com/boxboat/fixuid
@@ -12,9 +12,9 @@ RUN USER=asciidoctor && \
     printf "user: $USER\ngroup: $GROUP\n" > /etc/fixuid/config.yml
 ENTRYPOINT ["fixuid", "-q"]
 
-ARG gems_path=/usr/lib/ruby/gems/2.7.0/gems
+ARG gems_path=/usr/lib/ruby/gems/3.2.0/gems
 # Also update path in gbif-extensions/lib/translate-labels.rb
-ARG adoc_path=$gems_path/asciidoctor-2.0.16
+ARG adoc_path=$gems_path/asciidoctor-2.0.20
 
 # PO4A translation tool
 RUN apk add --no-cache diffutils perl-unicode-linebreak perl-yaml-tiny po4a
@@ -37,8 +37,6 @@ RUN gem install rugged
 
 # Stylesheet compiler:
 RUN apk add --no-cache ruby-rdoc ruby-bundler
-RUN gem install compass --version 1.0.3 && \
-    gem install zurb-foundation --version 4.3.2
 
 # Required for PDF handling of certain images
 RUN apk add graphicsmagick-dev
@@ -49,6 +47,8 @@ RUN mkdir -p /adoc/fonts && \
     curl -SsL https://download.gbif.org/2020/03/KaiGenGothic.txz | tar -JxvC /adoc/fonts && \
     curl -SsLO https://noto-website-2.storage.googleapis.com/pkgs/NotoSans-hinted.zip && unzip -jod /adoc/fonts NotoSans-hinted.zip && rm -f NotoSans-hinted.zip && \
     curl -SsLO https://noto-website-2.storage.googleapis.com/pkgs/NotoEmoji-unhinted.zip && unzip -jod /adoc/fonts NotoEmoji-unhinted.zip && rm -f NotoEmoji-unhinted.zip && \
+    curl -SsLO https://download.gbif.org/2023/06/Bitter.zip && unzip -jod /adoc/fonts Bitter.zip && rm -f Bitter.zip && \
+    curl -SsLO https://download.gbif.org/2023/06/Rubik.zip && unzip -jod /adoc/fonts Rubik.zip && rm -f Rubik.zip && \
     chmod a+r -R /adoc/fonts
 
 # GNU Aspell for Oxford English (UN English) spellcheck
@@ -96,11 +96,11 @@ RUN apk add --no-cache nodejs npm && \
 
 RUN apk add --no-cache ffmpeg jq
 
+# GBIF stylesheets
 COPY gbif-stylesheet/ /adoc/gbif-stylesheet/
-RUN cd /adoc/gbif-stylesheet && compass compile
 
 # BibTeX style
-COPY gbif.csl $gems_path/csl-styles-1.0.1.10/vendor/styles/
+COPY gbif.csl $gems_path/csl-styles-1.6.0/vendor/styles/
 
 COPY asciidoctor-extensions-lab/ /adoc/asciidoctor-extensions-lab/
 COPY gbif-extensions/ /adoc/gbif-extensions/

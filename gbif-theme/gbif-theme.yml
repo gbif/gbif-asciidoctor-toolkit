@@ -30,6 +30,42 @@ font:
       italic: NotoEmoji-Regular.ttf
       bold_italic: NotoEmoji-Regular.ttf
 
+    Bitter:
+      thin: Bitter-Thin.ttf
+      extralight: Bitter-ExtraLight.ttf
+      light: Bitter-Light.ttf
+      normal: Bitter-Regular.ttf
+      medium: Bitter-Medium.ttf
+      semibold: Bitter-SemiBold.ttf
+      bold: Bitter-Bold.ttf
+      extrabold: Bitter-ExtraBold.ttf
+      black: Bitter-Black.ttf
+      thin_italic: Bitter-ThinItalic.ttf
+      extralight_italic: Bitter-ExtraLightItalic.ttf
+      light_italic: Bitter-LightItalic.ttf
+      italic: Bitter-Italic.ttf
+      medium_italic: Bitter-MediumItalic.ttf
+      semibold_italic: Bitter-SemiBoldItalic.ttf
+      bold_italic: Bitter-BoldItalic.ttf
+      extrabold_italic: Bitter-ExtraBoldItalic.ttf
+      black_italic: Bitter-BlackItalic.ttf
+
+    Rubik:
+      light: Rubik-Light.ttf
+      normal: Rubik-Regular.ttf
+      medium: Rubik-Medium.ttf
+      semibold: Rubik-SemiBold.ttf
+      bold: Rubik-Bold.ttf
+      extrabold: Rubik-ExtraBold.ttf
+      black: Rubik-Black.ttf
+      light_italic: Rubik-LightItalic.ttf
+      italic: Rubik-Italic.ttf
+      medium_italic: Rubik-MediumItalic.ttf
+      semibold_italic: Rubik-SemiBoldItalic.ttf
+      bold_italic: Rubik-BoldItalic.ttf
+      extrabold_italic: Rubik-ExtraBoldItalic.ttf
+      black_italic: Rubik-BlackItalic.ttf
+
     # The fonts below are part of the default distribution/theme.
     # Noto Serif supports Latin, Latin-1 Supplement, Latin Extended-A, Greek, Cyrillic, Vietnamese & an assortment of symbols
     Noto Serif:
@@ -56,28 +92,44 @@ font:
 extends: default-with-fallback-font
 
 base:
-  font-family: Noto Sans
-  font-color: #000000
+  font-family: Rubik
+  font-color: #333333
 
 title-page:
-#  background-image: image:/adoc/gbif-theme/img/gbif-cover-lines.svg[fit=contain]
+  align: center
+  text_align: center
+  background-color: #f2f8fb
   title:
-    font-family: Noto Sans Medium
-    font-color: #000000
-    top: 75%
+    font-family: Bitter
+    font-style: semibold
+    font-size: $heading_h1_font_size * 1.1
+    font-color: #393536
+    top: 57.5%
   authors:
-    font-color: #534B4A
+    margin_top: $base_font_size * 3
+    font-color: #1985bb
+    font-size: $base_font_size * 1.1
+    delimiter: ' • '
   revision:
-    font-color: #534B4A
+    margin-top: 1cm
+    font-color: #393536
+    font-size: $base_font_size * 0.9
+  logo:
+    image: image:/adoc/gbif-theme/img/gbif-logo.svg[pdfwidth=5cm]
+    top: 96.5%
 
 heading:
-  font-color: #694121
-  font-family: Noto Sans Medium
+  font-color: #0078B4
+  font-family: $base_font_family
   font-style: bold
 
 link:
-  font-color: #7d466a
-  font-family: Noto Sans Medium
+  font-color: #509e2f
+  font-family: $base_font_family
+
+list:
+  indent: $horizontal_rhythm * 1.5
+  marker_font_color: $heading_font_color
 
 footer:
   font-color: #534B4A

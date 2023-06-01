@@ -146,19 +146,19 @@ end
 # add methods to get the source text without substitutions applied.
 #
 # See also https://discuss.asciidoctor.org/Changing-text-content-in-a-TreeProcessor-extension-td8115.html
-class AbstractBlock
+class Asciidoctor::AbstractBlock
   def title_source
     @title
   end
 end
 
-class Block
+class Asciidoctor::Block
   def lines_source
     @lines
   end
 end
 
-class ListItem
+class Asciidoctor::ListItem
   def text_source
     @text
   end
