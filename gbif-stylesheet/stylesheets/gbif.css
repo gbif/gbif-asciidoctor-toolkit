@@ -1,0 +1,252 @@
+/* This way delays font loading
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic|Noto+Serif:400,400italic,700,700italic|Droid+Sans+Mono:400,700&display=swap); */
+
+@import url(https://fonts.googleapis.com/css?family=Roboto:300,300italic,400,400italic,600,600italic|Droid+Sans+Mono:400,700&display=swap);
+
+@import "https://cdn.jsdelivr.net/gh/asciidoctor/asciidoctor@2.0/data/stylesheets/asciidoctor-default.css";
+
+/**
+ * Overrides of the default stylesheet
+ */
+
+:root {
+  --primary-color: #4e565f;
+  --primary-font: "Roboto", "DejaVu Sans", sans-serif, "Twemoji Country Flags";
+  --header-color: #46a138;
+  --subheader-color: #4e565f;
+}
+
+html {
+  font-family: var(--primary-font);
+}
+
+body {
+  font-family: var(--primary-font);
+  color: var(--primary-color);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+#toctitle, .sidebarblock > .content > .title {
+  font-family: var(--primary-font);
+  color: var(--header-color);
+  font-weight: 400;
+}
+
+h1 small,
+h2 small,
+h3 small,
+#toctitle small,
+.sidebarblock > .content > .title small,
+h4 small,
+h5 small,
+h6 small {
+  color: var(--header-color);
+}
+
+#toctitle {
+  color: var(--subheader-color);
+}
+
+#toc ul {
+  font-family: var(--primary-font);
+}
+
+.admonitionblock td.content > .title,
+.audioblock > .title,
+.exampleblock > .title,
+.imageblock > .title,
+.listingblock > .title,
+.literalblock > .title,
+.stemblock > .title,
+.openblock > .title,
+.paragraph > .title,
+.quoteblock > .title,
+table.tableblock > .title,
+.verseblock > .title,
+.videoblock > .title,
+.dlist > .title,
+.olist > .title,
+.ulist > .title,
+.qlist > .title,
+.hdlist > .title {
+  font-family: var(--primary-font);
+}
+
+.admonitionblock > table td.icon .title {
+  font-family: var(--primary-font);
+}
+
+.subheader,
+.admonitionblock td.content > .title,
+.audioblock > .title,
+.exampleblock > .title,
+.imageblock > .title,
+.listingblock > .title,
+.literalblock > .title,
+.stemblock > .title,
+.openblock > .title,
+.paragraph > .title,
+.quoteblock > .title,
+table.tableblock > .title,
+.verseblock > .title,
+.videoblock > .title,
+.dlist > .title,
+.olist > .title,
+.ulist > .title,
+.qlist > .title,
+.hdlist > .title {
+  color: var(--primary-color);
+}
+
+a {
+  color: #4ba2ce;
+}
+
+a:hover,
+a:focus {
+  color: #2c79a1;
+}
+
+code {
+  color: rgba(0, 0, 0, 0.9);
+}
+
+blockquote,
+blockquote p {
+  color: var(--primary-color);
+}
+
+/*
+$subheader-font-color: $body-font-color;
+$title-font-weight: $header-font-weight;
+
+$hr-border-color: #ccc;
+$hr-border-style: dotted;
+$sect-divider-color: $hr-border-color;
+
+$panel-font-color: $body-font-color;
+
+$blockquote-cite-font-color: darken($blockquote-font-color, 10%);
+$blockquote-border: 1px solid #efefef;
+
+$code-color: darken($alert-color, 15%);
+
+$pre-bg: #efefef;
+$pre-padding: emCalc(12px) emCalc(12px) emCalc(10px) emCalc(12px);
+*/
+
+table thead tr th,
+table thead tr td,
+table tfoot tr th,
+table tfoot tr td {
+  color: var(--header-color);
+}
+
+table tr th,
+table tr td {
+  color: var(--primary-color);
+}
+
+#footer {
+  background: #222222;
+}
+
+#footer-text {
+  color: white;
+}
+
+/**
+ * GBIF custom styles (not simply colour/font changes).
+ */
+
+xtable.stripes-none tr {
+  background: none;
+}
+
+#toc h3 {
+  /* From h3 */
+  line-height: 1.2;
+  word-spacing: -0.05em;
+  /* End */
+  color: var(--subheader-color);
+  /* shrink font-size below breakpoint */
+  font-size: 1.375em;
+  margin: 0 0 0.8rem 0;
+  line-height: 1.2;
+}
+
+@media screen and (min-width: 768px) {
+  #toc h3 {
+    /* restore font size above breakpoint */
+    font-size: 1.375em;
+  }
+}
+
+#content {
+  margin-top: 1.25em;
+  /* A bit of a hack: make the footer stick to the bottom.
+   * 2.5em+2.88em is the footer top+bottom padding and two line heights
+   * 2.5em is the top+bottom padding on content
+   * 2.25rem is the h1 top margin
+   * 2.75*1.2rem is the h1 font size * line height
+   * 0.5rem+1.45rem is the padding and line height of the author line
+   */
+  min-height: calc(100vh - 2.5em - 2.88em - 2.5em - 2.25rem - 2.75 * 1.2rem - 0.5rem - 1.45rem);
+}
+
+h1, #header > h1:first-child {
+  text-align: center;
+  color: var(--header-color);
+}
+
+#header h1 small {
+  display: block;
+  line-height: inherit;
+}
+
+.imageblock .title {
+  margin-left: 2em;
+  margin-right: 2em;
+}
+
+:not(.translationLinks) > {
+  em:lang(zh), em:lang(ja) {
+    font-style: normal;
+    text-emphasis: dot;
+  }
+}
+
+.term {
+  color: inherit;
+  font: 0.9em "Droid Sans Mono", "DejaVu Sans Mono", monospace;
+  text-decoration: dotted underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  word-wrap: break-word;
+}
+
+a.glossary {
+  color: inherit;
+  text-decoration: dotted underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.break-all {
+  word-break: break-all;
+}
+
+.hl {
+  text-shadow: yellow 0 0 8px, yellow 0 0 5px, yellow 0 0 3px;
+}
+
+.sidebarblock {
+  margin-left: 2em;
+  margin-right: 2em;
+  line-height: 1.6;
+}
