@@ -169,3 +169,17 @@ class Asciidoctor::Table::Cell
     @text
   end
 end
+
+# I'm not really sure what's going on here.  The PDF and HTML converters getting mixed?
+# @bibref_refs is initialized in Asciidoctor::PDF::Converter.init_pdf, but that doesn't
+# seem to be called before the value is used in a different method, called above.
+module Asciidoctor
+  module PDF
+    class Converter
+      def initialize backend, opts
+        super
+        @bibref_refs = ::Set.new
+      end
+    end
+  end
+end
