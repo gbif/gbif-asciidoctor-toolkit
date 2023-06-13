@@ -100,7 +100,7 @@ RUN apk add --no-cache ffmpeg jq
 COPY gbif-stylesheet/ /adoc/gbif-stylesheet/
 
 # BibTeX style
-COPY gbif.csl $gems_path/csl-styles-1.6.0/vendor/styles/
+COPY gbif.csl $gems_path/csl-styles-1.0.1.11/vendor/styles/
 
 COPY asciidoctor-extensions-lab/ /adoc/asciidoctor-extensions-lab/
 COPY gbif-extensions/ /adoc/gbif-extensions/

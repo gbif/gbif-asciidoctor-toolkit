@@ -173,6 +173,8 @@ end
 # I'm not really sure what's going on here.  The PDF and HTML converters getting mixed?
 # @bibref_refs is initialized in Asciidoctor::PDF::Converter.init_pdf, but that doesn't
 # seem to be called before the value is used in a different method, called above.
+#
+# Note: This seems to break source highlighting.
 module Asciidoctor
   module PDF
     class Converter
