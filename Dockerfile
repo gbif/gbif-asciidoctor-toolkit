@@ -23,18 +23,6 @@ RUN apk add --no-cache diffutils perl-unicode-linebreak perl-yaml-tiny po4a
 RUN apk add --no-cache openssl openssl-dev cmake ruby-dev ruby-rdoc gcc musl-dev
 RUN gem install rugged
 
-# A2S diagrams (needs Go)
-#RUN apk add --no-cache make musl-dev go
-#ENV GOROOT /usr/lib/go
-#ENV GOPATH /go
-#ENV PATH /go/bin:$PATH
-#RUN mkdir -p ${GOPATH}/src ${GOPATH}/bin
-#RUN apk add --no-cache go gcc musl-dev
-#go get github.com/asciitosvg/asciitosvg/cmd/a2s
-
-# "Meme" diagram type
-#RUN apk add --no-cache imagemagick
-
 # Stylesheet compiler:
 RUN apk add --no-cache ruby-rdoc ruby-bundler
 
@@ -86,6 +74,7 @@ RUN ln -s $adoc_path/data/locale/attributes-es.adoc $adoc_path/data/locale/attri
 COPY asciidoctor-question /adoc/asciidoctor-question/
 RUN cd /adoc/asciidoctor-question && rake build && rake install
 
+# Multipage for courses
 RUN gem install asciidoctor-multipage --version 0.0.12
 
 # Lunr.JS indexing
@@ -94,6 +83,7 @@ RUN apk add --no-cache nodejs npm && \
     cd /adoc/lunr && \
     npm install
 
+# Processing video subtitles
 RUN apk add --no-cache ffmpeg jq
 
 # GBIF stylesheets

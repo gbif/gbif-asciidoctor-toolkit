@@ -19,10 +19,12 @@ fi
 echo -e "${RED}GBIF Asciidoctor Toolkit v${GBIF_ASCIIDOCTOR_TOOLKIT_VERSION}.${NC}"
 echo
 
-OPTS=$(getopt --options 'h' --long 'help,no-compress,no-git,no-pdf,no-spellcheck,no-translation,no-video' -n $0 -- "$@")
+OPTS=$(getopt --options 'h' --long 'help,no-compress,no-git,no-presentation,no-pdf,no-spellcheck,no-translation,no-video' -n $0 -- "$@")
 
 if [[ $? -ne 0 ]]; then
 	echo 'Invalid arguments.' >&2
+	echo "Usage:" >&2
+	echo "$0 [--no-compress] [--no-git] [--no-presentation] [--no-pdf] [--no-spellcheck] [--no-translation] [--no-video]" >&2
 	exit 1
 fi
 
@@ -38,6 +40,11 @@ while true; do
 			;;
 		'--no-git')
 			no_git=1
+			shift 1
+			continue
+			;;
+		'--no-presentation')
+			no_presentation=1
 			shift 1
 			continue
 			;;
@@ -63,7 +70,7 @@ while true; do
 			;;
 		'-h'|'--help')
 			echo "Usage:"
-			echo "$0 [--no-compress] [--no-git] [--no-pdf] [--no-spellcheck] [--no-translation] [--no-video]"
+			echo "$0 [--no-compress] [--no-git] [--no-presentation] [--no-pdf] [--no-spellcheck] [--no-translation] [--no-video]"
 			exit 0
 			;;
 		'--')
@@ -203,9 +210,9 @@ else
 fi
 
 # Generate the output HTML and PDF.
-rm -f ??/*.html ??/*.html.brotli ??/*.pdf ??/*.pdf.brotli *.??.asis \
-   ??-??/*.html ??-??/*.html.brotli ??-??/*.pdf ??-??/*.pdf.brotli *.??-??.asis \
-   ??-???/*.html ??-???/*.html.brotli ??-???/*.pdf ??-???/*.pdf.brotli *.??-???.asis \
+rm -f ??/*.html ??/*.html.brotli ??/present/*.html ??/*.pdf ??/*.pdf.brotli *.??.asis \
+   ??-??/*.html ??-??/*.html.brotli ??-??/present/*.html ??-??/*.pdf ??-??/*.pdf.brotli *.??-??.asis \
+   ??-???/*.html ??-???/*.html.brotli ??-???/present/*.html ??-???/*.pdf ??-???/*.pdf.brotli *.??-???.asis \
    **/lunr-index.json*
 for lang in $PRIMARY_LANGUAGE \
 			translations/??.po translations/??-??.po translations/??-???.po \
@@ -260,7 +267,6 @@ for lang in $PRIMARY_LANGUAGE \
 		$bibtex_plugin \
 		-r asciidoctor-question \
 		-r /adoc/asciidoctor-extensions-lab/lib/git-metadata-preprocessor.rb \
-		-r /adoc/asciidoctor-extensions-lab/lib/google-analytics-docinfoprocessor.rb \
 		-r /adoc/gbif-extensions/lib/glossary.rb \
 		-r /adoc/gbif-extensions/lib/license-url-docinfoprocessor.rb \
 		-r /adoc/gbif-extensions/lib/plausible-analytics-docinfoprocessor.rb \
@@ -273,10 +279,6 @@ for lang in $PRIMARY_LANGUAGE \
 		--verbose \
 		$index
 
-	if [[ -z $no_compress ]]; then
-		find $langcode -type f -iname '*.html' -print0 | parallel --will-cite --no-run-if-empty -0 brotli --keep --force --suffix=.brotli --best '{}' &
-	fi
-
 	echo -e "${RED}Generating $langcode search index${NC}"
 	node /adoc/lunr/generate-index.js $langcode $langcode/lunr-index.json > lunr.log || \
 		(echo "${RED}Lunr index failed"; echo '{}' > $langcode/lunr-index.json)
@@ -286,6 +288,44 @@ for lang in $PRIMARY_LANGUAGE \
 	fi
 
 	echo
+
+	if [[ -n $no_presentation ]]; then
+		echo -e "${RED}Not generating $langcode presentation${NC}"
+	else
+		echo -e "${RED}Generating $langcode presentation${NC}"
+		asciidoctor-revealjs \
+			-b revealjs \
+			-a icons=font \
+			-a lang=$langcode \
+			-a imagesdir=../../ \
+			-a sectanchors \
+			-a idprefix=@ \
+			-a idseparator=-@ \
+			-a revealjs_theme=sky \
+			-a revealjsdir=https://cdn.jsdelivr.net/npm/reveal.js@3.9.2 \
+			-a plausible-analytics-data-domain=docs.gbif.org,gbif.org \
+			-r asciidoctor-diagram \
+			$bibtex_plugin \
+			-r asciidoctor-question \
+			-r /adoc/asciidoctor-extensions-lab/lib/git-metadata-preprocessor.rb \
+			-r /adoc/gbif-extensions/lib/glossary.rb \
+			-r /adoc/gbif-extensions/lib/license-url-docinfoprocessor.rb \
+			-r /adoc/gbif-extensions/lib/plausible-analytics-docinfoprocessor.rb \
+			-r /adoc/gbif-extensions/lib/term.rb \
+			-r /adoc/gbif-extensions/lib/translate-labels.rb \
+			-r /adoc/gbif-extensions/lib/translation-links.rb \
+			-r /adoc/GbifHtmlConverter.rb \
+			-o $langcode/present/index.$langcode.html \
+			--trace \
+			--verbose \
+			$index
+
+		echo
+	fi
+
+	if [[ -z $no_compress ]]; then
+		find $langcode -type f -iname '*.html' -print0 | parallel --will-cite --no-run-if-empty -0 brotli --keep --force --suffix=.brotli --best '{}' &
+	fi
 
 	if [[ -n $no_pdf ]]; then
 		echo -e "${RED}Not generating $langcode PDF${NC}"
@@ -315,6 +355,8 @@ for lang in $PRIMARY_LANGUAGE \
 		if [[ -z $no_compress ]]; then
 			brotli --keep --force --output=$langcode/$title.$langcode.pdf.brotli --best $langcode/$title.$langcode.pdf &
 		fi
+
+		echo
 	fi
 
 	if [[ ! -e translations/$langcode.hidden ]]; then

@@ -86,6 +86,16 @@ class TranslationLinksMacro < Extensions::InlineMacroProcessor
   end
 end
 
+class HideTranslationLinksMacro < Extensions::InlineMacroProcessor
+  use_dsl
+
+  named :languageLinks
+  name_positional_attributes 'preText', 'linkText', 'postText'
+
+  def process parent, target, attributes
+  end
+end
+
 class TranslationLinksDocinfoProcessor < Extensions::DocinfoProcessor
   use_dsl
   at_location :head
