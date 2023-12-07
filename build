@@ -144,6 +144,10 @@ if [[ -z $no_translation ]] && [[ -e po4a.conf ]]; then
 			echo "Replacing includes in $tdoc for $langcode"
 			perl -pi -e 's/([A-Za-z0-9_-]+).'$PRIMARY_LANGUAGE'.adoc/\1.'$langcode'.adoc/' "$tdoc"
 		done
+		for tdoc in $(grep -l -E -e '\.[a-z][a-z]\.txt' -- **/*.$langcode.adoc); do
+			echo "Replacing includes in $tdoc for $langcode"
+			perl -pi -e 's/([A-Za-z0-9_-]+).'$PRIMARY_LANGUAGE'.txt/\1.'$langcode'.txt/' "$tdoc"
+		done
 	done
 	echo "Translating source files completed"
 else
