@@ -19,12 +19,12 @@ fi
 echo -e "${RED}GBIF Asciidoctor Toolkit v${GBIF_ASCIIDOCTOR_TOOLKIT_VERSION}.${NC}"
 echo
 
-OPTS=$(getopt --options 'h' --long 'help,no-compress,no-git,no-presentation,no-pdf,no-spellcheck,no-translation,no-video' -n $0 -- "$@")
+OPTS=$(getopt --options 'h' --long 'help,no-compress,no-git,presentation,no-pdf,no-spellcheck,no-translation,no-video' -n $0 -- "$@")
 
 if [[ $? -ne 0 ]]; then
 	echo 'Invalid arguments.' >&2
 	echo "Usage:" >&2
-	echo "$0 [--no-compress] [--no-git] [--no-presentation] [--no-pdf] [--no-spellcheck] [--no-translation] [--no-video]" >&2
+	echo "$0 [--no-compress] [--no-git] [--presentation] [--no-pdf] [--no-spellcheck] [--no-translation] [--no-video]" >&2
 	exit 1
 fi
 
@@ -43,8 +43,8 @@ while true; do
 			shift 1
 			continue
 			;;
-		'--no-presentation')
-			no_presentation=1
+		'--presentation')
+			presentation=1
 			shift 1
 			continue
 			;;
@@ -70,7 +70,7 @@ while true; do
 			;;
 		'-h'|'--help')
 			echo "Usage:"
-			echo "$0 [--no-compress] [--no-git] [--no-presentation] [--no-pdf] [--no-spellcheck] [--no-translation] [--no-video]"
+			echo "$0 [--no-compress] [--no-git] [--presentation] [--no-pdf] [--no-spellcheck] [--no-translation] [--no-video]"
 			exit 0
 			;;
 		'--')
@@ -293,9 +293,7 @@ for lang in $PRIMARY_LANGUAGE \
 
 	echo
 
-	if [[ -n $no_presentation ]]; then
-		echo -e "${RED}Not generating $langcode presentation${NC}"
-	else
+	if [[ -n $presentation ]]; then
 		echo -e "${RED}Generating $langcode presentation${NC}"
 		asciidoctor-revealjs \
 			-b revealjs \
@@ -325,6 +323,8 @@ for lang in $PRIMARY_LANGUAGE \
 			$index
 
 		echo
+	else
+		echo -e "${RED}Not generating $langcode presentation${NC}"
 	fi
 
 	if [[ -z $no_compress ]]; then
