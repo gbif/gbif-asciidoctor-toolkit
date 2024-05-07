@@ -137,6 +137,7 @@ EPSG
 ESIP
 ESRI
 EUNIS
+EXIF
 Ebbe
 Elysia
 Enciclovida
@@ -433,6 +434,7 @@ Wallonie
 WeDigBio
 Wieczorek
 Wikidata
+WildTrax
 Wildfly
 Willerslev
 WoRMS
@@ -488,6 +490,7 @@ bioinformatically
 bioinformaticians
 bioinformatics
 biome
+biomes
 bioregions
 biosample
 biosystems
@@ -517,6 +520,8 @@ convolutional
 coordinatePrecision
 coordinateUncertaintyInMeters
 countryCode
+covariate
+covariates
 crowdsource
 crowdsourced
 crowdsourcing
@@ -564,6 +569,9 @@ eLearning
 easting
 ebooks
 ecogenomics
+ecoregion
+ecoregions
+ectothermic
 elasmobranchs
 elevational
 encodings
@@ -587,11 +595,13 @@ facto
 fide
 fieldNumber
 fieldbook
+findability
 findable
 fluorophore
 footprintSRS
 footprintSpatialFit
 footprintWKT
+fossorial
 frictionless
 funder
 funders
@@ -627,7 +637,6 @@ gravimetric
 gridded
 hackathon
 headwater
-helpdesk
 herbaria
 herbarium
 heterogeneities
@@ -695,6 +704,7 @@ locationID
 locationRemarks
 locational
 macrophyte
+mammalogists
 materialSampleID
 maximumDepthInMeters
 maximumDistanceAboveSurfaceInMeters
@@ -778,6 +788,8 @@ precisionDataProvided
 precisionDataStored
 precisions
 prepend
+preprocessed
+preprocessing
 programmatically
 prokaryote
 prokaryotes
@@ -785,6 +797,7 @@ proto
 pulldown
 pygments
 pylei
+pyroelectric
 qPCR
 quasigeoid
 rGBIF
@@ -840,8 +853,11 @@ startDayOfYear
 stateProvince
 steading
 stratigraphic
+subadult
 subcollections
 subgenus
+subproject
+subprojects
 subtype
 symposia
 synonymized
@@ -850,6 +866,7 @@ systemctl
 taxonID
 taxonRank
 taxonomicStatus
+taxonomical
 taxonomically
 thebugroomno
 toclevels
