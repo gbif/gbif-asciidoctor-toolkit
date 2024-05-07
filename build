@@ -19,12 +19,12 @@ fi
 echo -e "${RED}GBIF Asciidoctor Toolkit v${GBIF_ASCIIDOCTOR_TOOLKIT_VERSION}.${NC}"
 echo
 
-OPTS=$(getopt --options 'h' --long 'help,no-compress,no-git,presentation,no-pdf,no-spellcheck,no-translation,no-video' -n $0 -- "$@")
+OPTS=$(getopt --options 'h' --long 'help,no-compress,no-git,no-pdf,no-spellcheck,no-translation,no-video,presentation,url:' -n $0 -- "$@")
 
 if [[ $? -ne 0 ]]; then
 	echo 'Invalid arguments.' >&2
 	echo "Usage:" >&2
-	echo "$0 [--no-compress] [--no-git] [--presentation] [--no-pdf] [--no-spellcheck] [--no-translation] [--no-video]" >&2
+	echo "$0 [--no-compress] [--no-git] [--no-pdf] [--no-spellcheck] [--no-translation] [--no-video] [--presentation] [--url]" >&2
 	exit 1
 fi
 
@@ -40,11 +40,6 @@ while true; do
 			;;
 		'--no-git')
 			no_git=1
-			shift 1
-			continue
-			;;
-		'--presentation')
-			presentation=1
 			shift 1
 			continue
 			;;
@@ -66,6 +61,16 @@ while true; do
 		'--no-video')
 			no_video=1
 			shift 1
+			continue
+			;;
+		'--presentation')
+			presentation=1
+			shift 1
+			continue
+			;;
+		'--url')
+			url=$2
+			shift 2
 			continue
 			;;
 		'-h'|'--help')
@@ -335,6 +340,12 @@ for lang in $PRIMARY_LANGUAGE \
 		echo -e "${RED}Not generating $langcode PDF${NC}"
 	else
 		echo -e "${RED}Generating $langcode PDF${NC}"
+
+		# Use absolute URLs in PDFs.
+		if [[ -n $url ]]; then
+			sed --in-place "s|link:../|link:$url|" **/*.$langcode.adoc
+		fi
+
 		asciidoctor-pdf \
 			-a icons=font \
 			-a pagenums \
