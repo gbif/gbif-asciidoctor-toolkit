@@ -16,9 +16,8 @@ class TermMacro < Extensions::InlineMacroProcessor
   name_positional_attributes 'shortName'
 
   def process parent, target, attributes
-
     # Set role for PDF
-    attributes['role'] = 'term'
+    attributes['role'] = 'term term_' + target
 
     shortName = attributes['shortName']
 
@@ -27,11 +26,13 @@ class TermMacro < Extensions::InlineMacroProcessor
       # Remove a dwc: prefix if it exists
       fullLink = "https://rs.tdwg.org/dwc/terms/"+(shortName.gsub(/^dwc:/, ''))
     when "dna"
-      fullLink = "https://rs.gbif.org/extension/gbif/1.0/dna_derived_data_2024-04-17.xml#"+(shortName.gsub(/^dna:/, ''))
+      fullLink = "https://rs.gbif.org/terms/1.0/DNADerivedData#"+(shortName.gsub(/^dna:/, ''))
     when "mixs"
-      fullLink = "https://rs.gbif.org/extension/gbif/1.0/dna_derived_data_2024-04-17.xml#"+(shortName.gsub(/^mixs:/, ''))
+      fullLink = "https://rs.gbif.org/terms/1.0/DNADerivedData#"+(shortName.gsub(/^mixs:/, ''))
+    when "eco"
+      fullLink = "https://rs.tdwg.org/eco/terms/"+(shortName.gsub(/^eco:/, ''))
     end
-    anchor = %(<a class="term" href="#{fullLink}" target="_blank">#{shortName}</a>)
+    anchor = %(<a class="term term_#{target}" href="#{fullLink}" target="_blank">#{shortName}</a>)
 
     Asciidoctor::Inline.new(parent, :quoted, anchor)
   end
