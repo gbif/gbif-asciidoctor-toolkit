@@ -1,4 +1,4 @@
-personal_ws-1.1 en 890 utf-8
+personal_ws-1.1 en 989 utf-8
 ABCD
 ADBC
 ALA's
@@ -11,6 +11,7 @@ Aldana
 Altay
 Alturas
 Anabela
+Anders
 André
 Animalia
 AnnoSys
@@ -35,6 +36,7 @@ BINs
 BIOM
 BIOSCAN
 BONs
+Bagard
 Banki
 Bayern
 Belonoperce
@@ -45,6 +47,7 @@ BiCIKL
 BioAmazonia
 BioCASe
 BioDATA
+BioDT
 BioData
 BioGeomancer
 Biocollections
@@ -157,6 +160,7 @@ Fluxx
 FossilSpecimen
 Française
 FreeMarker
+Frøslev
 Fungorum
 GADM
 GBIC
@@ -178,6 +182,7 @@ GTDB
 GUID
 GUIDs
 Gainesville
+Gamboa
 Garmin
 GenBank
 GeologicalContext
@@ -227,6 +232,7 @@ IUCN
 Iberoamerican
 Illumina
 Información
+Ingenloff
 Instituto
 IntelliJ
 JACQ
@@ -254,9 +260,11 @@ LINESTRING
 LSID
 LTER
 Lamiaceae
+Laursen
 Lecoq
 Leese
 Lepidoptera
+Liam
 LifeStage
 LifeWatch
 Linnaean
@@ -266,6 +274,7 @@ Liège
 Llinás
 Lombok
 Lycidae
+Lysaght
 MEAs
 MGRS
 MGnify
@@ -277,6 +286,7 @@ MaPSTeDI
 MacKenzie
 MacOS
 MachineObservation
+Maheva
 Majaneva
 Maofang
 Markus
@@ -391,6 +401,7 @@ SoilBON
 Stjernegaard
 Strasser
 Strzelecki
+Svenningsen
 SwissTPH
 Sybase
 Symbiota
@@ -462,6 +473,7 @@ analytics
 antimeridian
 aquaria
 archaea
+areNonTargetTaxaFullyReported
 artefactual
 asciidoc
 asciidoctor
@@ -483,6 +495,7 @@ benthic
 billabongs
 bioGEOTRACES
 bioGUID
+bioblitz
 biofilms
 biogeographic
 bioinformatic
@@ -513,6 +526,9 @@ citable
 classpath
 codebase
 collectionCode
+compilationOfExistingSourcesAndSamplingEvents
+compilationSourceTypes
+compilationTypes
 conf
 config
 contig
@@ -533,6 +549,7 @@ cycads
 cytometry
 d'Ivoire
 dPCR
+dataGeneralizations
 dataSensitiveComments
 dataSensitiveIndicator
 dataSensitiveReason
@@ -560,6 +577,7 @@ disaggregate
 disaggregation
 discoverability
 discoverable
+docx
 downscaled
 dénombrement
 eBird
@@ -585,14 +603,23 @@ equipotential
 ethnobotanical
 eukaryotic
 eventDate
+eventDurationUnit
+eventDurationValue
 eventID
 eventIDs
 eventRemarks
 eventTime
+eventType
+excludedDegreeOfEstablishmentScope
+excludedGrowthFormScope
+excludedHabitatScope
+excludedLifeStageScope
+excludedTaxonomicScope
 explainer
 extensibility
 facto
 fide
+fieldNotes
 fieldNumber
 fieldbook
 findability
@@ -632,10 +659,16 @@ georeferences
 georeferencing
 geoscience
 geospatial
+geospatialScopeAreaUnit
+geospatialScopeAreaValue
 geotagged
 gravimetric
 gridded
 hackathon
+hasMaterialSamples
+hasNonTargetOrganisms
+hasNonTargetTaxa
+hasVouchers
 headwater
 herbaria
 herbarium
@@ -649,6 +682,7 @@ higherTaxonID
 html
 hyaline
 hydrographic
+hypervariable
 iBOL
 iDigBio
 iDigBio's
@@ -657,6 +691,7 @@ iDiv
 iNat
 iNaturalist
 iconv
+identificationRemarks
 identifiedBy
 identifierType
 idprefix
@@ -669,7 +704,7 @@ incertae
 indexable
 individualCount
 informaticians
-informationWitheld
+informationWithheld
 infrageneric
 infraspecificEpithet
 ingestible
@@ -683,6 +718,14 @@ intersessional
 intra
 intraspecific
 invasively
+inventoryTypes
+isDegreeOfEstablishmentScopeFullyReported
+isGrowthFormScopeFullyReported
+isLeastSpecificTargetCategoryQuantityInclusive
+isLifeStageScopeFullyReported
+isSamplingEffortReported
+isTaxonomicScopeFullyReported
+isVegetationCoverReported
 islandGroup
 isobaths
 isohypse
@@ -694,6 +737,7 @@ knowledgebase
 lang
 languageLinks
 lectotypifications
+lichenized
 lifestage
 lindenbergianus
 lithostratigraphic
@@ -706,12 +750,15 @@ locational
 macrophyte
 mammalogists
 materialSampleID
+materialSampleTypes
 maximumDepthInMeters
 maximumDistanceAboveSurfaceInMeters
 maximumElevationInMeters
+maximumTemperatureInDegreesFahrenheit
 measurementRemarks
 measurementUnit
 measurementValue
+megadiverse
 mellifera
 memoranda
 metabarcodes
@@ -726,6 +773,7 @@ microbiomes
 minimumDepthInMeters
 minimumDistanceAboveSurfaceInMeters
 minimumElevationInMeters
+minimumTemperatureInDegreesFahrenheit
 mischaracterized
 misidentification
 misidentifications
@@ -733,17 +781,20 @@ morphologically
 multibeam
 multipath
 multipolygons
+museumSpecimens
 nameAccordingTo
 nameAccordingToID
 namePublishedIn
 namePublishedInID
 namespace
 natively
+nbsp
 neglections
 nomenclator
 nomenclators
 nomenclatural
 nomenclaturalStatus
+nonTargetTaxa
 nonmarine
 northing
 occurrenceID
@@ -756,6 +807,7 @@ ordinated
 organismID
 organismQuantity
 organismQuantityType
+organismal
 originalNameID
 originalNameUsageID
 orthometric
@@ -794,6 +846,9 @@ programmatically
 prokaryote
 prokaryotes
 proto
+protocolDescriptions
+protocolNames
+protocolReferences
 pulldown
 pygments
 pylei
@@ -815,6 +870,10 @@ regionalization
 relevé
 replicability
 repo
+reportedComplete
+reportedExtremeConditions
+reportedIncomplete
+reportedWeather
 reproducibility
 reputational
 resourceID
@@ -830,12 +889,17 @@ runtime
 sampleSizeUnit
 sampleSizeValue
 samplingEffort
+samplingEffortProtocol
+samplingEffortUnit
+samplingEffortValue
+samplingPerformedBy
 samplingProtocol
 scalable
 schemaLocation
 schemas
 scientificName
 scientificNameAuthorship
+scientificNameID
 screencast
 sectnumlevels
 sectnums
@@ -844,6 +908,8 @@ sedis
 sensitiveDateForReview
 servlet
 servlet's
+siteCount
+siteNestingDescription
 snib
 sobre
 socio
@@ -854,6 +920,7 @@ stateProvince
 steading
 stratigraphic
 subadult
+subclasses
 subcollections
 subgenus
 subproject
@@ -863,6 +930,14 @@ symposia
 synonymized
 synonymously
 systemctl
+targetDegreeOfEstablishmentScope
+targetGrowthFormScope
+targetHabitatScope
+targetLifeStageScope
+targetTaxonomicScope
+taxonCompletenessProtocols
+taxonCompletenessReported
+taxonConceptID
 taxonID
 taxonRank
 taxonomicStatus
@@ -872,6 +947,8 @@ thebugroomno
 toclevels
 toolkits
 toponyms
+totalAreaSampledUnit
+totalAreaSampledValue
 transactional
 traversable
 troglobiont
@@ -896,9 +973,14 @@ verbatimLatitude
 verbatimLocality
 verbatimLongitude
 verbatimSRS
+verbatimSiteDescriptions
+verbatimSiteNames
+verbatimTargetScope
+voucherInstitutions
 vouchered
 waterBody
 waypoints
+wholeOrganism
 withholdings
 xrefstyle
 xylaria
