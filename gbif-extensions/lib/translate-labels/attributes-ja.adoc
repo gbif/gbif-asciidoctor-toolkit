@@ -4,8 +4,8 @@
 :also_links_pre_text: pass:[この文書は以下でも利用可能です ]
 :also_links_pdf_link_text: PDF形式
 :also_links_languages_pre_text: pass:[ 他の言語: ]
-:also_links_languages_separator: pass:[, ]
-:also_links_post_text: .
+:also_links_languages_separator: 、
+:also_links_post_text: 。
 
 :other_formats_text: 他の形式
 :pdf_file_text: PDFファイル
@@ -17,7 +17,7 @@
 
 :search_text: 検索
 :search_results_header_text: 検索結果
-:search_results_query_text: “${query}” の検索結果
+:search_results_query_text: 「${query}」の検索結果
 :search_no_results_text: 結果がありません
 
 :navigation_home: ホーム
