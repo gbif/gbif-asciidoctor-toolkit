@@ -119,6 +119,17 @@ module GbifHtmlConverterBase
       end
     end
 
+    if ENV["debug"]
+      result << %(<style type="text/css">)
+      # Mark over logo
+      result << %(header a::after {content: '#{ENV["debug"]}'; font-size: 1.2em; font-weight: bolder; background: tomato; color: #fff; padding: 5px; border-radius: 3px; display: block; margin: 2px auto 0; text-align: center; })
+      # Hatched background on TOC
+      result << %(#toc.toc2 { background: repeating-linear-gradient(45deg, #f8f8f7, #f8f8f7 10px, #f4f4f4 10px, #f4f4f4 20px); })
+      # Watermark
+      result << %(body.article { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='800px' width='800px'><text transform='translate(200, 200) rotate(-45)' text-anchor='middle' dominant-baseline='middle' fill='rgb(245,245,245)' font-size='80' font-family='sans-serif' font-weight='bold'>#{ENV["debug"]}</text></svg>")})
+      result << %(</style>)
+    end
+
     # Special flag emoji font for Windows only.
     # Based on https://github.com/talkjs/country-flag-emoji-polyfill
     result << %(<script type="text/javascript">
