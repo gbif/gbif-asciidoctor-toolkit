@@ -9,6 +9,11 @@ This is a Docker container derived from https://github.com/asciidoctor/docker-as
 * https://github.com/hobbypunk90/asciidoctor-question[Asciidoctor Question]
 * GBIF templates and styling
 * Custom GBIF macros and extensions
+** link:gbif-extensions/lib/glossary.rb[Glossary link formatting (dotted underlines)] (applied automatically)
+** link:gbif-extensions/lib/plausible-analytics-docinfoprocessor.rb[Plausible analytics] (applied automatically)
+** link:gbif-extensions/lib/term-macro/extension.rb[Term macro] (e.g. `term:dwc[decimalLatitude]`)
+** link:gbif-extensions/lib/translate-labels.rb[Translation of labels] (Translation of Page Contents labels etc, applied automatically)
+** link:gbif-extensions/lib/translation-links-macro/extension.rb[Translation links] ("This page is also available in…", applied automatically)
 * GBIF document build script
 
 The Asciidoctor Docker container provides:
