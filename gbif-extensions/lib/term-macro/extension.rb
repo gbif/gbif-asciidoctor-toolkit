@@ -13,6 +13,10 @@ include Asciidoctor
 #   term:eco[absentTaxa]          Generates the link https://rs.tdwg.org/eco/terms/absentTaxa
 #   term:obis[measurementTypeID]  Generates the link http://rs.iobis.org/obis/terms/measurementTypeID
 #   term:gbif[datasetKey]         Generates the link http://rs.gbif.org/terms/1.0/datasetKey
+#
+# If necessary, the styling can be applied to any link:
+#   http://rs.tdwg.org/ltc/terms/LatimerCoreScheme[LatimerCoreScheme,role=term]
+#
 class TermMacro < Extensions::InlineMacroProcessor
   use_dsl
 
