@@ -126,7 +126,7 @@ module GbifHtmlConverterBase
       # Hatched background on TOC
       result << %(#toc.toc2 { background: repeating-linear-gradient(45deg, #f8f8f7, #f8f8f7 10px, #f4f4f4 10px, #f4f4f4 20px); })
       # Watermark
-      result << %(body.article { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='800px' width='800px'><text transform='translate(200, 200) rotate(-45)' text-anchor='middle' dominant-baseline='middle' fill='rgb(245,245,245)' font-size='80' font-family='sans-serif' font-weight='bold'>#{ENV["debug"]}</text></svg>")})
+      result << %(body.article { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='400px' width='800px'><text transform='translate(200, 200) rotate(-45)' text-anchor='middle' dominant-baseline='middle' fill='rgb(245,245,245)' font-size='60' font-family='sans-serif' font-weight='bold'>#{ENV["debug"]}</text><text transform='translate(600, 400) rotate(-45)' text-anchor='middle' dominant-baseline='middle' fill='rgb(245,245,245)' font-size='60' font-family='sans-serif' font-weight='bold'>#{ENV["debug"]}</text><text transform='translate(600, 00) rotate(-45)' text-anchor='middle' dominant-baseline='middle' fill='rgb(245,245,245)' font-size='60' font-family='sans-serif' font-weight='bold'>#{ENV["debug"]}</text></svg>") })
       result << %(</style>)
     end
 
