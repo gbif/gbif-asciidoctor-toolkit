@@ -464,8 +464,12 @@ MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
     Dir["index.??.adoc", "index.??-??.adoc", "index.??-???.adoc"]
       .map { |file| file.match(/index\.(.+)\.adoc/)[1] }
       .sort.each do |langCode|
-      if langCode != currentLangCode && !File.file?("translations/#{langCode}.hidden")
-        result << %(<li><a hreflang="#{langCode}" href="../#{langCode}/">#{@@language_names[langCode]}</a></li>)
+      if langCode != currentLangCode && (!File.file?("translations/#{langCode}.hidden") || ENV["debug"])
+        if File.file?("translations/#{langCode}.hidden")
+          result << %(<li><a hreflang="#{langCode}" href="../#{langCode}/">#{@@language_names[langCode]} (HIDDEN)</a></li>)
+        else
+          result << %(<li><a hreflang="#{langCode}" href="../#{langCode}/">#{@@language_names[langCode]}</a></li>)
+        end
       end
     end
 
